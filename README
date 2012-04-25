@@ -1,0 +1,20 @@
+1. Compile all models, views and controllers do JS.
+2. Compile all templates inside the views as self-contained functions.
+
+
+MODEL
+	0. handles data
+
+CONTROLLER
+	0. instantiate and process model
+	1. deliver it to some view
+
+VIEW
+	0. include the referenced markup
+	1. render it with the data received from model
+
+MARKUP
+	0. are rendered using coffeekup to self-contained functions
+
+STYLE
+	0. are rendered using styl
