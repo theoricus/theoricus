@@ -1,5 +1,5 @@
 #<< theoricus/mvc/*
-#<< theoricus/utils/*
+#<< theoricus/utils/string_util
 
 class Factory
 	controllers: {}
@@ -14,7 +14,7 @@ class Factory
 
 
 	controller:( name )->
-		name = StringUtil.ucfirst name
+		name = StringUtil.camelize name
 		if @controllers[ name ]?
 			return @controllers[ name ]
 		else
@@ -25,7 +25,7 @@ class Factory
 
 
 	model:( name )->
-		name = StringUtil.ucfirst name
+		name = StringUtil.camelize name
 		model = eval( @m_tmpl.replace "{classname}", name )
 		model = new model
 		model.boot @the
@@ -33,13 +33,13 @@ class Factory
 
 
 	view:( name )->
-		name = StringUtil.ucfirst name
+		name = StringUtil.camelize name
 		view = eval( @v_tmpl.replace( "{classname}", name) )
 		view = new view
 		view.boot @the
 
 
 	template:( name )->
-		name = StringUtil.ucfirst name
+		name = StringUtil.camelize name
 		template = eval( @t_tmpl.replace( "{classname}", name) )
 		new template

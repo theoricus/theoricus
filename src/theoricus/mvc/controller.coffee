@@ -1,13 +1,16 @@
+#<< theoricus/utils/string_util
+
 class Controller
-	factory = null
+	Factory = null
+	StringUtil = theoricus.utils.StringUtil
 
 	boot:( @the )->
-		factory = @the.factory
+		Factory = @the.factory
 		console.log "Controller.boot()"
 		@
 	
 	render:( view, data )->
-		view = factory.view "main"
+		view = Factory.view "main"
 		view._render @route, data
 	
 	routing:( @route )->

@@ -11723,82 +11723,45 @@ var theoricus = {};
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
 
-  __t('theoricus.mvc').Controller = (function() {
-    var factory;
+  __t('theoricus.utils').StringUtil = (function() {
 
-    Controller.name = 'Controller';
+    StringUtil.name = 'StringUtil';
 
-    function Controller() {}
+    function StringUtil() {}
 
-    factory = null;
-
-    Controller.prototype.boot = function(the) {
-      this.the = the;
-      factory = this.the.factory;
-      console.log("Controller.boot()");
-      return this;
+    StringUtil.ucfirst = function(str) {
+      var a, b;
+      a = str.substr(0, 1).toUpperCase();
+      b = str.substr(1).toLowerCase();
+      return a + b;
     };
 
-    Controller.prototype.render = function(view, data) {
-      view = factory.view("main");
-      return view._render(this.route, data);
+    StringUtil.camelize = function(str) {
+      var buffer, part, parts, _i, _len, _results;
+      parts = [].concat(str.split("_"));
+      buffer = "";
+      _results = [];
+      for (_i = 0, _len = parts.length; _i < _len; _i++) {
+        part = parts[_i];
+        _results.push(buffer += StringUtil.ucfirst(part));
+      }
+      return _results;
     };
 
-    Controller.prototype.routing = function(route) {
-      this.route = route;
+    StringUtil.underscore = function(str) {
+      str = str.replace(/([A-Z])/g, "_$1").toLowerCase();
+      return str = str.substr(1) === "_" ? str.substr(1) : str;
     };
 
-    return Controller;
+    return StringUtil;
 
   })();
 
-  __t('theoricus.mvc').Model = (function() {
+  /*
+  	Router inspired by:
+  	https://github.com/haithembelhaj/RouterJs
+  */
 
-    Model.name = 'Model';
-
-    function Model() {}
-
-    Model.prototype.boot = function(the) {
-      this.the = the;
-      console.log("Model.boot()");
-      return this;
-    };
-
-    return Model;
-
-  })();
-
-  __t('theoricus.core').Processes = (function() {
-
-    Processes.name = 'Processes';
-
-    Processes.prototype.active = {};
-
-    Processes.prototype.rendering = [];
-
-    function Processes(the) {
-      this.the = the;
-      this.process = __bind(this.process, this);
-
-      this.factory = this.the.factory;
-      this.router = new theoricus.core.Router(this.the);
-      this.router.on_change(this.process);
-      this.router.init(this.the.boot.boot);
-    }
-
-    Processes.prototype.process = function(route, params) {
-      var controller;
-      controller = this.factory.controller(route.controller);
-      params = [].concat(params).concat(route);
-      controller.routing(route);
-      controller[route.action].apply(controller, params);
-      controller.routing(false);
-      return this.active[route.mask] = route;
-    };
-
-    return Processes;
-
-  })();
 
   __t('theoricus.core').Router = (function() {
 
@@ -11845,15 +11808,14 @@ var theoricus = {};
     };
 
     Router.prototype.route = function(state) {
-      var listener, params, regex, route, url, _i, _j, _len, _len1, _ref, _ref1;
+      var listener, params, route, url, _i, _j, _len, _len1, _ref, _ref1;
       if (this.trigger) {
         url = state.title || state.hash;
         _ref = this.routes;
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           route = _ref[_i];
-          regex = new RegExp(route.text_reg);
-          if (regex.test(url)) {
-            params = regex.exec(url).slice(1);
+          if (route.matcher.test(url)) {
+            params = route.matcher.exec(url).slice(1);
             _ref1 = this.listeners;
             for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
               listener = _ref1[_j];
@@ -11893,28 +11855,88 @@ var theoricus = {};
   })();
 
   __t('theoricus.core').Route = (function() {
+    var StringUtil;
 
     Route.name = 'Route';
+
+    StringUtil = theoricus.utils.StringUtil;
 
     Route.named_param_reg = /:\w+/g;
 
     Route.splat_param_reg = /\*\w+/g;
 
     function Route(route, to, at) {
-      this.route = route;
-      this.to = to;
-      this.at = at;
-      this.mask = this.route;
-      this.route = this.route.replace(Route.named_param_reg, '([^\/]+)');
-      this.route = this.route.replace(Route.splat_param_reg, '(.*?)');
-      this.text_reg = "^" + this.route + "$";
-      this.controller = this.to.split("/")[0];
-      this.action = this.to.split("/")[1];
-      this.at_route = this.at.split("#")[0];
-      this.at_container = this.at.split("#")[1];
+      this.raw = {
+        route: route,
+        to: to,
+        at: at
+      };
+      this.matcher = route.replace(Route.named_param_reg, '([^\/]+)');
+      this.matcher = this.matcher.replace(Route.splat_param_reg, '(.*?)');
+      this.matcher = new RegExp("^" + this.matcher + "$");
+      this.controller = to.split("/")[0];
+      this.action = to.split("/")[1];
+      if (/\#/g.test(at)) {
+        this.target_route = at.split("#")[0];
+        this.target_el = at.split("#")[1];
+      } else {
+        this.target_route = null;
+        this.target_el = at;
+      }
     }
 
     return Route;
+
+  })();
+
+  __t('theoricus.mvc').Model = (function() {
+
+    Model.name = 'Model';
+
+    function Model() {}
+
+    Model.prototype.boot = function(the) {
+      this.the = the;
+      console.log("Model.boot()");
+      return this;
+    };
+
+    return Model;
+
+  })();
+
+  __t('theoricus.core').Processes = (function() {
+    var Factory;
+
+    Processes.name = 'Processes';
+
+    Factory = null;
+
+    Processes.prototype.active = {};
+
+    Processes.prototype.rendering = [];
+
+    function Processes(the) {
+      this.the = the;
+      this.process = __bind(this.process, this);
+
+      Factory = this.the.factory;
+      this.router = new theoricus.core.Router(this.the);
+      this.router.on_change(this.process);
+      this.router.init(this.the.boot.boot);
+    }
+
+    Processes.prototype.process = function(route, params) {
+      var controller;
+      controller = Factory.controller(route.controller);
+      params = [].concat(params).concat(route);
+      controller.routing(route);
+      controller[route.action].apply(controller, params);
+      controller.routing(false);
+      return this.active[route.mask] = route;
+    };
+
+    return Processes;
 
   })();
 
@@ -11936,8 +11958,7 @@ var theoricus = {};
     View.prototype._render = function(route, data) {
       this.route = route;
       this.data = data != null ? data : {};
-      console.log("View.render()");
-      console.log(this.route);
+      this.el = $(this.route.target_el);
       if (this.render) {
         return this.render(data);
       } else {
@@ -11950,19 +11971,19 @@ var theoricus = {};
       template = factory.template(template);
       template.dom(data);
       dom = __ck.buffer.join('');
-      $(this.route.at).append(dom);
+      this.el.append(dom);
       return this["in"]();
     };
 
     View.prototype["in"] = function(data) {
-      $(this.route.at).css("opacity", 0);
-      return $(this.route.at).animate({
+      this.el.css("opacity", 0);
+      return this.el.animate({
         opacity: 1
       }, 1000);
     };
 
     View.prototype.out = function(data) {
-      return $(this.route.at).animate({
+      return this.el.animate({
         opacity: 0
       }, 1000);
     };
@@ -11971,20 +11992,34 @@ var theoricus = {};
 
   })();
 
-  __t('theoricus.utils').StringUtil = (function() {
+  __t('theoricus.mvc').Controller = (function() {
+    var Factory, StringUtil;
 
-    StringUtil.name = 'StringUtil';
+    Controller.name = 'Controller';
 
-    function StringUtil() {}
+    function Controller() {}
 
-    StringUtil.ucfirst = function(str) {
-      var a, b;
-      a = str.substr(0, 1).toUpperCase();
-      b = str.substr(1).toLowerCase();
-      return a + b;
+    Factory = null;
+
+    StringUtil = theoricus.utils.StringUtil;
+
+    Controller.prototype.boot = function(the) {
+      this.the = the;
+      Factory = this.the.factory;
+      console.log("Controller.boot()");
+      return this;
     };
 
-    return StringUtil;
+    Controller.prototype.render = function(view, data) {
+      view = Factory.view("main");
+      return view._render(this.route, data);
+    };
+
+    Controller.prototype.routing = function(route) {
+      this.route = route;
+    };
+
+    return Controller;
 
   })();
 
@@ -12019,7 +12054,7 @@ var theoricus = {};
 
     Factory.prototype.controller = function(name) {
       var controller;
-      name = StringUtil.ucfirst(name);
+      name = StringUtil.camelize(name);
       if (this.controllers[name] != null) {
         return this.controllers[name];
       } else {
@@ -12031,7 +12066,7 @@ var theoricus = {};
 
     Factory.prototype.model = function(name) {
       var model;
-      name = StringUtil.ucfirst(name);
+      name = StringUtil.camelize(name);
       model = eval(this.m_tmpl.replace("{classname}", name));
       model = new model;
       return model.boot(this.the);
@@ -12039,7 +12074,7 @@ var theoricus = {};
 
     Factory.prototype.view = function(name) {
       var view;
-      name = StringUtil.ucfirst(name);
+      name = StringUtil.camelize(name);
       view = eval(this.v_tmpl.replace("{classname}", name));
       view = new view;
       return view.boot(this.the);
@@ -12047,7 +12082,7 @@ var theoricus = {};
 
     Factory.prototype.template = function(name) {
       var template;
-      name = StringUtil.ucfirst(name);
+      name = StringUtil.camelize(name);
       template = eval(this.t_tmpl.replace("{classname}", name));
       return new template;
     };
@@ -12273,23 +12308,6 @@ var theoricus = {};
       return MainView.__super__.constructor.apply(this, arguments);
     }
 
-    MainView.prototype["in"] = function() {
-      $(this.route.at).css("opacity", 0);
-      return $(this.route.at).animate({
-        opacity: 1
-      }, {
-        duration: 1000
-      });
-    };
-
-    MainView.prototype.out = function() {
-      return $(this.route.at).animate({
-        opacity: 0
-      }, {
-        duration: 1000
-      });
-    };
-
     return MainView;
 
   })(app.views.AppView);
@@ -12337,23 +12355,6 @@ var theoricus = {};
     };
 
     return MainTemplate;
-
-  })();
-
-  __t('theoricus').StringUtil = (function() {
-
-    StringUtil.name = 'StringUtil';
-
-    function StringUtil() {}
-
-    StringUtil.ucfirst = function(str) {
-      var a, v;
-      a = str.substr(0, 1).toUpperCase();
-      v = str.substr(1).toLowerCase();
-      return a + v;
-    };
-
-    return StringUtil;
 
   })();
 

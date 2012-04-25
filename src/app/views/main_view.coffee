@@ -1,15 +1,15 @@
 class MainView extends app.views.AppView
 	
-	# if you haven't defined the render method, the code
-	# bellow is processed automatically
+	# if you haven't defined the render, on and out methods,
+	# the code bellow is processed automatically by default
 	# 
 	# render:( data )->
 	#	# @usage: @render_template template_name, data
 	# 	@render_template "main", data
+	# 
+	# in:( data )->
+	# 	@el.css "opacity", 0
+	# 	@el.animate {opacity: 1}, 1000
 
-	in:()->
-		$( @route.at ).css( "opacity", 0 )
-		$( @route.at ).animate({opacity:1}, {duration:1000})
-	
-	out:()->
-		$( @route.at ).animate({opacity:0}, {duration:1000})
+	# out:( data )->
+	# 	@el.animate {opacity: 0}, 1000

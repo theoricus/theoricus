@@ -1,7 +1,11 @@
-# Router inspired by: https://github.com/haithembelhaj/RouterJs
+#<< theoricus/utils/string_util
+
+###
+	Router inspired by:
+	https://github.com/haithembelhaj/RouterJs
+###
 
 class Router
-
 	routes: []
 	listeners: []
 
@@ -28,11 +32,10 @@ class Router
 		if @trigger
 			url = state.title or state.hash
 			for route in @routes
-				regex = new RegExp route.text_reg
-				if regex.test url
-					params = regex.exec( url ).slice 1
+				if route.matcher.test url
+					params = route.matcher.exec( url ).slice 1
 					listener route, params for listener in @listeners
-						
+
 		@trigger = true
 
 	navigate:( url, trigger = true, replace = false )->
@@ -51,16 +54,24 @@ class Router
 
 
 class Route
+	StringUtil = theoricus.utils.StringUtil
+
 	@named_param_reg: /:\w+/g
 	@splat_param_reg: /\*\w+/g
 
-	constructor:( @route, @to, @at )->
-		@mask = @route
-		@route = @route.replace Route.named_param_reg, '([^\/]+)'
-		@route = @route.replace Route.splat_param_reg, '(.*?)'
-		@text_reg = "^#{@route}$"
+	constructor:( route, to, at )->
+		@raw = route:route, to:to, at:at
+		
+		@matcher = route.replace Route.named_param_reg, '([^\/]+)'
+		@matcher = @matcher.replace Route.splat_param_reg, '(.*?)'
+		@matcher = new RegExp "^#{@matcher}$"
 
-		@controller = @to.split( "/" )[0]
-		@action = @to.split( "/" )[1]
-		@at_route = @at.split( "#" )[0]
-		@at_container = @at.split( "#" )[1]
+		@controller = to.split( "/" )[0]
+		@action = to.split( "/" )[1]
+
+		if /\#/g.test at
+			@target_route = at.split( "#" )[0]
+			@target_el = at.split( "#" )[1]
+		else
+			@target_route = null
+			@target_el = at
