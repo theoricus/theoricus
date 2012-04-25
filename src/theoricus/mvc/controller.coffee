@@ -19,7 +19,7 @@ class Controller
 		# @route = false
 
 	render:( view_name, data )->
-		console.log "Controller.render( '#{view_name}', '#{data}' )"
+		# console.log "Controller.render( '#{view_name}', '#{data}' )"
 		view = Factory.view @route.controller, view_name
 		view.after_render = @after_run
 		view.after_destroy = @after_destroy

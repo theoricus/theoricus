@@ -9,7 +9,7 @@ class App extends theoricus.Theoricus
 				all: ["en", "pt", "es"]
 
 			# Boot / Root url (default route)
-			boot: "/main/home"
+			boot: "/main"
 
 			# Application routes
 			routes:
@@ -25,7 +25,7 @@ class App extends theoricus.Theoricus
 					to: "home/features",
 					at: "/main/home#features"
 
-				"/main/home/feature/:feature_id/*genre":
+				"/main/home/feature/:feature_id/":
 					to: "home/show_feature",
 					at: "/main/home/features#feature"
 

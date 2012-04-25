@@ -1,8 +1,8 @@
 class View
-	factory = null
+	Factory = null
 
 	_boot:( @the )->
-		factory = @the.factory
+		Factory = @the.factory
 		@
 
 	_render:( @route, auto_tmpl_name, @data = {} )->
@@ -12,9 +12,11 @@ class View
 			@render data
 		else
 			@render_template auto_tmpl_name, data
+		
+		@set_triggers?()
 
 	render_template:( template, data )->
-		template = factory.template @route.controller, template
+		template = Factory.template @route.controller, template
 		template.dom data
 		dom = __ck.buffer.join ''
 		__ck.buffer = []
@@ -29,3 +31,6 @@ class View
 	out:( data )->
 		@el.animate {opacity: 0}, 1000, =>
 			@after_destroy?()
+
+	navigate:( url )->
+		@the.processes.router.navigate url

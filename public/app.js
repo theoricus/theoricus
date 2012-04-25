@@ -11978,7 +11978,6 @@ var theoricus = {};
 
     Model.prototype._boot = function(the) {
       this.the = the;
-      console.log("Model.boot()");
       return this;
     };
 
@@ -11987,17 +11986,17 @@ var theoricus = {};
   })();
 
   __t('theoricus.mvc').View = (function() {
-    var factory;
+    var Factory;
 
     View.name = 'View';
 
     function View() {}
 
-    factory = null;
+    Factory = null;
 
     View.prototype._boot = function(the) {
       this.the = the;
-      factory = this.the.factory;
+      Factory = this.the.factory;
       return this;
     };
 
@@ -12006,15 +12005,16 @@ var theoricus = {};
       this.data = data != null ? data : {};
       this.el = $(this.route.target_el);
       if (this.render) {
-        return this.render(data);
+        this.render(data);
       } else {
-        return this.render_template(auto_tmpl_name, data);
+        this.render_template(auto_tmpl_name, data);
       }
+      return typeof this.set_triggers === "function" ? this.set_triggers() : void 0;
     };
 
     View.prototype.render_template = function(template, data) {
       var dom;
-      template = factory.template(this.route.controller, template);
+      template = Factory.template(this.route.controller, template);
       template.dom(data);
       dom = __ck.buffer.join('');
       __ck.buffer = [];
@@ -12039,6 +12039,10 @@ var theoricus = {};
       }, 1000, function() {
         return typeof _this.after_destroy === "function" ? _this.after_destroy() : void 0;
       });
+    };
+
+    View.prototype.navigate = function(url) {
+      return this.the.processes.router.navigate(url);
     };
 
     return View;
@@ -12073,7 +12077,6 @@ var theoricus = {};
 
     Controller.prototype.render = function(view_name, data) {
       var view;
-      console.log("Controller.render( '" + view_name + "', '" + data + "' )");
       view = Factory.view(this.route.controller, view_name);
       view.after_render = this.after_run;
       view.after_destroy = this.after_destroy;
@@ -12153,7 +12156,7 @@ var theoricus = {};
 
     Theoricus.prototype.config = null;
 
-    Theoricus.prototype.router = null;
+    Theoricus.prototype.processes = null;
 
     function Theoricus(boot) {
       var _ref;
@@ -12180,7 +12183,7 @@ var theoricus = {};
           "default": "en",
           all: ["en", "pt", "es"]
         },
-        boot: "/main/home",
+        boot: "/main",
         routes: {
           "/main": {
             to: "main/index",
@@ -12194,7 +12197,7 @@ var theoricus = {};
             to: "home/features",
             at: "/main/home#features"
           },
-          "/main/home/feature/:feature_id/*genre": {
+          "/main/home/feature/:feature_id/": {
             to: "home/show_feature",
             at: "/main/home/features#feature"
           }
@@ -12336,7 +12339,10 @@ var theoricus = {};
 
     HeadlineTemplate.prototype.dom = function(data) {
       return div("home", function() {
-        return h1("HOME markup rendered! :)");
+        h1("HOME markup rendered! :)");
+        return div({
+          id: "#features"
+        });
       });
     };
 
@@ -12354,6 +12360,16 @@ var theoricus = {};
       return MainView.__super__.constructor.apply(this, arguments);
     }
 
+    MainView.prototype.set_triggers = function() {
+      var _this = this;
+      console.log("ah garoto...");
+      return this.el.find("a").click(function(ev) {
+        console.log("CLICKED!");
+        ev.preventDefault();
+        return _this.navigate($(ev.target).attr("href"));
+      });
+    };
+
     return MainView;
 
   })(app.views.AppView);
@@ -12366,7 +12382,21 @@ var theoricus = {};
 
     MainTemplate.prototype.dom = function(data) {
       div("header", function() {
-        return h1("I'm the HEADER.");
+        h1("I'm the HEADER.");
+        return div("menu", function() {
+          p(a({
+            href: "/main"
+          }, "/main"));
+          p(a({
+            href: "/main/home"
+          }, "/main/home"));
+          p(a({
+            href: "/main/home/features"
+          }, "/main/home/features"));
+          return p(a({
+            href: "/main/home/features/1"
+          }, "/main/home/features/1"));
+        });
       });
       div("main", function() {
         var item, _i, _len, _ref;

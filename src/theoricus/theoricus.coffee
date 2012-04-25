@@ -8,7 +8,7 @@ class Theoricus
 	
 	factory: null
 	config: null
-	router: null
+	processes: null
 	
 	constructor:( @boot )->
 		# console.log "Theoricus is born!"
