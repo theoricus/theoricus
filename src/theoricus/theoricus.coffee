@@ -1,3 +1,4 @@
+#<< theoricus/core/*
 #<< theoricus/config/*
 #<< theoricus/core/*
 

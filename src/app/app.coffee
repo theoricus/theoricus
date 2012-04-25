@@ -7,9 +7,9 @@ class App extends theoricus.Theoricus
 			locales:
 				default: "en"
 				all: ["en", "pt", "es"]
-			
+
 			# Boot / Root url (default route)
-			boot: "/main"
+			boot: "/main/home"
 
 			# Application routes
 			routes:
@@ -19,7 +19,7 @@ class App extends theoricus.Theoricus
 
 				"/main/home":
 					to: "home/index",
-					at: "/main/#holder"
+					at: "/main#holder"
 
 				"/main/home/features":
 					to: "home/features",

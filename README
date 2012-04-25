@@ -18,3 +18,33 @@ MARKUP
 
 STYLE
 	0. are rendered using styl
+
+
+
+
+/app
+	/controllers
+		MainController
+		UserController
+	/models
+		MainModel
+		UserModel
+	/views
+		/main
+			/static
+				layout.coffee
+				layout.styl
+				header.coffee
+				header.styl
+				footer.coffee
+				footer.styl
+			LayoutView
+			HeaderView
+			FooterView
+		
+		/user
+			/templates
+				index
+				list
+			IndexView
+			ListView

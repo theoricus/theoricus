@@ -4,7 +4,7 @@ class Processes
 	Factory = null
 
 	active: {}	
-	rendering: []
+	pending: []
 	
 	constructor:( @the )->
 		Factory = @the.factory
@@ -12,12 +12,34 @@ class Processes
 		@router.on_change @process
 		@router.init @the.boot.boot
 
+
+
 	process:( route, params )=>
+		# console.log "Processes.process( '#{route.raw.route}' )"
+
+		# if has no dependences
+		if route.target_route is null or @is_rendered route.target_route
+			@run route, params
+		
+		# otherwise if it has dependences
+		else
+			@pending.push {route:route, params:params}
+			@router.run route.target_route
+
+	is_rendered:( route )->
+		@active[ route ]?
+
+	run:( route, params )->
 		controller = Factory.controller route.controller
 		params = [].concat( params ).concat( route )
 
-		controller.routing route
-		controller[route.action].apply controller, params
-		controller.routing false
+		controller.after_run = => @after_run()
+		controller._run route, params
+		@active[ route.raw.route ] = route
 
-		@active[ route.mask ] = route
+
+
+	after_run:()->
+		if @pending.length
+			item = @pending.pop()
+			@router.run item.route.raw.route

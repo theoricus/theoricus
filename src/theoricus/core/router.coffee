@@ -23,7 +23,7 @@ class Router
 	init:->
 		return if @initialized
 		@initialized = true
-		@route {title:@the.boot.boot}
+		@run @the.boot.boot
 	
 	map:( route, to, at )->
 		@routes.push new theoricus.core.Route route, to, at
@@ -41,6 +41,11 @@ class Router
 	navigate:( url, trigger = true, replace = false )->
 		@trigger = trigger
 		History[if replace then "replaceState" else "pushState"] null, url, url
+
+	run:( url, trigger = true )->
+		# console.log "Router.run( '#{url}' )"
+		@trigger = trigger
+		@route {title:url}
 
 	go:( index )->
 		History.go index
@@ -71,7 +76,7 @@ class Route
 
 		if /\#/g.test at
 			@target_route = at.split( "#" )[0]
-			@target_el = at.split( "#" )[1]
+			@target_el = "#" + at.split( "#" )[1]
 		else
 			@target_route = null
 			@target_el = at

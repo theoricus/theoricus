@@ -1,4 +1,4 @@
 class Model
-	boot:( @the )->
+	_boot:( @the )->
 		console.log "Model.boot()"
 		@

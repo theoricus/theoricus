@@ -11798,9 +11798,7 @@ var theoricus = {};
         return;
       }
       this.initialized = true;
-      return this.route({
-        title: this.the.boot.boot
-      });
+      return this.run(this.the.boot.boot);
     };
 
     Router.prototype.map = function(route, to, at) {
@@ -11836,6 +11834,16 @@ var theoricus = {};
       }
       this.trigger = trigger;
       return History[replace ? "replaceState" : "pushState"](null, url, url);
+    };
+
+    Router.prototype.run = function(url, trigger) {
+      if (trigger == null) {
+        trigger = true;
+      }
+      this.trigger = trigger;
+      return this.route({
+        title: url
+      });
     };
 
     Router.prototype.go = function(index) {
@@ -11878,7 +11886,7 @@ var theoricus = {};
       this.action = to.split("/")[1];
       if (/\#/g.test(at)) {
         this.target_route = at.split("#")[0];
-        this.target_el = at.split("#")[1];
+        this.target_el = "#" + at.split("#")[1];
       } else {
         this.target_route = null;
         this.target_el = at;
@@ -11886,22 +11894,6 @@ var theoricus = {};
     }
 
     return Route;
-
-  })();
-
-  __t('theoricus.mvc').Model = (function() {
-
-    Model.name = 'Model';
-
-    function Model() {}
-
-    Model.prototype.boot = function(the) {
-      this.the = the;
-      console.log("Model.boot()");
-      return this;
-    };
-
-    return Model;
 
   })();
 
@@ -11914,7 +11906,7 @@ var theoricus = {};
 
     Processes.prototype.active = {};
 
-    Processes.prototype.rendering = [];
+    Processes.prototype.pending = [];
 
     function Processes(the) {
       this.the = the;
@@ -11927,16 +11919,70 @@ var theoricus = {};
     }
 
     Processes.prototype.process = function(route, params) {
-      var controller;
+      if (route.target_route === null || this.is_rendered(route.target_route)) {
+        return this.run(route, params);
+      } else {
+        this.pending.push({
+          route: route,
+          params: params
+        });
+        return this.router.run(route.target_route);
+      }
+    };
+
+    Processes.prototype.is_rendered = function(route) {
+      return this.active[route] != null;
+    };
+
+    Processes.prototype.run = function(route, params) {
+      var controller,
+        _this = this;
       controller = Factory.controller(route.controller);
       params = [].concat(params).concat(route);
-      controller.routing(route);
-      controller[route.action].apply(controller, params);
-      controller.routing(false);
-      return this.active[route.mask] = route;
+      controller.after_run = function() {
+        return _this.after_run();
+      };
+      controller._run(route, params);
+      return this.active[route.raw.route] = route;
+    };
+
+    Processes.prototype.after_run = function() {
+      var item;
+      if (this.pending.length) {
+        item = this.pending.pop();
+        return this.router.run(item.route.raw.route);
+      }
     };
 
     return Processes;
+
+  })();
+
+  __t('theoricus.config').Config = (function() {
+
+    Config.name = 'Config';
+
+    function Config(the) {
+      this.the = the;
+    }
+
+    return Config;
+
+  })();
+
+  __t('theoricus.mvc').Model = (function() {
+
+    Model.name = 'Model';
+
+    function Model() {}
+
+    Model.prototype._boot = function(the) {
+      this.the = the;
+      console.log("Model.boot()");
+      return this;
+    };
+
+    return Model;
 
   })();
 
@@ -11949,43 +11995,50 @@ var theoricus = {};
 
     factory = null;
 
-    View.prototype.boot = function(the) {
+    View.prototype._boot = function(the) {
       this.the = the;
       factory = this.the.factory;
       return this;
     };
 
-    View.prototype._render = function(route, data) {
+    View.prototype._render = function(route, auto_tmpl_name, data) {
       this.route = route;
       this.data = data != null ? data : {};
       this.el = $(this.route.target_el);
       if (this.render) {
         return this.render(data);
       } else {
-        return this.render_template(this.route.controller, data);
+        return this.render_template(auto_tmpl_name, data);
       }
     };
 
     View.prototype.render_template = function(template, data) {
       var dom;
-      template = factory.template(template);
+      template = factory.template(this.route.controller, template);
       template.dom(data);
       dom = __ck.buffer.join('');
+      __ck.buffer = [];
       this.el.append(dom);
       return this["in"]();
     };
 
     View.prototype["in"] = function(data) {
+      var _this = this;
       this.el.css("opacity", 0);
       return this.el.animate({
         opacity: 1
-      }, 1000);
+      }, 1000, function() {
+        return typeof _this.after_render === "function" ? _this.after_render() : void 0;
+      });
     };
 
     View.prototype.out = function(data) {
+      var _this = this;
       return this.el.animate({
         opacity: 0
-      }, 1000);
+      }, 1000, function() {
+        return typeof _this.after_destroy === "function" ? _this.after_destroy() : void 0;
+      });
     };
 
     return View;
@@ -12003,35 +12056,31 @@ var theoricus = {};
 
     StringUtil = theoricus.utils.StringUtil;
 
-    Controller.prototype.boot = function(the) {
+    Controller.prototype._boot = function(the) {
       this.the = the;
       Factory = this.the.factory;
-      console.log("Controller.boot()");
       return this;
     };
 
-    Controller.prototype.render = function(view, data) {
-      view = Factory.view("main");
-      return view._render(this.route, data);
+    Controller.prototype._run = function(route, params) {
+      this.route = route;
+      if (this[route.action] != null) {
+        return this[route.action].apply(this, params);
+      } else {
+        return this.render(this.route.controller, Factory.model(this.route.controller));
+      }
     };
 
-    Controller.prototype.routing = function(route) {
-      this.route = route;
+    Controller.prototype.render = function(view_name, data) {
+      var view;
+      console.log("Controller.render( '" + view_name + "', '" + data + "' )");
+      view = Factory.view(this.route.controller, view_name);
+      view.after_render = this.after_run;
+      view.after_destroy = this.after_destroy;
+      return view._render(this.route, view_name, data);
     };
 
     return Controller;
-
-  })();
-
-  __t('theoricus.config').Config = (function() {
-
-    Config.name = 'Config';
-
-    function Config(the) {
-      this.the = the;
-    }
-
-    return Config;
 
   })();
 
@@ -12048,8 +12097,8 @@ var theoricus = {};
       this.the = the;
       this.c_tmpl = "" + this.the.boot.name + ".controllers.{classname}Controller";
       this.m_tmpl = "" + this.the.boot.name + ".models.{classname}Model";
-      this.v_tmpl = "" + this.the.boot.name + ".views.{classname}View";
-      this.t_tmpl = "" + this.the.boot.name + ".views.templates.{classname}Template";
+      this.v_tmpl = "" + this.the.boot.name + ".views.{ns}.{classname}View";
+      this.t_tmpl = "" + this.the.boot.name + ".views.{ns}.templates.{classname}Template";
     }
 
     Factory.prototype.controller = function(name) {
@@ -12060,7 +12109,8 @@ var theoricus = {};
       } else {
         controller = eval(this.c_tmpl.replace("{classname}", name));
         controller = new controller;
-        return this.controllers[name] = controller.boot(this.the);
+        controller._boot(this.the);
+        return this.controllers[name] = controller;
       }
     };
 
@@ -12069,22 +12119,22 @@ var theoricus = {};
       name = StringUtil.camelize(name);
       model = eval(this.m_tmpl.replace("{classname}", name));
       model = new model;
-      return model.boot(this.the);
+      return model._boot(this.the);
     };
 
-    Factory.prototype.view = function(name) {
-      var view;
+    Factory.prototype.view = function(ns, name) {
+      var classpath, view;
       name = StringUtil.camelize(name);
-      view = eval(this.v_tmpl.replace("{classname}", name));
-      view = new view;
-      return view.boot(this.the);
+      classpath = this.v_tmpl.replace("{ns}", ns).replace("{classname}", name);
+      view = new (eval(classpath));
+      return view._boot(this.the);
     };
 
-    Factory.prototype.template = function(name) {
-      var template;
+    Factory.prototype.template = function(ns, name) {
+      var classpath;
       name = StringUtil.camelize(name);
-      template = eval(this.t_tmpl.replace("{classname}", name));
-      return new template;
+      classpath = this.t_tmpl.replace("{ns}", ns).replace("{classname}", name);
+      return new (eval(classpath));
     };
 
     return Factory;
@@ -12130,7 +12180,7 @@ var theoricus = {};
           "default": "en",
           all: ["en", "pt", "es"]
         },
-        boot: "/main",
+        boot: "/main/home",
         routes: {
           "/main": {
             to: "main/index",
@@ -12138,7 +12188,7 @@ var theoricus = {};
           },
           "/main/home": {
             to: "home/index",
-            at: "/main/#holder"
+            at: "/main#holder"
           },
           "/main/home/features": {
             to: "home/features",
@@ -12170,11 +12220,6 @@ var theoricus = {};
       return AppController.__super__.constructor.apply(this, arguments);
     }
 
-    AppController.prototype.index = function() {
-      this.model = new app.models.AppModel;
-      return this.render("app", this.model);
-    };
-
     return AppController;
 
   })(theoricus.mvc.Controller);
@@ -12189,19 +12234,8 @@ var theoricus = {};
       return HomeController.__super__.constructor.apply(this, arguments);
     }
 
-    HomeController.prototype.index = function() {
-      return console.log("HomeController.index()");
-    };
-
-    HomeController.prototype.features = function() {
-      return console.log("HomeController.features()");
-    };
-
-    HomeController.prototype.show_feature = function(id, genre) {
-      if (genre == null) {
-        genre = "pop";
-      }
-      return console.log("HomeController.show_feature( " + id + ", " + genre + " )");
+    HomeController.prototype.index = function(data) {
+      return this.render("headline", new app.models.HomeModel);
     };
 
     return HomeController;
@@ -12217,10 +12251,6 @@ var theoricus = {};
     function MainController() {
       return MainController.__super__.constructor.apply(this, arguments);
     }
-
-    MainController.prototype.index = function() {
-      return this.render("main", new app.models.MainModel);
-    };
 
     return MainController;
 
@@ -12247,12 +12277,12 @@ var theoricus = {};
     HomeModel.name = 'HomeModel';
 
     function HomeModel() {
-      console.log("HomeModel is born!");
+      return HomeModel.__super__.constructor.apply(this, arguments);
     }
 
     return HomeModel;
 
-  })(theoricus.mvc.Model);
+  })(app.models.AppModel);
 
   __t('app.models').MainModel = (function(_super) {
 
@@ -12284,21 +12314,37 @@ var theoricus = {};
 
   })(theoricus.mvc.View);
 
-  __t('app.views').HomeView = (function(_super) {
+  __t('app.views.home').HeadlineView = (function(_super) {
 
-    __extends(HomeView, _super);
+    __extends(HeadlineView, _super);
 
-    HomeView.name = 'HomeView';
+    HeadlineView.name = 'HeadlineView';
 
-    function HomeView() {
-      console.log("AppView is born!");
+    function HeadlineView() {
+      return HeadlineView.__super__.constructor.apply(this, arguments);
     }
 
-    return HomeView;
+    return HeadlineView;
 
   })(app.views.AppView);
 
-  __t('app.views').MainView = (function(_super) {
+  __t('app.views.home.templates').HeadlineTemplate = (function() {
+
+    HeadlineTemplate.name = 'HeadlineTemplate';
+
+    function HeadlineTemplate() {}
+
+    HeadlineTemplate.prototype.dom = function(data) {
+      return div("home", function() {
+        return h1("HOME markup rendered! :)");
+      });
+    };
+
+    return HeadlineTemplate;
+
+  })();
+
+  __t('app.views.main').MainView = (function(_super) {
 
     __extends(MainView, _super);
 
@@ -12312,23 +12358,7 @@ var theoricus = {};
 
   })(app.views.AppView);
 
-  __t('app.views.templates').HomeTemplate = (function() {
-
-    HomeTemplate.name = 'HomeTemplate';
-
-    function HomeTemplate() {}
-
-    HomeTemplate.prototype.dom = function(data) {
-      return div("home", function() {
-        return h1("HOME markup rendered! :)");
-      });
-    };
-
-    return HomeTemplate;
-
-  })();
-
-  __t('app.views.templates').MainTemplate = (function() {
+  __t('app.views.main.templates').MainTemplate = (function() {
 
     MainTemplate.name = 'MainTemplate';
 
@@ -12339,15 +12369,16 @@ var theoricus = {};
         return h1("I'm the HEADER.");
       });
       div("main", function() {
-        var item, _i, _len, _ref, _results;
+        var item, _i, _len, _ref;
         h1("I'm the MAIN.");
         _ref = data.lines;
-        _results = [];
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           item = _ref[_i];
-          _results.push(p(item));
+          p(item);
         }
-        return _results;
+        return div({
+          id: "holder"
+        });
       });
       return div("footer", function() {
         return h1("I'm the FOOTER.");
