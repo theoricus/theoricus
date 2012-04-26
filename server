@@ -1,0 +1,49 @@
+#!/Users/nybras/.nvm/v0.4.9/bin/node
+
+var http = require("http"),
+	url = require("url"),
+	path = require("path"),
+	fs = require("fs"),
+	port = process.argv[2] || 8888,
+	root = process.argv[3] || "/public"
+
+http.createServer(function(request, response) {
+
+	var uri = url.parse(request.url).pathname
+	var filename = path.join(process.cwd() + root, uri);
+
+	path.exists(filename, function(exists) {
+		if(!exists || fs.lstatSync(filename).isDirectory() ) {
+
+			filename = process.cwd() + root + "/index.html"
+			file = fs.readFileSync( filename , "binary")
+
+			response.writeHead(200);
+			response.write( file );
+			response.end();
+
+			// console.log( "INDEX: " + filename );
+
+			return;
+		}
+
+		fs.readFile(filename, "binary", function(err, file) {
+
+			if(err) {        
+				response.writeHead(500, {"Content-Type": "text/plain"});
+				response.write(err + "\n");
+				response.end();
+				return;
+			}
+
+			response.writeHead(200);
+			response.write(file, "binary");
+			response.end();
+
+			// console.log( "OTHER: " +filename );
+		});
+
+	});
+}).listen(parseInt(port, 10));
+
+console.log("Theoricus ridicuo server running at\n  => http://localhost:" + port + "/\nCTRL + C to shutdown");
