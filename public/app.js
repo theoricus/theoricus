@@ -11794,11 +11794,16 @@ var theoricus = {};
     };
 
     Router.prototype.init = function() {
+      var url;
       if (this.initialized) {
         return;
       }
       this.initialized = true;
-      return this.run(this.the.boot.boot);
+      url = window.location.pathname;
+      if (url === "/") {
+        url = this.the.boot.boot;
+      }
+      return this.run(url);
     };
 
     Router.prototype.map = function(route, to, at) {
@@ -12364,7 +12369,6 @@ var theoricus = {};
       var _this = this;
       console.log("ah garoto...");
       return this.el.find("a").click(function(ev) {
-        console.log("CLICKED!");
         ev.preventDefault();
         return _this.navigate($(ev.target).attr("href"));
       });

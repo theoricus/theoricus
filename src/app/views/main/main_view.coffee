@@ -5,6 +5,5 @@ class MainView extends app.views.AppView
 	set_triggers:()->
 		console.log "ah garoto..."
 		@el.find( "a" ).click ( ev )=>
-			console.log "CLICKED!"
 			ev.preventDefault()
-			@navigate $( ev.target ).attr( "href" )
+			@navigate $( ev.target ).attr "href"
