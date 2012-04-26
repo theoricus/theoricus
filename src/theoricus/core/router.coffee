@@ -23,7 +23,11 @@ class Router
 	init:->
 		return if @initialized
 		@initialized = true
-		@run @the.boot.boot
+
+		url = window.location.pathname
+		url = @the.boot.boot if url == "/"
+
+		@run url
 	
 	map:( route, to, at )->
 		@routes.push new theoricus.core.Route route, to, at
