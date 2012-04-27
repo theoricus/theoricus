@@ -16,7 +16,7 @@ class View
 		@set_triggers?()
 
 	render_template:( template, data )->
-		template = Factory.template @route.controller, template
+		template = Factory.template @route.api.controller_name, template
 		template.dom data
 		dom = __ck.buffer.join ''
 		__ck.buffer = []
@@ -28,9 +28,8 @@ class View
 		@el.animate {opacity: 1}, 1000, =>
 			@after_render?()
 
-	out:( data )->
-		@el.animate {opacity: 0}, 1000, =>
-			@after_destroy?()
+	out:( after_destroy )->
+		@el.animate {opacity: 0}, 600, after_destroy
 
 	navigate:( url )->
 		@the.processes.router.navigate url

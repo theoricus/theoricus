@@ -13,7 +13,7 @@ toast 'src'
 	# expose: ''
 	# minify: true
 	exclude: [
-		"app/static"
+		# "app/static"
 		# "app/views/templates"
 	]
 

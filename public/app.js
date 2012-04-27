@@ -11757,6 +11757,31 @@ var theoricus = {};
 
   })();
 
+  __t('theoricus.utils').ObjectUtil = (function() {
+
+    ObjectUtil.name = 'ObjectUtil';
+
+    function ObjectUtil() {}
+
+    ObjectUtil.find = function(src, search) {
+      var k, v;
+      for (k in search) {
+        v = search[k];
+        if (v instanceof Object) {
+          return ObjectUtil.find(src[k], v);
+        } else {
+          if (src[k] === v) {
+            return src;
+          }
+        }
+      }
+      return null;
+    };
+
+    return ObjectUtil;
+
+  })();
+
   /*
   	Router inspired by:
   	https://github.com/haithembelhaj/RouterJs
@@ -11764,8 +11789,11 @@ var theoricus = {};
 
 
   __t('theoricus.core').Router = (function() {
+    var Factory;
 
     Router.name = 'Router';
+
+    Factory = null;
 
     Router.prototype.routes = [];
 
@@ -11773,12 +11801,12 @@ var theoricus = {};
 
     Router.prototype.trigger = true;
 
-    Router.prototype.initialized = false;
-
-    function Router(the) {
+    function Router(the, on_change) {
       var opts, route, _ref,
         _this = this;
       this.the = the;
+      this.on_change = on_change;
+      Factory = this.the.factory;
       _ref = this.the.boot.routes;
       for (route in _ref) {
         opts = _ref[route];
@@ -11787,43 +11815,33 @@ var theoricus = {};
       History.Adapter.bind(window, 'statechange', function() {
         return _this.route(History.getState());
       });
+      setTimeout((function() {
+        var url;
+        url = window.location.pathname;
+        if (url === "/") {
+          url = _this.the.boot.boot;
+        }
+        return _this.run(url);
+      }), 1);
     }
 
-    Router.prototype.on_change = function(listener) {
-      return this.listeners.push(listener);
-    };
-
-    Router.prototype.init = function() {
-      var url;
-      if (this.initialized) {
-        return;
-      }
-      this.initialized = true;
-      url = window.location.pathname;
-      if (url === "/") {
-        url = this.the.boot.boot;
-      }
-      return this.run(url);
-    };
-
     Router.prototype.map = function(route, to, at) {
-      return this.routes.push(new theoricus.core.Route(route, to, at));
+      return this.routes.push(new theoricus.core.Route(route, to, at, this));
     };
 
     Router.prototype.route = function(state) {
-      var listener, params, route, url, _i, _j, _len, _len1, _ref, _ref1;
+      var route, url, _i, _len, _ref;
       if (this.trigger) {
         url = state.title || state.hash;
         _ref = this.routes;
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           route = _ref[_i];
           if (route.matcher.test(url)) {
-            params = route.matcher.exec(url).slice(1);
-            _ref1 = this.listeners;
-            for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-              listener = _ref1[_j];
-              listener(route, params);
+            route.set_location(url);
+            if (typeof this.on_change === "function") {
+              this.on_change(route);
             }
+            return;
           }
         }
       }
@@ -11868,9 +11886,11 @@ var theoricus = {};
   })();
 
   __t('theoricus.core').Route = (function() {
-    var StringUtil;
+    var Factory, StringUtil;
 
     Route.name = 'Route';
+
+    Factory = null;
 
     StringUtil = theoricus.utils.StringUtil;
 
@@ -11878,7 +11898,12 @@ var theoricus = {};
 
     Route.splat_param_reg = /\*\w+/g;
 
-    function Route(route, to, at) {
+    Route.prototype.api = null;
+
+    Route.prototype.location = null;
+
+    function Route(route, to, at, router) {
+      Factory = router.the.factory;
       this.raw = {
         route: route,
         to: to,
@@ -11887,8 +11912,10 @@ var theoricus = {};
       this.matcher = route.replace(Route.named_param_reg, '([^\/]+)');
       this.matcher = this.matcher.replace(Route.splat_param_reg, '(.*?)');
       this.matcher = new RegExp("^" + this.matcher + "$");
-      this.controller = to.split("/")[0];
-      this.action = to.split("/")[1];
+      this.api = {};
+      this.api.controller_name = to.split("/")[0];
+      this.api.controller = Factory.controller(this.api.controller_name);
+      this.api.action = to.split("/")[1];
       if (/\#/g.test(at)) {
         this.target_route = at.split("#")[0];
         this.target_el = "#" + at.split("#")[1];
@@ -11898,68 +11925,12 @@ var theoricus = {};
       }
     }
 
+    Route.prototype.set_location = function(location) {
+      this.location = location;
+      return this.api.params = this.matcher.exec(location).slice(1);
+    };
+
     return Route;
-
-  })();
-
-  __t('theoricus.core').Processes = (function() {
-    var Factory;
-
-    Processes.name = 'Processes';
-
-    Factory = null;
-
-    Processes.prototype.active = {};
-
-    Processes.prototype.pending = [];
-
-    function Processes(the) {
-      this.the = the;
-      this.process = __bind(this.process, this);
-
-      Factory = this.the.factory;
-      this.router = new theoricus.core.Router(this.the);
-      this.router.on_change(this.process);
-      this.router.init(this.the.boot.boot);
-    }
-
-    Processes.prototype.process = function(route, params) {
-      if (route.target_route === null || this.is_rendered(route.target_route)) {
-        return this.run(route, params);
-      } else {
-        this.pending.push({
-          route: route,
-          params: params
-        });
-        return this.router.run(route.target_route);
-      }
-    };
-
-    Processes.prototype.is_rendered = function(route) {
-      return this.active[route] != null;
-    };
-
-    Processes.prototype.run = function(route, params) {
-      var controller,
-        _this = this;
-      controller = Factory.controller(route.controller);
-      params = [].concat(params).concat(route);
-      controller.after_run = function() {
-        return _this.after_run();
-      };
-      controller._run(route, params);
-      return this.active[route.raw.route] = route;
-    };
-
-    Processes.prototype.after_run = function() {
-      var item;
-      if (this.pending.length) {
-        item = this.pending.pop();
-        return this.router.run(item.route.raw.route);
-      }
-    };
-
-    return Processes;
 
   })();
 
@@ -11972,6 +11943,222 @@ var theoricus = {};
     }
 
     return Config;
+
+  })();
+
+  __t('theoricus.utils').ArrayUtil = (function() {
+    var ObjectUtil;
+
+    ArrayUtil.name = 'ArrayUtil';
+
+    function ArrayUtil() {}
+
+    ObjectUtil = theoricus.utils.ObjectUtil;
+
+    ArrayUtil.find = function(src, search) {
+      var i, v, _i, _len;
+      for (i = _i = 0, _len = src.length; _i < _len; i = ++_i) {
+        v = src[i];
+        if (search instanceof String) {
+          if (v === src) {
+            return {
+              item: v,
+              index: i
+            };
+          }
+        } else if (search instanceof Object) {
+          if (ObjectUtil.find(v, search) != null) {
+            return {
+              item: v,
+              index: i
+            };
+          }
+        }
+      }
+      return null;
+    };
+
+    ArrayUtil["delete"] = function(src, search) {
+      var item;
+      item = ArrayUtil.find(src, search);
+      if (item != null) {
+        return src.splice(item.index, 1);
+      }
+    };
+
+    return ArrayUtil;
+
+  })();
+
+  __t('theoricus.core').Processes = (function() {
+    var ArrayUtil, Factory;
+
+    Processes.name = 'Processes';
+
+    Factory = null;
+
+    ArrayUtil = theoricus.utils.ArrayUtil;
+
+    Processes.prototype.deads = [];
+
+    Processes.prototype.active = [];
+
+    Processes.prototype.pendings = [];
+
+    function Processes(the) {
+      this.the = the;
+      this._run_pending_processes = __bind(this._run_pending_processes, this);
+
+      this._destroy_dead_processes = __bind(this._destroy_dead_processes, this);
+
+      this._on_router_change = __bind(this._on_router_change, this);
+
+      Factory = this.the.factory;
+      this.router = new theoricus.core.Router(this.the, this._on_router_change);
+    }
+
+    Processes.prototype._on_router_change = function(route) {
+      var _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2;
+      console.log("::::::::::::::::::::::::::::::::: ON CHANGE");
+      console.log(route);
+      this._filter_pending_processes(route);
+      this._filter_dead_processes();
+      this._filter_pending_processes(route);
+      console.log("================= ACTIVES");
+      _ref = this.active;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        route = _ref[_i];
+        console.log(route);
+      }
+      console.log("<<<");
+      console.log("================= PENDINGS");
+      _ref1 = this.pendings;
+      for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+        route = _ref1[_j];
+        console.log(route);
+      }
+      console.log("<<<");
+      console.log("================= DEAD");
+      _ref2 = this.deads;
+      for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
+        route = _ref2[_k];
+        console.log(route);
+      }
+      console.log("<<<");
+      return this._destroy_dead_processes();
+    };
+
+    Processes.prototype._filter_pending_processes = function(route) {
+      var search, _results;
+      console.log("Processes._filter_pending_processes for:");
+      console.log(route);
+      this.pendings = [route];
+      _results = [];
+      while (route.target_route != null) {
+        search = {
+          raw: {
+            route: route.target_route
+          }
+        };
+        route = ArrayUtil.find(this.router.routes, search);
+        if (route != null) {
+          this.pendings.push(route.item);
+        }
+        if (route == null) {
+          break;
+        } else {
+          _results.push(void 0);
+        }
+      }
+      return _results;
+    };
+
+    Processes.prototype._filter_dead_processes = function() {
+      var found, route, search, _i, _len, _ref, _results;
+      console.log("Processes._filter_dead_processes");
+      this.deads = [];
+      _ref = this.active;
+      _results = [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        route = _ref[_i];
+        console.log("$$$$$$$$$$$$ ACTIVE IS DEAD?");
+        console.log(route);
+        search = {
+          raw: {
+            route: route.raw.route
+          }
+        };
+        console.log("@@@@ Search for " + route.raw.route + " in pendings");
+        found = ArrayUtil.find(this.pendings, search);
+        console.log(found);
+        if (found === null) {
+          console.log("IS DEAD!");
+          _results.push(this.deads.push(route));
+        } else {
+          console.log("NOT DEAD!");
+          console.log(route);
+          _results.push(console.log("<<<"));
+        }
+      }
+      return _results;
+    };
+
+    Processes.prototype._destroy_dead_processes = function() {
+      var active, route, search, _i, _j, _len, _len1, _ref, _ref1;
+      console.log("Processes._destroy_dead_processes");
+      if (this.deads.length) {
+        route = this.deads.pop();
+        console.log("DESTROY=============================================" + this.active.length);
+        _ref = this.active;
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          active = _ref[_i];
+          console.log(active);
+        }
+        search = {
+          raw: {
+            route: route.raw.route
+          }
+        };
+        ArrayUtil["delete"](this.active, search);
+        console.log("DESTROYED=============================================" + this.active.length);
+        _ref1 = this.active;
+        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+          active = _ref1[_j];
+          console.log(active);
+        }
+        return route.api.controller._destroy(this._destroy_dead_processes);
+      } else {
+        console.log("All processes have benn, huh, destroyed.");
+        return this._run_pending_processes();
+      }
+    };
+
+    Processes.prototype._run_pending_processes = function() {
+      var route, search;
+      console.log("++++++++++++++++++++++++++++++++++++++");
+      if (this.pendings.length) {
+        route = this.pendings.pop();
+        console.log("Processes._run_pending_processes for:");
+        console.log(route);
+        search = {
+          raw: {
+            route: route.raw.route
+          }
+        };
+        if (ArrayUtil.find(this.active, search) === null) {
+          console.log("RENDER IT!");
+          this.active.push(route);
+          return route.api.controller._run(route, this._run_pending_processes);
+        } else {
+          console.log("ALREADY RENDERED!");
+          return this._run_pending_processes();
+        }
+      } else {
+        return console.log("All processes have benn, huh, processed.");
+      }
+    };
+
+    return Processes;
 
   })();
 
@@ -12019,7 +12206,7 @@ var theoricus = {};
 
     View.prototype.render_template = function(template, data) {
       var dom;
-      template = Factory.template(this.route.controller, template);
+      template = Factory.template(this.route.api.controller_name, template);
       template.dom(data);
       dom = __ck.buffer.join('');
       __ck.buffer = [];
@@ -12037,13 +12224,10 @@ var theoricus = {};
       });
     };
 
-    View.prototype.out = function(data) {
-      var _this = this;
+    View.prototype.out = function(after_destroy) {
       return this.el.animate({
         opacity: 0
-      }, 1000, function() {
-        return typeof _this.after_destroy === "function" ? _this.after_destroy() : void 0;
-      });
+      }, 600, after_destroy);
     };
 
     View.prototype.navigate = function(url) {
@@ -12071,21 +12255,34 @@ var theoricus = {};
       return this;
     };
 
-    Controller.prototype._run = function(route, params) {
+    Controller.prototype._run = function(route, after_run) {
+      var alias, model;
       this.route = route;
-      if (this[route.action] != null) {
-        return this[route.action].apply(this, params);
+      console.log("Controller._run");
+      if (this[this.route.api.action] != null) {
+        this[this.route.api.action].apply(this, this.route.api.params, after_run);
+        return console.log("IF");
       } else {
-        return this.render(this.route.controller, Factory.model(this.route.controller));
+        alias = this.route.api.controller_name;
+        console.log("ELSE -> " + alias);
+        model = Factory.model(alias);
+        return this.render(alias, model, after_run);
       }
     };
 
-    Controller.prototype.render = function(view_name, data) {
-      var view;
-      view = Factory.view(this.route.controller, view_name);
-      view.after_render = this.after_run;
-      view.after_destroy = this.after_destroy;
-      return view._render(this.route, view_name, data);
+    Controller.prototype._destroy = function(after_destroy) {
+      var _this = this;
+      console.log("controller._destroy" + after_destroy);
+      return this.view.out(function() {
+        $(_this.view.el).empty();
+        return typeof after_destroy === "function" ? after_destroy() : void 0;
+      });
+    };
+
+    Controller.prototype.render = function(view_name, data, after_render) {
+      this.view = Factory.view(this.route.api.controller_name, view_name);
+      this.view.after_render = after_render;
+      return this.view._render(this.route, view_name, data);
     };
 
     return Controller;
@@ -12124,6 +12321,7 @@ var theoricus = {};
 
     Factory.prototype.model = function(name) {
       var model;
+      console.log("Factory.model( '" + name + "' )");
       name = StringUtil.camelize(name);
       model = eval(this.m_tmpl.replace("{classname}", name));
       model = new model;
@@ -12140,6 +12338,7 @@ var theoricus = {};
 
     Factory.prototype.template = function(ns, name) {
       var classpath;
+      console.log("Factory.template( '" + ns + "', '" + name + "' )");
       name = StringUtil.camelize(name);
       classpath = this.t_tmpl.replace("{ns}", ns).replace("{classname}", name);
       return new (eval(classpath));
@@ -12242,8 +12441,8 @@ var theoricus = {};
       return HomeController.__super__.constructor.apply(this, arguments);
     }
 
-    HomeController.prototype.index = function(data) {
-      return this.render("headline", new app.models.HomeModel);
+    HomeController.prototype.index = function(data, fn) {
+      return this.render("headline", new app.models.HomeModel, fn);
     };
 
     return HomeController;
