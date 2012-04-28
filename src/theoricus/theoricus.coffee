@@ -12,8 +12,6 @@ class Theoricus
 	
 	constructor:( @boot )->
 		# console.log "Theoricus is born!"
-		@boot.name = @boot.name ? "app"
-
-		@config = new theoricus.config.Config @
+		@boot.name = "app"
 		@factory = new theoricus.core.Factory @
 		@processes = new theoricus.core.Processes @

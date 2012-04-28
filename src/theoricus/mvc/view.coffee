@@ -12,7 +12,7 @@ class View
 			@render data
 		else
 			@render_template auto_tmpl_name, data
-		
+
 		@set_triggers?()
 
 	render_template:( template, data )->
@@ -24,17 +24,18 @@ class View
 		@in( @after_in )
 
 	in:( after_in )->
-		@el.css "opacity", 0
-		@el.animate {opacity: 1}, 1000, =>
-			# console.log "AFTER INNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
-			# console.log @
-			# console.log @after_in
-			# console.log ">>>>>>>>>>>>>>>!"
+		if @the.boot.auto_transition
+			@el.css "opacity", 0
+			@el.animate {opacity: 1}, 600, =>
+				after_in?()
+		else
 			after_in?()
 
 	out:( after_out )->
-		# consrole.log "out.... " + after_destroy
-		@el.animate {opacity: 0}, 1000, after_out
+		if @the.boot.auto_transition
+			@el.animate {opacity: 0}, 300, after_out
+		else
+			after_out?()
 
 	navigate:( url )->
 		@the.processes.router.navigate url

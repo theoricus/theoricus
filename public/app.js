@@ -11756,6 +11756,69 @@ var theoricus = {};
 
   })();
 
+  /*
+  	Router Logic inspired by RouterJS:
+  	https://github.com/haithembelhaj/RouterJs
+  */
+
+
+  __t('theoricus.core').Route = (function() {
+    var Factory, StringUtil;
+
+    Route.name = 'Route';
+
+    Factory = null;
+
+    StringUtil = theoricus.utils.StringUtil;
+
+    Route.named_param_reg = /:\w+/g;
+
+    Route.splat_param_reg = /\*\w+/g;
+
+    Route.prototype.api = null;
+
+    Route.prototype.location = null;
+
+    function Route(route, to, at, router) {
+      Factory = router.the.factory;
+      this.raw = {
+        route: route,
+        to: to,
+        at: at
+      };
+      this.matcher = route.replace(Route.named_param_reg, '([^\/]+)');
+      this.matcher = this.matcher.replace(Route.splat_param_reg, '(.*?)');
+      this.matcher = new RegExp("^" + this.matcher + "$");
+      this.api = {};
+      this.api.controller_name = to.split("/")[0];
+      this.api.controller = Factory.controller(this.api.controller_name);
+      this.api.action = to.split("/")[1];
+      if (/\#/g.test(at)) {
+        this.target_route = at.split("#")[0];
+        this.target_el = "#" + at.split("#")[1];
+      } else {
+        this.target_route = null;
+        this.target_el = at;
+      }
+    }
+
+    Route.prototype.run = function(after_run) {
+      return this.api.controller._run(this, after_run);
+    };
+
+    Route.prototype.destroy = function(after_destroy) {
+      return this.api.controller._destroy(this, after_destroy);
+    };
+
+    Route.prototype.set_location = function(location) {
+      this.location = location;
+      return this.api.params = this.matcher.exec(location).slice(1);
+    };
+
+    return Route;
+
+  })();
+
   __t('theoricus.utils').ObjectUtil = (function() {
 
     ObjectUtil.name = 'ObjectUtil';
@@ -11782,7 +11845,7 @@ var theoricus = {};
   })();
 
   /*
-  	Router inspired by:
+  	Router Logic inspired by RouterJS:
   	https://github.com/haithembelhaj/RouterJs
   */
 
@@ -11851,6 +11914,7 @@ var theoricus = {};
     };
 
     Router.prototype.navigate = function(url, trigger, replace) {
+      var action;
       if (trigger == null) {
         trigger = true;
       }
@@ -11858,7 +11922,8 @@ var theoricus = {};
         replace = false;
       }
       this.trigger = trigger;
-      return History[replace ? "replaceState" : "pushState"](null, url, url);
+      action = replace ? "replaceState" : "pushState";
+      return History[action](null, url, url);
     };
 
     Router.prototype.run = function(url, trigger) {
@@ -11884,63 +11949,6 @@ var theoricus = {};
     };
 
     return Router;
-
-  })();
-
-  __t('theoricus.core').Route = (function() {
-    var Factory, StringUtil;
-
-    Route.name = 'Route';
-
-    Factory = null;
-
-    StringUtil = theoricus.utils.StringUtil;
-
-    Route.named_param_reg = /:\w+/g;
-
-    Route.splat_param_reg = /\*\w+/g;
-
-    Route.prototype.api = null;
-
-    Route.prototype.location = null;
-
-    function Route(route, to, at, router) {
-      Factory = router.the.factory;
-      this.raw = {
-        route: route,
-        to: to,
-        at: at
-      };
-      this.matcher = route.replace(Route.named_param_reg, '([^\/]+)');
-      this.matcher = this.matcher.replace(Route.splat_param_reg, '(.*?)');
-      this.matcher = new RegExp("^" + this.matcher + "$");
-      this.api = {};
-      this.api.controller_name = to.split("/")[0];
-      this.api.controller = Factory.controller(this.api.controller_name);
-      this.api.action = to.split("/")[1];
-      if (/\#/g.test(at)) {
-        this.target_route = at.split("#")[0];
-        this.target_el = "#" + at.split("#")[1];
-      } else {
-        this.target_route = null;
-        this.target_el = at;
-      }
-    }
-
-    Route.prototype.run = function(after_run) {
-      return this.api.controller._run(this, after_run);
-    };
-
-    Route.prototype.destroy = function(after_destroy) {
-      return this.api.controller._destroy(this, after_destroy);
-    };
-
-    Route.prototype.set_location = function(location) {
-      this.location = location;
-      return this.api.params = this.matcher.exec(location).slice(1);
-    };
-
-    return Route;
 
   })();
 
@@ -12031,8 +12039,7 @@ var theoricus = {};
 
     Processes.prototype._on_router_change = function(route) {
       if (this.locked) {
-        this.router.navigate(this.last_route.location, false, true);
-        return;
+        return this.router.navigate(this.last_route.location, false, true);
       }
       this.last_route = route;
       this.locked = true;
@@ -12101,11 +12108,8 @@ var theoricus = {};
           }
         };
         ArrayUtil["delete"](this.active_processes, search);
-        console.log("Pr. DESTROY....");
-        console.log(route);
         return route.destroy(this._destroy_dead_processes);
       } else {
-        console.log("All processes have benn, huh, destroyed.");
         return this._run_pending_processes();
       }
     };
@@ -12119,14 +12123,13 @@ var theoricus = {};
             route: route.raw.route
           }
         };
-        if (ArrayUtil.find(this.active_processes, search) === null) {
+        if (ArrayUtil.find(this.active_processes, search) == null) {
           this.active_processes.push(route);
           return route.run(this._run_pending_processes);
         } else {
           return this._run_pending_processes();
         }
       } else {
-        console.log("All processes have benn, huh, processed.");
         return this.locked = false;
       }
     };
@@ -12189,18 +12192,26 @@ var theoricus = {};
 
     View.prototype["in"] = function(after_in) {
       var _this = this;
-      this.el.css("opacity", 0);
-      return this.el.animate({
-        opacity: 1
-      }, 1000, function() {
+      if (this.the.boot.auto_transition) {
+        this.el.css("opacity", 0);
+        return this.el.animate({
+          opacity: 1
+        }, 600, function() {
+          return typeof after_in === "function" ? after_in() : void 0;
+        });
+      } else {
         return typeof after_in === "function" ? after_in() : void 0;
-      });
+      }
     };
 
     View.prototype.out = function(after_out) {
-      return this.el.animate({
-        opacity: 0
-      }, 1000, after_out);
+      if (this.the.boot.auto_transition) {
+        return this.el.animate({
+          opacity: 0
+        }, 300, after_out);
+      } else {
+        return typeof after_out === "function" ? after_out() : void 0;
+      }
     };
 
     View.prototype.navigate = function(url) {
@@ -12246,8 +12257,6 @@ var theoricus = {};
       route.view.after_out = after_destroy;
       return route.view.out(function() {
         var _base;
-        console.log("OUT COMPLETE");
-        console.log(_this);
         $(route.view.el).empty();
         return typeof (_base = route.view).after_out === "function" ? _base.after_out() : void 0;
       });
@@ -12335,10 +12344,8 @@ var theoricus = {};
     Theoricus.prototype.processes = null;
 
     function Theoricus(boot) {
-      var _ref;
       this.boot = boot;
-      this.boot.name = (_ref = this.boot.name) != null ? _ref : "app";
-      this.config = new theoricus.config.Config(this);
+      this.boot.name = "app";
       this.factory = new theoricus.core.Factory(this);
       this.processes = new theoricus.core.Processes(this);
     }
@@ -12360,6 +12367,7 @@ var theoricus = {};
           all: ["en", "pt", "es"]
         },
         boot: "/main",
+        auto_transition: true,
         routes: {
           "/main": {
             to: "main/index",

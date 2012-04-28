@@ -11,6 +11,9 @@ class App extends theoricus.Theoricus
 			# Boot / Root url (default route)
 			boot: "/main"
 
+			# enables / disables auto fadein-fadeout as transitions
+			auto_transition: true
+
 			# Application routes
 			routes:
 				"/main":
