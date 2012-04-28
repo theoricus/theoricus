@@ -5,6 +5,8 @@ class Processes
 	Factory = null
 	ArrayUtil = theoricus.utils.ArrayUtil
 
+	locked: false
+
 	active_processes: []
 	dead_processes: []
 	pending_processes: []
@@ -26,6 +28,13 @@ class Processes
 	_on_router_change:( route )=>
 		# console.log "::::::::::::::::::::::::::::::::: ON CHANGE"
 		# console.log route
+
+		if @locked
+			@router.navigate @last_route.location, false, true
+			return
+
+		@last_route = route
+		@locked = true
 
 		@_filter_pending_processes route
 		@_filter_dead_processes()
@@ -136,3 +145,4 @@ class Processes
 				@_run_pending_processes()
 		else
 			console.log "All processes have benn, huh, processed."
+			@locked = false

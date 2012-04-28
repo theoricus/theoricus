@@ -12009,6 +12009,8 @@ var theoricus = {};
 
     ArrayUtil = theoricus.utils.ArrayUtil;
 
+    Processes.prototype.locked = false;
+
     Processes.prototype.active_processes = [];
 
     Processes.prototype.dead_processes = [];
@@ -12028,6 +12030,12 @@ var theoricus = {};
     }
 
     Processes.prototype._on_router_change = function(route) {
+      if (this.locked) {
+        this.router.navigate(this.last_route.location, false, true);
+        return;
+      }
+      this.last_route = route;
+      this.locked = true;
       this._filter_pending_processes(route);
       this._filter_dead_processes();
       return this._destroy_dead_processes();
@@ -12118,7 +12126,8 @@ var theoricus = {};
           return this._run_pending_processes();
         }
       } else {
-        return console.log("All processes have benn, huh, processed.");
+        console.log("All processes have benn, huh, processed.");
+        return this.locked = false;
       }
     };
 
