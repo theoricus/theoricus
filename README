@@ -1,50 +1,32 @@
-1. Compile all models, views and controllers do JS.
-2. Compile all templates inside the views as self-contained functions.
+= Theoricus
 
+Made to serve your needs and make you happy.
+Version 0.0.1
 
-MODEL
-	0. handles data
-
-CONTROLLER
-	0. instantiate and process model
-	1. deliver it to some view
-
-VIEW
-	0. include the referenced markup
-	1. render it with the data received from model
-
-MARKUP
-	0. are rendered using coffeekup to self-contained functions
-
-STYLE
-	0. are rendered using styl
-
-
-
+= Structure Draft
 
 /app
 	/controllers
-		MainController
-		UserController
+		app_controller
+		main_controller
+		user_controller
 	/models
-		MainModel
-		UserModel
+		app_model
+		main_model
+		user_model
 	/views
 		/main
-			/static
-				layout.coffee
-				layout.styl
-				header.coffee
-				header.styl
-				footer.coffee
-				footer.styl
-			LayoutView
-			HeaderView
-			FooterView
-		
+			/templates
+				home_template
+				footer_template
+				header_template
+			main_view
+			footer_view
+			header_view
 		/user
 			/templates
-				index
-				list
-			IndexView
-			ListView
+				user
+				user.styl
+			user_view
+		app_view
+	app
