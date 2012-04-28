@@ -1,0 +1,1 @@
+class FeatureView extends app.views.AppView

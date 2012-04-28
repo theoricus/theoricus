@@ -4,9 +4,9 @@ class MainTemplate
 			h1 "I'm the HEADER."
 			div "menu", ->
 				p a href:"/main", "/main"
-				p a href:"/main/home", "/main/home"
-				p a href:"/main/home/features", "/main/home/features"
-				p a href:"/main/home/features/1", "/main/home/features/1"
+				p a href:"/home", "/home"
+				p a href:"/features", "/features"
+				p a href:"/feature/1", "/feature/1"
 		
 		div "main", ->
 			h1 "I'm the MAIN."		

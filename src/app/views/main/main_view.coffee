@@ -3,7 +3,7 @@ class MainView extends app.views.AppView
 	# 	@render_template "main", data
 
 	set_triggers:()->
-		console.log "ah garoto..."
 		@el.find( "a" ).click ( ev )=>
+			console.log "I WAS CLICKED!"
 			ev.preventDefault()
 			@navigate $( ev.target ).attr "href"

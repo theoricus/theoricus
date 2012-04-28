@@ -18,7 +18,7 @@ http.createServer(function(request, response) {
 			filename = process.cwd() + root + "/index.html"
 			file = fs.readFileSync( filename , "binary")
 
-			response.writeHead(200);
+			response.writeHead(200); //, {"Content-Type": "text/script"});
 			response.write( file );
 			response.end();
 

@@ -29,15 +29,19 @@ class Router
 	route:( state )->
 		if @trigger
 			url = state.title or state.hash
+			url = @the.boot.boot if url == "/"
+			# console.log "URLLLLL >>>>  " + url
 			for route in @routes
 				if route.matcher.test url
 					route.set_location url
 					@on_change?( route )
 					return
+
 		@trigger = true
 
 	navigate:( url, trigger = true, replace = false )->
 		@trigger = trigger
+		# console.log "History[#{if replace then "replaceState" else "pushState"}] null, #{url}, #{url}"
 		History[if replace then "replaceState" else "pushState"] null, url, url
 
 	run:( url, trigger = true )->
@@ -89,6 +93,12 @@ class Route
 		else
 			@target_route = null
 			@target_el = at
+	
+	run:( after_run )->
+		@api.controller._run @, after_run
+
+	destroy:( after_destroy )->
+		@api.controller._destroy @, after_destroy
 
 	set_location:( location )->
 		@location = location

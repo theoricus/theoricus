@@ -27,7 +27,7 @@ class Factory
 
 
 	model:( name )->
-		console.log "Factory.model( '#{name}' )"
+		# console.log "Factory.model( '#{name}' )"
 		name = StringUtil.camelize name
 		model = eval( @m_tmpl.replace "{classname}", name )
 		model = new model
@@ -44,7 +44,8 @@ class Factory
 
 
 	template:( ns, name )->
-		console.log "Factory.template( '#{ns}', '#{name}' )"
+		# console.log "Factory.template( '#{ns}', '#{name}' )"
 		name = StringUtil.camelize name
 		classpath = @t_tmpl.replace( "{ns}", ns ).replace( "{classname}", name )
+		# console.log classpath
 		new ( eval classpath )

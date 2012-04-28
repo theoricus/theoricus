@@ -17,17 +17,17 @@ class App extends theoricus.Theoricus
 					to: "main/index",
 					at: "body"
 
-				"/main/home":
-					to: "home/index",
+				"/home":
+					to: "home/home",
 					at: "/main#holder"
 
-				"/main/home/features":
+				"/features":
 					to: "home/features",
-					at: "/main/home#features"
+					at: "/main#holder"
 
-				"/main/home/feature/:feature_id/":
+				"/feature/:feature_id":
 					to: "home/show_feature",
-					at: "/main/home/features#feature"
+					at: "/features#feature"
 
 $( document ).ready ->
 	new app.App

@@ -1941,7 +1941,6 @@
 	History.init();
 
 })(window);
-
 /**
  * History.js Native Adapter
  * @author Benjamin Arthur Lupton <contact@balupton.com>
@@ -11833,6 +11832,9 @@ var theoricus = {};
       var route, url, _i, _len, _ref;
       if (this.trigger) {
         url = state.title || state.hash;
+        if (url === "/") {
+          url = this.the.boot.boot;
+        }
         _ref = this.routes;
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           route = _ref[_i];
@@ -11925,6 +11927,14 @@ var theoricus = {};
       }
     }
 
+    Route.prototype.run = function(after_run) {
+      return this.api.controller._run(this, after_run);
+    };
+
+    Route.prototype.destroy = function(after_destroy) {
+      return this.api.controller._destroy(this, after_destroy);
+    };
+
     Route.prototype.set_location = function(location) {
       this.location = location;
       return this.api.params = this.matcher.exec(location).slice(1);
@@ -11999,11 +12009,11 @@ var theoricus = {};
 
     ArrayUtil = theoricus.utils.ArrayUtil;
 
-    Processes.prototype.deads = [];
+    Processes.prototype.active_processes = [];
 
-    Processes.prototype.active = [];
+    Processes.prototype.dead_processes = [];
 
-    Processes.prototype.pendings = [];
+    Processes.prototype.pending_processes = [];
 
     function Processes(the) {
       this.the = the;
@@ -12018,43 +12028,16 @@ var theoricus = {};
     }
 
     Processes.prototype._on_router_change = function(route) {
-      var _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2;
-      console.log("::::::::::::::::::::::::::::::::: ON CHANGE");
-      console.log(route);
       this._filter_pending_processes(route);
       this._filter_dead_processes();
-      this._filter_pending_processes(route);
-      console.log("================= ACTIVES");
-      _ref = this.active;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        route = _ref[_i];
-        console.log(route);
-      }
-      console.log("<<<");
-      console.log("================= PENDINGS");
-      _ref1 = this.pendings;
-      for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-        route = _ref1[_j];
-        console.log(route);
-      }
-      console.log("<<<");
-      console.log("================= DEAD");
-      _ref2 = this.deads;
-      for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
-        route = _ref2[_k];
-        console.log(route);
-      }
-      console.log("<<<");
       return this._destroy_dead_processes();
     };
 
     Processes.prototype._filter_pending_processes = function(route) {
       var search, _results;
-      console.log("Processes._filter_pending_processes for:");
-      console.log(route);
-      this.pendings = [route];
+      this.pending_processes = [route];
       _results = [];
-      while (route.target_route != null) {
+      while (true && route && route.target_route) {
         search = {
           raw: {
             route: route.target_route
@@ -12062,10 +12045,15 @@ var theoricus = {};
         };
         route = ArrayUtil.find(this.router.routes, search);
         if (route != null) {
-          this.pendings.push(route.item);
+          route = route.item;
         }
-        if (route == null) {
-          break;
+        if (route != null) {
+          this.pending_processes.push(route);
+          if (route.target_route === null) {
+            break;
+          } else {
+            _results.push(void 0);
+          }
         } else {
           _results.push(void 0);
         }
@@ -12075,58 +12063,39 @@ var theoricus = {};
 
     Processes.prototype._filter_dead_processes = function() {
       var found, route, search, _i, _len, _ref, _results;
-      console.log("Processes._filter_dead_processes");
-      this.deads = [];
-      _ref = this.active;
+      this.dead_processes = [];
+      _ref = this.active_processes;
       _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         route = _ref[_i];
-        console.log("$$$$$$$$$$$$ ACTIVE IS DEAD?");
-        console.log(route);
         search = {
           raw: {
             route: route.raw.route
           }
         };
-        console.log("@@@@ Search for " + route.raw.route + " in pendings");
-        found = ArrayUtil.find(this.pendings, search);
-        console.log(found);
+        found = ArrayUtil.find(this.pending_processes, search);
         if (found === null) {
-          console.log("IS DEAD!");
-          _results.push(this.deads.push(route));
+          _results.push(this.dead_processes.push(route));
         } else {
-          console.log("NOT DEAD!");
-          console.log(route);
-          _results.push(console.log("<<<"));
+          _results.push(void 0);
         }
       }
       return _results;
     };
 
     Processes.prototype._destroy_dead_processes = function() {
-      var active, route, search, _i, _j, _len, _len1, _ref, _ref1;
-      console.log("Processes._destroy_dead_processes");
-      if (this.deads.length) {
-        route = this.deads.pop();
-        console.log("DESTROY=============================================" + this.active.length);
-        _ref = this.active;
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          active = _ref[_i];
-          console.log(active);
-        }
+      var route, search;
+      if (this.dead_processes.length) {
+        route = this.dead_processes.pop();
         search = {
           raw: {
             route: route.raw.route
           }
         };
-        ArrayUtil["delete"](this.active, search);
-        console.log("DESTROYED=============================================" + this.active.length);
-        _ref1 = this.active;
-        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-          active = _ref1[_j];
-          console.log(active);
-        }
-        return route.api.controller._destroy(this._destroy_dead_processes);
+        ArrayUtil["delete"](this.active_processes, search);
+        console.log("Pr. DESTROY....");
+        console.log(route);
+        return route.destroy(this._destroy_dead_processes);
       } else {
         console.log("All processes have benn, huh, destroyed.");
         return this._run_pending_processes();
@@ -12135,22 +12104,17 @@ var theoricus = {};
 
     Processes.prototype._run_pending_processes = function() {
       var route, search;
-      console.log("++++++++++++++++++++++++++++++++++++++");
-      if (this.pendings.length) {
-        route = this.pendings.pop();
-        console.log("Processes._run_pending_processes for:");
-        console.log(route);
+      if (this.pending_processes.length) {
+        route = this.pending_processes.pop();
         search = {
           raw: {
             route: route.raw.route
           }
         };
-        if (ArrayUtil.find(this.active, search) === null) {
-          console.log("RENDER IT!");
-          this.active.push(route);
-          return route.api.controller._run(route, this._run_pending_processes);
+        if (ArrayUtil.find(this.active_processes, search) === null) {
+          this.active_processes.push(route);
+          return route.run(this._run_pending_processes);
         } else {
-          console.log("ALREADY RENDERED!");
           return this._run_pending_processes();
         }
       } else {
@@ -12211,23 +12175,23 @@ var theoricus = {};
       dom = __ck.buffer.join('');
       __ck.buffer = [];
       this.el.append(dom);
-      return this["in"]();
+      return this["in"](this.after_in);
     };
 
-    View.prototype["in"] = function(data) {
+    View.prototype["in"] = function(after_in) {
       var _this = this;
       this.el.css("opacity", 0);
       return this.el.animate({
         opacity: 1
       }, 1000, function() {
-        return typeof _this.after_render === "function" ? _this.after_render() : void 0;
+        return typeof after_in === "function" ? after_in() : void 0;
       });
     };
 
-    View.prototype.out = function(after_destroy) {
+    View.prototype.out = function(after_out) {
       return this.el.animate({
         opacity: 0
-      }, 600, after_destroy);
+      }, 1000, after_out);
     };
 
     View.prototype.navigate = function(url) {
@@ -12258,31 +12222,32 @@ var theoricus = {};
     Controller.prototype._run = function(route, after_run) {
       var alias, model;
       this.route = route;
-      console.log("Controller._run");
+      this.after_run = after_run;
       if (this[this.route.api.action] != null) {
-        this[this.route.api.action].apply(this, this.route.api.params, after_run);
-        return console.log("IF");
+        return this[this.route.api.action].apply(this, this.route.api.params);
       } else {
         alias = this.route.api.controller_name;
-        console.log("ELSE -> " + alias);
         model = Factory.model(alias);
-        return this.render(alias, model, after_run);
+        return this.render(alias, model);
       }
     };
 
-    Controller.prototype._destroy = function(after_destroy) {
+    Controller.prototype._destroy = function(route, after_destroy) {
       var _this = this;
-      console.log("controller._destroy" + after_destroy);
-      return this.view.out(function() {
-        $(_this.view.el).empty();
-        return typeof after_destroy === "function" ? after_destroy() : void 0;
+      route.view.after_out = after_destroy;
+      return route.view.out(function() {
+        var _base;
+        console.log("OUT COMPLETE");
+        console.log(_this);
+        $(route.view.el).empty();
+        return typeof (_base = route.view).after_out === "function" ? _base.after_out() : void 0;
       });
     };
 
-    Controller.prototype.render = function(view_name, data, after_render) {
-      this.view = Factory.view(this.route.api.controller_name, view_name);
-      this.view.after_render = after_render;
-      return this.view._render(this.route, view_name, data);
+    Controller.prototype.render = function(view_name, data) {
+      this.route.view = Factory.view(this.route.api.controller_name, view_name);
+      this.route.view.after_in = this.after_run;
+      return this.route.view._render(this.route, view_name, data);
     };
 
     return Controller;
@@ -12321,7 +12286,6 @@ var theoricus = {};
 
     Factory.prototype.model = function(name) {
       var model;
-      console.log("Factory.model( '" + name + "' )");
       name = StringUtil.camelize(name);
       model = eval(this.m_tmpl.replace("{classname}", name));
       model = new model;
@@ -12338,7 +12302,6 @@ var theoricus = {};
 
     Factory.prototype.template = function(ns, name) {
       var classpath;
-      console.log("Factory.template( '" + ns + "', '" + name + "' )");
       name = StringUtil.camelize(name);
       classpath = this.t_tmpl.replace("{ns}", ns).replace("{classname}", name);
       return new (eval(classpath));
@@ -12393,17 +12356,17 @@ var theoricus = {};
             to: "main/index",
             at: "body"
           },
-          "/main/home": {
-            to: "home/index",
+          "/home": {
+            to: "home/home",
             at: "/main#holder"
           },
-          "/main/home/features": {
+          "/features": {
             to: "home/features",
-            at: "/main/home#features"
+            at: "/main#holder"
           },
-          "/main/home/feature/:feature_id/": {
+          "/feature/:feature_id": {
             to: "home/show_feature",
-            at: "/main/home/features#feature"
+            at: "/features#feature"
           }
         }
       });
@@ -12441,8 +12404,16 @@ var theoricus = {};
       return HomeController.__super__.constructor.apply(this, arguments);
     }
 
-    HomeController.prototype.index = function(data, fn) {
-      return this.render("headline", new app.models.HomeModel, fn);
+    HomeController.prototype.home = function(data) {
+      return this.render("home", new app.models.HomeModel);
+    };
+
+    HomeController.prototype.features = function(data) {
+      return this.render("features", ["Feature A", "Feature B"]);
+    };
+
+    HomeController.prototype.show_feature = function(id) {
+      return this.render("feature", id);
     };
 
     return HomeController;
@@ -12521,36 +12492,92 @@ var theoricus = {};
 
   })(theoricus.mvc.View);
 
-  __t('app.views.home').HeadlineView = (function(_super) {
+  __t('app.views.home').FeatureView = (function(_super) {
 
-    __extends(HeadlineView, _super);
+    __extends(FeatureView, _super);
 
-    HeadlineView.name = 'HeadlineView';
+    FeatureView.name = 'FeatureView';
 
-    function HeadlineView() {
-      return HeadlineView.__super__.constructor.apply(this, arguments);
+    function FeatureView() {
+      return FeatureView.__super__.constructor.apply(this, arguments);
     }
 
-    return HeadlineView;
+    return FeatureView;
 
   })(app.views.AppView);
 
-  __t('app.views.home.templates').HeadlineTemplate = (function() {
+  __t('app.views.home').FeaturesView = (function(_super) {
 
-    HeadlineTemplate.name = 'HeadlineTemplate';
+    __extends(FeaturesView, _super);
 
-    function HeadlineTemplate() {}
+    FeaturesView.name = 'FeaturesView';
 
-    HeadlineTemplate.prototype.dom = function(data) {
-      return div("home", function() {
-        h1("HOME markup rendered! :)");
-        return div({
-          id: "#features"
-        });
+    function FeaturesView() {
+      return FeaturesView.__super__.constructor.apply(this, arguments);
+    }
+
+    return FeaturesView;
+
+  })(app.views.AppView);
+
+  __t('app.views.home').HomeView = (function(_super) {
+
+    __extends(HomeView, _super);
+
+    HomeView.name = 'HomeView';
+
+    function HomeView() {
+      return HomeView.__super__.constructor.apply(this, arguments);
+    }
+
+    return HomeView;
+
+  })(app.views.AppView);
+
+  __t('app.views.home.templates').FeatureTemplate = (function() {
+
+    FeatureTemplate.name = 'FeatureTemplate';
+
+    function FeatureTemplate() {}
+
+    FeatureTemplate.prototype.dom = function(data) {
+      return h1("FEATURE # " + data + " rendered! :)");
+    };
+
+    return FeatureTemplate;
+
+  })();
+
+  __t('app.views.home.templates').FeaturesTemplate = (function() {
+
+    FeaturesTemplate.name = 'FeaturesTemplate';
+
+    function FeaturesTemplate() {}
+
+    FeaturesTemplate.prototype.dom = function(data) {
+      h1("FEATURES rendered! :)");
+      return div({
+        id: "feature"
       });
     };
 
-    return HeadlineTemplate;
+    return FeaturesTemplate;
+
+  })();
+
+  __t('app.views.home.templates').HomeTemplate = (function() {
+
+    HomeTemplate.name = 'HomeTemplate';
+
+    function HomeTemplate() {}
+
+    HomeTemplate.prototype.dom = function(data) {
+      return div("home", function() {
+        return h1("HOME markup rendered! :)");
+      });
+    };
+
+    return HomeTemplate;
 
   })();
 
@@ -12566,8 +12593,8 @@ var theoricus = {};
 
     MainView.prototype.set_triggers = function() {
       var _this = this;
-      console.log("ah garoto...");
       return this.el.find("a").click(function(ev) {
+        console.log("I WAS CLICKED!");
         ev.preventDefault();
         return _this.navigate($(ev.target).attr("href"));
       });
@@ -12591,14 +12618,14 @@ var theoricus = {};
             href: "/main"
           }, "/main"));
           p(a({
-            href: "/main/home"
-          }, "/main/home"));
+            href: "/home"
+          }, "/home"));
           p(a({
-            href: "/main/home/features"
-          }, "/main/home/features"));
+            href: "/features"
+          }, "/features"));
           return p(a({
-            href: "/main/home/features/1"
-          }, "/main/home/features/1"));
+            href: "/feature/1"
+          }, "/feature/1"));
         });
       });
       div("main", function() {
