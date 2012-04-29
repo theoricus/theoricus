@@ -1,0 +1,17 @@
+{
+  "author"         : "Anderson Arboleya <anderson@arboleya.me>",
+  "name"           : "theoricus",
+  "description"    : "Made to serve your needs and make you happy.",
+  "version"        : "0.0.1",
+  
+  "repository"     : {
+    "type"           : "git",
+    "url"            : "http://github.com/serpentem/theoricus"
+  },
+  
+  "engines"        : {
+    "node"           : ">= 0.4.9"
+  },
+  
+  "dependencies"   : {}
+}
