@@ -25,7 +25,11 @@ http.createServer(function(request, response) {
 			response.writeHead(200, {"Content-Type": "text/html"});
 			if( crawl )
 			{
-				cmd = "phantomjs crawler.coffee http://"+ headers.host + request.url
+				cmd =	"phantomjs crawler.coffee http://"+
+						headers.host +
+						request.url +
+						"?no-transition"
+				
 				exec( cmd, function (error, stdout, stderr)
 				{
 					response.writeHead(200, {"Content-Type": "text/html"});
@@ -59,4 +63,4 @@ http.createServer(function(request, response) {
 	});
 }).listen(parseInt(port, 10));
 
-console.log("Theoricus ridiculous server running at\n  => http://localhost:" + port + "/\nCTRL + C to shutdown");
+console.log("Theoricus ridiculous server running at... http://localhost:" + port + "/\nCTRL + C to shutdown");

@@ -7,8 +7,8 @@ page.onConsoleMessage=( msg )-> console.log msg
 page.open url, ->
 	setInterval ->
 		return unless ( page.evaluate -> return window.crawler.is_rendered )
-		page.render "phantom.png"
-		fs.write "phantom.html", page.content
+		# page.render "phantom.png"
+		# fs.write "phantom.html", page.content
 		console.log page.content
 		phantom.exit()
 	, 30

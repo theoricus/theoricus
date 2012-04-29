@@ -15,7 +15,7 @@ class Theoricus
 	constructor:( @boot )->
 		@boot.name = "app"
 
-		if /(\?|\&)(no-transitions)/.test window.location
+		if /(\?|\&)(no\-transition)/.test window.location
 			@boot.auto_transition = false
 
 		@factory = new theoricus.core.Factory @

@@ -12352,7 +12352,7 @@ var theoricus = {};
     function Theoricus(boot) {
       this.boot = boot;
       this.boot.name = "app";
-      if (/(\?|\&)(no-transitions)/.test(window.location)) {
+      if (/(\?|\&)(no\-transition)/.test(window.location)) {
         this.boot.auto_transition = false;
       }
       this.factory = new theoricus.core.Factory(this);
