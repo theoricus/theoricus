@@ -9,9 +9,14 @@ class Theoricus
 	factory: null
 	config: null
 	processes: null
-	
+
+	crawler: (window.crawler = is_rendered: false)
+
 	constructor:( @boot )->
-		# console.log "Theoricus is born!"
 		@boot.name = "app"
+
+		if /(\?|\&)(no-transitions)/.test window.location
+			@boot.auto_transition = false
+
 		@factory = new theoricus.core.Factory @
 		@processes = new theoricus.core.Processes @

@@ -12043,6 +12043,7 @@ var theoricus = {};
       }
       this.last_route = route;
       this.locked = true;
+      this.the.crawler.is_rendered = false;
       this._filter_pending_processes(route);
       this._filter_dead_processes();
       return this._destroy_dead_processes();
@@ -12130,7 +12131,8 @@ var theoricus = {};
           return this._run_pending_processes();
         }
       } else {
-        return this.locked = false;
+        this.locked = false;
+        return this.the.crawler.is_rendered = true;
       }
     };
 
@@ -12343,9 +12345,16 @@ var theoricus = {};
 
     Theoricus.prototype.processes = null;
 
+    Theoricus.prototype.crawler = (window.crawler = {
+      is_rendered: false
+    });
+
     function Theoricus(boot) {
       this.boot = boot;
       this.boot.name = "app";
+      if (/(\?|\&)(no-transitions)/.test(window.location)) {
+        this.boot.auto_transition = false;
+      }
       this.factory = new theoricus.core.Factory(this);
       this.processes = new theoricus.core.Processes(this);
     }

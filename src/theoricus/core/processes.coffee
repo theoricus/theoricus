@@ -28,8 +28,11 @@ class Processes
 	# 1
 	_on_router_change:( route )=>
 		return @router.navigate @last_route.location, false, true if @locked
+
 		@last_route = route
 		@locked = true
+		@the.crawler.is_rendered = false
+
 		@_filter_pending_processes route
 		@_filter_dead_processes()
 		@_destroy_dead_processes()
@@ -63,7 +66,6 @@ class Processes
 			ArrayUtil.delete @active_processes, search
 			route.destroy @_destroy_dead_processes
 		else
-			# console.log "All processes have benn, huh, destroyed."
 			@_run_pending_processes()
 
 	# 5
@@ -77,5 +79,5 @@ class Processes
 			else
 				@_run_pending_processes()
 		else
-			# console.log "All processes have benn, huh, processed."
 			@locked = false
+			@the.crawler.is_rendered = true
