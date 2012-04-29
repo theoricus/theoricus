@@ -11831,10 +11831,9 @@ var theoricus = {};
         v = search[k];
         if (v instanceof Object) {
           return ObjectUtil.find(src[k], v);
-        } else {
-          if (src[k] === v) {
-            return src;
-          }
+        }
+        if (src[k] === v) {
+          return src;
         }
       }
       return null;
@@ -11978,7 +11977,7 @@ var theoricus = {};
       for (i = _i = 0, _len = src.length; _i < _len; i = ++_i) {
         v = src[i];
         if (search instanceof String) {
-          if (v === src) {
+          if (v === search) {
             return {
               item: v,
               index: i

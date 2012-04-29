@@ -6,11 +6,9 @@ class ArrayUtil
 	@find:( src, search )->
 		for v, i in src
 			if search instanceof String
-				if v == src
-					return {item: v, index:i}
+				return item: v, index:i if v == search
 			else if search instanceof Object
-				if ObjectUtil.find(v, search)?
-					return {item: v, index:i}
+				return item: v, index:i if ObjectUtil.find(v, search)?
 		return null
 
 	@delete:( src, search )->
