@@ -27,7 +27,7 @@ server = (request, response)->
 				cmd = "phantomjs crawler.coffee http://"+
 						headers.host +
 						request.url +
-						"?no-transition"
+						"?crawler"
 				exec cmd, (error, stdout, stderr)->
 					response.writeHead 200, {"Content-Type": "text/html"}
 					response.write stdout
