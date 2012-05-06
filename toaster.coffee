@@ -6,6 +6,8 @@ toast 'src'
 		"vendors/coffeekup.js"
 	]
 
+	minify: false
+
 	httpfolder: ''
 	release: 'public/app.js'
 	debug: 'public/app-debug.js'
