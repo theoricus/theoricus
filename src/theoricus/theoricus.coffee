@@ -5,7 +5,7 @@
 class Theoricus
 	app: null
 	root: null
-	
+
 	factory: null
 	config: null
 	processes: null
@@ -14,9 +14,9 @@ class Theoricus
 
 	constructor:( @boot )->
 		@boot.name = "app"
-
-		if /(\?|\&)(no\-transition)/.test window.location
-			@boot.auto_transition = false
+		@boot.no_push_state = (typeof history.pushState is not 'function')
+		@boot.disable_transitions =	@boot.no_push_state or
+									 /(\?|\&)(crawler)/.test window.location
 
 		@factory = new theoricus.core.Factory @
 		@processes = new theoricus.core.Processes @

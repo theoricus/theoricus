@@ -40,9 +40,12 @@ class Router
 		@trigger = true
 
 	navigate:( url, trigger = true, replace = false )->
-		@trigger = trigger
-		action = if replace then "replaceState" else "pushState"
-		History[action] null, url, url
+		if @the.boot.no_push_state
+			window.location = url
+		else
+			@trigger = trigger
+			action = if replace then "replaceState" else "pushState"
+			History[action] null, url, url
 
 	run:( url, trigger = true )->
 		@trigger = trigger
