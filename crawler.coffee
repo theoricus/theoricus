@@ -2,7 +2,7 @@ fs = require 'fs'
 page = require('webpage').create()
 url = phantom.args[ 0 ]
 
-page.onConsoleMessage=( msg )-> console.log msg
+# page.onConsoleMessage=( msg )-> console.log msg
 
 page.open url, ->
 	setInterval ->
