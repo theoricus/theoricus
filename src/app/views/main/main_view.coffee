@@ -6,4 +6,4 @@ class MainView extends app.views.AppView
 		@el.find( "a" ).click ( ev )=>
 			# console.log "I WAS CLICKED!"
 			@navigate $( ev.target ).attr "href"
-			ev.preventDefault()
+			ev.preventDefault() unless @the.boot.no_push_state
