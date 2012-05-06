@@ -24,7 +24,7 @@ class View
 		@in( @after_in )
 
 	in:( after_in )->
-		if !@the.boot.auto_transitions || @the.boot.disable_transitions
+		if !@the.boot.enable_auto_transitions || @the.boot.disable_transitions
 			after_in?()
 		else
 			@el.css "opacity", 0
@@ -32,7 +32,7 @@ class View
 				after_in?()
 
 	out:( after_out )->
-		if !@the.boot.auto_transitions || @the.boot.disable_transitions
+		if !@the.boot.enable_auto_transitions || @the.boot.disable_transitions
 			after_out?()
 		else
 			@el.animate {opacity: 0}, 300, after_out

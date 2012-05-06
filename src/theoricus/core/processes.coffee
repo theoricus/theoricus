@@ -6,6 +6,7 @@ class Processes
 	ArrayUtil = theoricus.utils.ArrayUtil
 
 	locked: false
+	disable_transitions: null
 
 	active_processes: []
 	dead_processes: []
@@ -23,6 +24,11 @@ class Processes
 
 	constructor:( @the )->
 		Factory = @the.factory
+
+		if @the.boot.animate_at_startup is false
+			@disable_transitions = @the.boot.disable_transitions
+			@the.boot.disable_transitions = true
+
 		@router = new theoricus.core.Router @the, @_on_router_change
 
 	# 1
@@ -81,3 +87,7 @@ class Processes
 		else
 			@locked = false
 			@the.crawler.is_rendered = true
+
+			if @disable_transitions?
+				@the.boot.disable_transitions = @disable_transitions
+				@disable_transitions = null

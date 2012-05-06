@@ -11,8 +11,11 @@ class App extends theoricus.Theoricus
 			# Boot / Root url (default route)
 			boot: "/main"
 
+			# Animates all levels on start up or just renders everything
+			animate_at_startup: false
+
 			# enables / disables auto fadein-fadeout as transitions
-			auto_transition: true
+			auto_transitions: true
 
 			# Application routes
 			routes:
