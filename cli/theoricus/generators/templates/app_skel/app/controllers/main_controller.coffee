@@ -1,0 +1,1 @@
+class MainController extends app.controllers.AppController

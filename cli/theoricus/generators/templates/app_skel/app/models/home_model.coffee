@@ -1,0 +1,1 @@
+class HomeModel extends app.models.AppModel
