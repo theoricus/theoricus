@@ -1,1 +1,1 @@
-class AppView extends app.views.AppView
+class MainView extends app.views.AppView

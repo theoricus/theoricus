@@ -1,5 +1,12 @@
 class View
+
+	# requirements
 	fs = require 'fs'
+
+	FsUtil = require( 'coffee-toaster' ).FsUtil
+	StringUtil = require( 'coffee-toaster' ).StringUtil
+	Toaster = require( 'coffee-toaster' ).Toaster
+
 
 	template =
 		body: "class ~NAMEView extends app.views.AppView"
@@ -7,20 +14,28 @@ class View
 
 	constructor:( @the, opts )->
 		name = opts[2]
-		filepath = "app/views/" + name + "_view.coffee"
 
-		contents = @build_contents name
-		fs.writeFileSync filepath, contents
-		console.log "#{'Created: '.bold} #{filepath}".green
+		folderpath = "app/views/#{name}"
+		view = "#{folderpath}/index_view.coffee"
 
-		filepath = filepath.replace ".coffee", ".styl"
-		fs.writeFileSync filepath, "// put your styles (stylus) here "
-		console.log "#{'Created: '.bold} #{filepath}".green
+		# create contaioner
+		FsUtil.mkdir_p folderpath = "#{folderpath}/index"
 
-		filepath = filepath.replace ".styl", ".jade"
-		fs.writeFileSync filepath, "// put your tempalte(jade) here"
-		console.log "#{'Created: '.bold} #{filepath}".green
+		# compute paths
+		jade = "#{folderpath}/index.jade"
+		styl = "#{folderpath}/index.styl"
+
+		# view
+		fs.writeFileSync view, @build_contents( "index" )
+		console.log "#{'Created: '.bold} #{view}".green
+
+		# jade
+		fs.writeFileSync jade, "// put your templates (JADE) here "
+		console.log "#{'Created: '.bold} #{jade}".green
+
+		# stylus
+		fs.writeFileSync styl, "// put your styles (STYLUS) here"
+		console.log "#{'Created: '.bold} #{styl}".green
 
 	build_contents:( name )->
-		buffer = ""
-		buffer += template.body.replace "~NAME", name
+		return template.body.replace "~NAME", StringUtil.ucasef name

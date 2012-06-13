@@ -6,11 +6,12 @@ exports.run = ->
 class Theoricus
 
 	# requirements
+	fs = require "fs"
 	path = require "path"
 	colors = require 'colors'
 	
 	constructor:->
-		@pwd = path.resolve "."
+		@pwd = @_get_app_root()
 		@root = path.normalize __dirname + "/.."
 		
 		cmds =	"#{'model'.cyan}#{'|'.white}#{'view'.cyan}#{'|'.white}" +
@@ -50,6 +51,10 @@ class Theoricus
 		cmd = options.join( " " ).match /([a-z]+)/
 		cmd = cmd[1] if cmd?
 
+		if @pwd is null and cmd is not "help"
+			console.log "#{'Error:'.bold} Not a Theoricus app.".red
+			return
+
 		switch cmd
 			when "new" then new theoricus.commands.AddProject @, options
 			when "add" then new theoricus.commands.Add @, options
@@ -57,4 +62,22 @@ class Theoricus
 			when "start" then new theoricus.commands.Server @, options
 			when "compile" then new theoricus.commands.Compiler @, options
 			when "version" then console.log "vesion"
-			else console.log @header
+			else
+				console.log @header
+
+	_get_app_root:()->
+		current = path.resolve "."
+
+		while true
+			app = path.normalize "#{current}/app/controllers/app_controller.coffee"
+
+			unless path.existsSync app
+				tmp = path.normalize path.resolve "#{current}/../"
+				if current == tmp
+					return null
+				else
+					current = tmp
+
+			contents = fs.readFileSync app, "utf-8"
+			return current if contents.indexOf( "theoricus.mvc.Controller" ) > 0
+			return null

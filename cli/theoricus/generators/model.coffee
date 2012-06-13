@@ -1,5 +1,6 @@
 class Model
 	fs = require 'fs'
+	StringUtil = require( 'coffee-toaster' ).StringUtil
 
 	template =
 		body: "class ~NAMEModel extends app.models.AppModel"
@@ -15,4 +16,4 @@ class Model
 
 	build_contents:( name )->
 		buffer = ""
-		buffer += template.body.replace "~NAME", name
+		buffer += template.body.replace "~NAME", StringUtil.ucasef name

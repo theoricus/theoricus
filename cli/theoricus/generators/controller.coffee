@@ -1,5 +1,6 @@
 class Controller
 	fs = require 'fs'
+	StringUtil = require( 'coffee-toaster' ).StringUtil
 
 	template =
 		body: "class ~NAMEController extends app.controllers.AppController"
@@ -15,4 +16,4 @@ class Controller
 
 	build_contents:( name )->
 		buffer = ""
-		buffer += template.body.replace "~NAME", name
+		buffer += template.body.replace "~NAME", StringUtil.ucasef name
