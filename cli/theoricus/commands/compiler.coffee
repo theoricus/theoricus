@@ -35,7 +35,6 @@ class Compiler
 		config.folders["#{@the.root}/src"] = "theoricus"
 
 		# start watching/compiling coffeescript
-		console.log ">>>>> APP"
 		@toaster = new Toaster @BASE_DIR, {w:1, d:1, config: config}, true
 
 		# compiling everything at startup
