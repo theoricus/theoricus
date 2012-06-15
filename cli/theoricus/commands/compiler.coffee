@@ -11,7 +11,14 @@ class Compiler
 	FsUtil = require( 'coffee-toaster' ).toaster.utils.FsUtil
 	ArrayUtil = require( 'coffee-toaster' ).toaster.utils.ArrayUtil
 
+	BASE_DIR: ""
+	APP_FOLDER: ""
+
 	constructor:( @the, options )->
+
+		@BASE_DIR = @the.pwd
+		@APP_FOLDER = "#{@BASE_DIR}/app"
+
 		config = {
 			folders: {},
 			vendors:[
@@ -24,26 +31,56 @@ class Compiler
 			debug: "public/app-debug.js"
 		}
 
-		config.folders["#{@the.pwd}/app"] = "app"
+		config.folders[@APP_FOLDER] = "app"
 		config.folders["#{@the.root}/src"] = "theoricus"
 
 		# start watching/compiling coffeescript
-		@toaster = new Toaster @the.pwd, {w:1, d:1, config: config}, true
+		console.log ">>>>> APP"
+		@toaster = new Toaster @BASE_DIR, {w:1, d:1, config: config}, true
 
 		# compiling everything at startup
 		@compile()
 
 		# watching jade
-		FsUtil.watch_folder @the.pwd, /.jade$/m, ( info )=>
-			@compile() if info.action != "watching"
+		FsUtil.watch_folder @APP_FOLDER, /.jade$/, @_on_jade_stylus_change
 
 		# watching stylus
-		FsUtil.watch_folder @the.pwd, /.styl$/m, ( info )=>
-			@compile() if info.action != "watching"
+		FsUtil.watch_folder @APP_FOLDER, /.styl$/, @_on_jade_stylus_change
 
-	
+
+
+	_on_jade_stylus_change:( info )=>
+		# skip all watching notifications
+		return if info.action == "watching" 
+
+		# skipe all folder creation
+		return if info.type == "folder" and info.action == "created"
+
+		# switch over created, deleted, updated and watching
+		switch info.action
+
+			# when a new file is created
+			when "created"
+				msg = "New file created".bold.cyan
+				console.log "#{msg} #{info.path.green}"
+
+			# when a file is deleted
+			when "deleted"
+				type = if info.type == "file" then "File" else "Folder"
+				msg = "#{type} deleted".bold.red
+				console.log "#{msg} #{info.path.red}"
+
+			# when a file is updated
+			when "updated"
+				msg = "File changed".bold.cyan
+				console.log "#{msg} #{info.path.cyan}"
+
+		@compile()
+
+
+
 	compile_jade:( after_compile )->
-		files = FsUtil.find @the.pwd, /.jade$/m
+		files = FsUtil.find @APP_FOLDER, /.jade$/
 
 		output = """(function() {
 			__t('app').templates = { ~TEMPLATES };
@@ -56,7 +93,7 @@ class Compiler
 			continue if file.match( /(\_)?[^\/]+$/ )[1] is "_"
 
 			# compute alias and read file's source
-			alias = file.match( /views\/[^\.]+/ )[ 0 ]
+			alias = file.match( /views\/[^\.]+/ )
 			source = fs.readFileSync file, "utf-8"
 
 			# compile source
@@ -78,7 +115,7 @@ class Compiler
 
 	
 	compile_stylus:( after_compile )->
-		files = FsUtil.find @the.pwd, /.styl$/m
+		files = FsUtil.find @APP_FOLDER, /.styl$/
 		
 		buffer = []
 		@pending_stylus = 0
