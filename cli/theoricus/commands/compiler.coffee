@@ -16,116 +16,125 @@ class Compiler
 toast
 	folders:
 		'~APP': 'app'
-		"~THE/src": 'theoricus'
+		'~THE/src': 'theoricus'
 
 	vendors: [
-		"~THE/vendors/jquery.js"
-		"~THE/vendors/history.js"
-		"~THE/vendors/history.adapter.native.js"
-		"~THE/vendors/jade.runtime.js"
+		'~THE/vendors/jquery.js'
+		'~THE/vendors/history.js'
+		'~THE/vendors/history.adapter.native.js'
+		'~THE/vendors/jade.runtime.js'
 	]
 
 	release: 'public/app.js'
-	debug: 'public/app-debug.js'
-"""
-
+	debug: 'public/app-debug.js'"""
 
 	constructor:( @the, options, after_compile )->
 		config_contents = config.replace /~THE/g, @the.root
 		config_contents = config_contents.replace "~APP", "#{@the.pwd}/app"
 
-		# watching coffeescript
-		@toaster = new Toaster @the.pwd, config_contents, {w:1, d:1}, ()=>
-			@compile =>
-				after_compile?()
-				after_compile = null
-			return false
+		# start watching/compiling coffeescript
+		@toaster = new Toaster @the.pwd, config_contents, {w:1, d:1}, true
+
+		# compiling everything at startup
+		@compile()
 
 		# watching jade
-		FsUtil.watch_folder @the.pwd, /.jade$/, ( info )=>
+		FsUtil.watch_folder @the.pwd, /.jade$/m, ( info )=>
 			@compile() if info.action != "watching"
 
 		# watching stylus
-		FsUtil.watch_folder @the.pwd, /.styl$/, ( info )=>
+		FsUtil.watch_folder @the.pwd, /.styl$/m, ( info )=>
 			@compile() if info.action != "watching"
 
-	# compiling jade templates
+	
 	compile_jade:( after_compile )->
+		files = FsUtil.find @the.pwd, /.jade$/m
 
-		FsUtil.find @the.pwd, "*.jade", ( files )=>
-			output = """(function() {
-				__t('app').templates = { ~TEMPLATES };
-			}).call( this );"""
-			buffer = []
-			included = []
+		output = """(function() {
+			__t('app').templates = { ~TEMPLATES };
+		}).call( this );"""
 
-			for file in files
+		buffer = []
+		for file in files
 
-				# skip files that starts with "_"
-				continue if file.match( /(\_)?[^\/]+$/ )[1] is "_"
+			# skip files that starts with "_"
+			continue if file.match( /(\_)?[^\/]+$/ )[1] is "_"
 
-				folder = file.split( "/" ).slice( 0, -1 ).join "/"
-				alias = file.match( /views\/[^\.]+/ )[ 0 ]
-				source = fs.readFileSync file, "utf-8"
+			# compute alias and read file's source
+			alias = file.match( /views\/[^\.]+/ )[ 0 ]
+			source = fs.readFileSync file, "utf-8"
 
-				compiled = jade.compile source,
-					filename: file
-					client: true
-					compileDebug: false
+			# compile source
+			compiled = jade.compile source,
+				filename: file
+				client: true
+				compileDebug: false
 
-				compiled = compiled.toString().replace "anonymous", ""
-				buffer.push "'#{alias}': " + compiled
- 
-			output = output.replace( "~TEMPLATES", buffer.join "," )
-			output = @to_single_line output
-			after_compile "// TEMPLATES\n#{output}"
+			# write template name and contents
+			compiled = compiled.toString().replace "anonymous", ""
+			buffer.push "'#{alias}': " + compiled
 
-	# compiling stylus styles
+		# format everything
+		output = output.replace( "~TEMPLATES", buffer.join "," )
+		output = @to_single_line output
+
+		# return all jade files compiled for use in client
+		return "// TEMPLATES\n#{output}"
+
+	
 	compile_stylus:( after_compile )->
-		FsUtil.find @the.pwd, "*.styl", ( files )=>
-			buffer = []
-			pending = 0
+		files = FsUtil.find @the.pwd, /.styl$/m
+		
+		buffer = []
+		@pending_stylus = 0
+		for file in files
+			# skip files that starts with "_"
+			@pending_stylus++ unless file.match( /(\_)?[^\/]+$/ )[1] is "_"
+		
+		for file in files
 
-			for file in files
+			# skip files that starts with "_"
+			continue if file.match( /(\_)?[^\/]+$/ )[1] is "_"
 
-				# skip files that starts with "_"
-				continue if file.match( /(\_)?[^\/]+$/ )[1] is "_"
+			source = fs.readFileSync file, "utf-8"
+			paths = [
+				"#{@the.pwd}/app/views/_mixins/stylus"
+			]
 
-				pending++
-				source = fs.readFileSync file, "utf-8"
-				paths = [
-					"#{@the.pwd}/app/views/_mixins/stylus"
-				]
-
-				compiled = stylus( source )
-							.set( 'filename', file )
-							.set( 'paths', paths )
-							.render (err, css)=>
-								throw err if err?
-								buffer.push css
-								if --pending == 0
-									after_compile( buffer.join "\n" )
+			stylus( source )
+				.set( 'filename', file )
+				.set( 'paths', paths )
+				.render (err, css)=>
+					throw err if err?
+					buffer.push css
+					if --@pending_stylus is 0
+						after_compile( buffer.join "\n" ) 
 
 	# updates the release files
-	compile:( after_compile )->
-
+	compile:()->
+		# read conf
 		conf = @_get_config()
 
-		# JADE
-		@compile_jade ( templates )=>
-			header = """#{templates}\n
-						#{conf.config}\n
-						#{conf.routes}\n
-						#{conf.root}\n"""
+		# getting JADE templates pre-compiled
+		templates = @compile_jade()
+			
+		# merge everything
+		header = """#{templates}\n
+					#{conf.config}\n
+					#{conf.routes}\n
+					#{conf.root}\n"""
+		
+		# formats footer
+		footer = "new theoricus.Theoricus"
 
-			footer = "new theoricus.Theoricus"
+		# biulds all coffeescript
+		@toaster.build header, footer
 
-			@toaster.build header, footer, =>
-					# STYLUS
-					@compile_stylus ( css )=>
-						target = "#{@the.pwd}/public/app.css"
-						fs.writeFileSync target, css
-						after_compile?()
+		# compile sytlus
+		@compile_stylus ( css )=>
+			target = "#{@the.pwd}/public/app.css"
+			fs.writeFileSync target, css
+
 
 	_get_config:()->
 		app = "#{@the.pwd}/config/app.coffee"
