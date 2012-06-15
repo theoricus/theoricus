@@ -11,29 +11,24 @@ class Compiler
 	FsUtil = require( 'coffee-toaster' ).toaster.utils.FsUtil
 	ArrayUtil = require( 'coffee-toaster' ).toaster.utils.ArrayUtil
 
-	# global-private variable
-	config = """
-toast
-	folders:
-		'~APP': 'app'
-		'~THE/src': 'theoricus'
+	constructor:( @the, options )->
+		config = {
+			folders: {},
+			vendors:[
+				"#{@the.root}/vendors/jquery.js",
+				"#{@the.root}/vendors/history.js",
+				"#{@the.root}/vendors/history.adapter.native.js",
+				"#{@the.root}/vendors/jade.runtime.js"
+			],
+			release: "public/app.js",
+			debug: "public/app-debug.js"
+		}
 
-	vendors: [
-		'~THE/vendors/jquery.js'
-		'~THE/vendors/history.js'
-		'~THE/vendors/history.adapter.native.js'
-		'~THE/vendors/jade.runtime.js'
-	]
-
-	release: 'public/app.js'
-	debug: 'public/app-debug.js'"""
-
-	constructor:( @the, options, after_compile )->
-		config_contents = config.replace /~THE/g, @the.root
-		config_contents = config_contents.replace "~APP", "#{@the.pwd}/app"
+		config.folders["#{@the.pwd}/app"] = "app"
+		config.folders["#{@the.root}/src"] = "theoricus"
 
 		# start watching/compiling coffeescript
-		@toaster = new Toaster @the.pwd, config_contents, {w:1, d:1}, true
+		@toaster = new Toaster @the.pwd, {w:1, d:1, config: config}, true
 
 		# compiling everything at startup
 		@compile()
