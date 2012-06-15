@@ -10,8 +10,9 @@ class Server
 		@port = "11235"
 		@root = "#{@the.pwd}/public"
 
-		@compiler = new theoricus.commands.Compiler @the, options, =>
-			@start_server()
+		# console.log  "Server is born()"
+		@compiler = new theoricus.commands.Compiler @the, options
+		@start_server()
 
 	start_server:()->
 
@@ -54,13 +55,18 @@ class Server
 						response.write err + "\n"
 						response.end()
 						return
-					response.writeHead 200, {"Content-Type": "text/javascript"}
+
+					if filename.match /.js$/m
+						response.writeHead 200, {"Content-Type": "text/javascript"}
+					else if filename.match /.css$/m
+						response.writeHead 200, {"Content-Type": "text/css"}
+
 					response.write file
 					response.end()
 
 		http.createServer( server ).listen @port
 
-		console.log(
+		console.log (
 			"#{'Server running at'.bold} http://localhost:#{@port}".grey
 			# "Hit CTRL+C to quit".grey
 		)
