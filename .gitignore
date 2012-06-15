@@ -1,4 +1,4 @@
 node_modules
 lib/toaster
-theoricus.cli.debug.js
-theoricus.debug.js
+lib/theoricus.debug.js
+lib/theoricus.cli.debug.js
