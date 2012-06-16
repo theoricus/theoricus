@@ -2,7 +2,7 @@
 
 ## Made to serve your needs and make you happy.
 
-Version 0.0.1
+Version 0.1.0
 
 # Structure  Draft
 

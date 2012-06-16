@@ -1,13 +1,11 @@
+toast 'cli'
+	expose: 'exports'
+	exclude: 'theoricus/generators/templates'
+	release: 'lib/theoricus.cli.js'
+	debug: 'lib/theoricus.cli.debug.js'
+
 toast 'src'
-	vendors:[
-		"vendors/history.js"
-		"vendors/history.adapter.native.js"
-		"vendors/jquery.js"
-		"vendors/coffeekup.js"
-	]
-
-	minify: false
-
-	httpfolder: ''
-	release: 'public/app.js'
-	debug: 'public/app-debug.js'
+	alias: 'theoricus'
+	expose: 'window'
+	release: 'lib/theoricus.js'
+	debug: 'lib/theoricus.debug.js'

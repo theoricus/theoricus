@@ -1,3 +1,4 @@
-public/toaster
-public/app-debug.js
 node_modules
+lib/toaster
+lib/theoricus.debug.js
+lib/theoricus.cli.debug.js

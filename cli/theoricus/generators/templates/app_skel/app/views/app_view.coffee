@@ -1,0 +1,1 @@
+class AppView extends theoricus.mvc.View
