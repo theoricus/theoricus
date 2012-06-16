@@ -1,1 +1,1 @@
-class MainModel extends app.controllers.AppModel
+class MainModel extends app.models.AppModel

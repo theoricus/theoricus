@@ -1,5 +1,5 @@
 # MAIN
-match "/main":
+match "/main"
 	to: "main/index"
 	at: null
 	el: "body"

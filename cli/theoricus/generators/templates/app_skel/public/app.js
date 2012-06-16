@@ -1,1 +1,1 @@
-/* it'll be your release js */
+/* this will be your release JS */
