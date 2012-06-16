@@ -12,9 +12,9 @@ class AddProject
 		@target = pn "#{@pwd}/#{@options[1]}"
 
 		if path.existsSync @target
-			console.log "ERROR: Target directory already existis. Do you " +
-						"wanna overwrite it? You'll lose everything."
-			return # if no
+			console.log "ERROR".bold.red + " Target directory already existis."+
+						"\n\t#{@target}".yellow
+			return
 
 		cmd = "cp -r #{@app_skel} #{@target}"
 		exec cmd, (error, stdout, stderr)=>
