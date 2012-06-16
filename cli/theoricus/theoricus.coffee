@@ -11,9 +11,7 @@ class Theoricus
 	colors = require 'colors'
 	
 	constructor:->
-		@pwd = @_get_app_root()
-		@root = path.normalize __dirname + "/.."
-		
+
 		cmds =	"#{'model'.cyan}#{'|'.white}#{'view'.cyan}#{'|'.white}" +
 				"#{'controller'.cyan}#{'|'.white}#{'all'.cyan}"
 
@@ -50,9 +48,13 @@ class Theoricus
 		options = process.argv.slice 2
 		cmd = options.join( " " ).match /([a-z]+)/
 		cmd = cmd[1] if cmd?
+		
+		@root = path.normalize __dirname + "/.."
+		@app_root = @_get_app_root()
+		@pwd = @app_root || path.resolve "."
 
-		if @pwd is null and cmd is not "help"
-			console.log "#{'Error:'.bold} Not a Theoricus app.".red
+		if @app_root == null and cmd != "help" and cmd != "new"
+			console.log "ERROR".bold.red + " Not a Theoricus app."
 			return
 
 		switch cmd
@@ -71,13 +73,16 @@ class Theoricus
 		while true
 			app = path.normalize "#{current}/app/controllers/app_controller.coffee"
 
-			unless path.existsSync app
-				tmp = path.normalize path.resolve "#{current}/../"
+			if path.existsSync app
+				contents = fs.readFileSync app, "utf-8"
+				if contents.indexOf( "theoricus.mvc.Controller" ) > 0
+					return current
+				else
+					return null
+			else
+				tmp = path.normalize path.resolve("#{current}/../")
 				if current == tmp
 					return null
 				else
 					current = tmp
-
-			contents = fs.readFileSync app, "utf-8"
-			return current if contents.indexOf( "theoricus.mvc.Controller" ) > 0
-			return null
+					continue
