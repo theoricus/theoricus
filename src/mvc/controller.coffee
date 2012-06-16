@@ -12,9 +12,8 @@ class Controller
 		if @[ @route.api.action]?
 			@[ @route.api.action].apply @, @route.api.params
 		else
-			alias = @route.api.controller_name
-			model = Factory.model alias
-			@render alias, model
+			model = Factory.model @route.api.controller_name
+			@render @route.api.action, model
 	
 	_destroy:( route, after_destroy )->
 		route.view.after_out = after_destroy
@@ -25,4 +24,4 @@ class Controller
 	render:( view_name, data )->
 		@route.view = Factory.view @route.api.controller_name, view_name
 		@route.view.after_in = @after_run
-		@route.view._render @route, view_name, data
+		@route.view._render @route, view_name, data: data

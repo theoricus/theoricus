@@ -15,11 +15,11 @@ class Route
 	api: null
 	location: null
 
-	constructor:( route, to, at, router )->
+	constructor:( route, to, at, el, router )->
 		Factory = router.the.factory
-
-		@raw = route:route, to:to, at:at
 		
+		@raw = route:route, to:to, at:at
+
 		@matcher = route.replace Route.named_param_reg, '([^\/]+)'
 		@matcher = @matcher.replace Route.splat_param_reg, '(.*?)'
 		@matcher = new RegExp "^#{@matcher}$"
@@ -29,13 +29,9 @@ class Route
 		@api.controller = Factory.controller @api.controller_name
 		@api.action = to.split( "/" )[1]
 
-		if /\#/g.test at
-			@target_route = at.split( "#" )[0]
-			@target_el = "#" + at.split( "#" )[1]
-		else
-			@target_route = null
-			@target_el = at
-	
+		@target_route = at
+		@target_el = el
+
 	run:( after_run )->
 		@api.controller._run @, after_run
 

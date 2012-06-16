@@ -2,13 +2,13 @@
 
 class ArrayUtil
 	ObjectUtil = theoricus.utils.ObjectUtil
-
+	
 	@find:( src, search )->
 		for v, i in src
 			if search instanceof String
 				return item: v, index:i if v == search
 			else if search instanceof Object
-				return item: v, index:i if ObjectUtil.find(v, search)?
+				return {item: v, index:i } if ObjectUtil.find(v, search)?
 		return null
 
 	@delete:( src, search )->

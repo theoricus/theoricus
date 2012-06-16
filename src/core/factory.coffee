@@ -6,10 +6,11 @@ class Factory
 	StringUtil = theoricus.utils.StringUtil
 
 	constructor:( @the )->
-		@c_tmpl = "#{@the.boot.name}.controllers.{classname}Controller"
-		@m_tmpl = "#{@the.boot.name}.models.{classname}Model"
-		@v_tmpl = "#{@the.boot.name}.views.{ns}.{classname}View"
-		@t_tmpl = "#{@the.boot.name}.views.{ns}.templates.{classname}Template"
+		app_name = @the.config.app_name
+		@c_tmpl = "#{app_name}.controllers.{classname}Controller"
+		@m_tmpl = "#{app_name}.models.{classname}Model"
+		@v_tmpl = "#{app_name}.views.{ns}.{classname}View"
+		@t_tmpl = "views/{ns}/{name}/index"
 
 	controller:( name )->
 		# console.log "Factory.controller( '#{name}' )"
@@ -17,7 +18,8 @@ class Factory
 		if @controllers[ name ]?
 			return @controllers[ name ]
 		else
-			controller = eval( @c_tmpl.replace( "{classname}", name ) )
+			classpath = @c_tmpl.replace "{classname}", name
+			controller = eval classpath
 			controller = new controller
 			controller._boot @the
 			@controllers[ name ] = controller
@@ -25,7 +27,8 @@ class Factory
 	model:( name )->
 		# console.log "Factory.model( '#{name}' )"
 		name = StringUtil.camelize name
-		model = eval( @m_tmpl.replace "{classname}", name )
+		classpath = @m_tmpl.replace "{classname}", name
+		model = eval classpath
 		model = new model
 		model._boot @the
 
@@ -33,11 +36,11 @@ class Factory
 		# console.log "Factory.view( '#{ns}', '#{name}' )"
 		name = StringUtil.camelize name
 		classpath = @v_tmpl.replace( "{ns}", ns ).replace( "{classname}", name )
-		view = new ( eval classpath )
+		view = eval classpath
+		view = new view
 		view._boot @the
 
 	template:( ns, name )->
-		# console.log "Factory.template( '#{ns}', '#{name}' )"
-		name = StringUtil.camelize name
-		classpath = @t_tmpl.replace( "{ns}", ns ).replace( "{classname}", name )
-		new ( eval classpath )
+		path = @t_tmpl.replace( "{ns}", ns ).replace /\{name\}/g, name
+		# console.log "Factory.template( '#{path}' )"
+		return app.templates[path]

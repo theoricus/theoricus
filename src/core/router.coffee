@@ -16,38 +16,45 @@ class Router
 
 	constructor:( @the, @on_change )->
 		Factory = @the.factory
-		@map route, opts.to, opts.at for route, opts of @the.boot.routes
-		History.Adapter.bind window, 'statechange', => @route History.getState()
-		setTimeout (=>
-			url = window.location.pathname
-			url = @the.boot.boot if url == "/"
-			@run url
-		), 1
 
-	map:( route, to, at )->
-		@routes.push new theoricus.core.Route route, to, at, @
+		for route, opts of app.routes
+			@map route, opts.to, opts.at, opts.el, @
+
+		History.Adapter.bind window, 'statechange', =>
+			@route History.getState()
+
+		setTimeout =>
+			url = window.location.pathname
+			url = app.root if url == "/"
+			@run url
+		, 1
+
+	map:( route, to, at, el )->
+		@routes.push new theoricus.core.Route route, to, at, el, @
 
 	route:( state )->
 		if @trigger
 			url = state.title or state.hash
-			url = @the.boot.boot if url == "/"
+			url = app.root if url == "/"
 			for route in @routes
 				if route.matcher.test url
 					route.set_location url
 					@on_change?( route )
 					return
-
+		
 		@trigger = true
 
 	navigate:( url, trigger = true, replace = false )->
-		if @the.boot.no_push_state
+		if @the.config.no_push_state
 			window.location = url
+			return
 		else
 			@trigger = trigger
 			action = if replace then "replaceState" else "pushState"
 			History[action] null, url, url
 
 	run:( url, trigger = true )->
+		# console.log "Router.run #{url}, #{trigger}"
 		@trigger = trigger
 		@route {title:url}
 
