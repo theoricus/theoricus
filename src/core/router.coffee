@@ -20,12 +20,14 @@ class Router
 		for route, opts of app.routes
 			@map route, opts.to, opts.at, opts.el, @
 
-		History.Adapter.bind window, 'statechange', => @route History.getState()
-		setTimeout (=>
+		History.Adapter.bind window, 'statechange', =>
+			@route History.getState()
+
+		setTimeout =>
 			url = window.location.pathname
 			url = app.root if url == "/"
 			@run url
-		), 1
+		, 1
 
 	map:( route, to, at, el )->
 		@routes.push new theoricus.core.Route route, to, at, el, @
@@ -39,7 +41,7 @@ class Router
 					route.set_location url
 					@on_change?( route )
 					return
-
+		
 		@trigger = true
 
 	navigate:( url, trigger = true, replace = false )->
