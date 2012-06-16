@@ -44,8 +44,8 @@ class Router
 
 	navigate:( url, trigger = true, replace = false )->
 		if @the.config.no_push_state
-			return
 			window.location = url
+			return
 		else
 			@trigger = trigger
 			action = if replace then "replaceState" else "pushState"
