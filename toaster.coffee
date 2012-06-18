@@ -1,6 +1,9 @@
 toast 'cli'
 	expose: 'exports'
-	exclude: 'theoricus/generators/templates'
+	exclude: [
+		'theoricus/generators/templates'
+		'theoricus/crawler/phantom.coffee'
+	]
 	release: 'lib/theoricus.cli.js'
 	debug: 'lib/theoricus.cli.debug.js'
 
