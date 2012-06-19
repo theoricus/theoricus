@@ -1,3 +1,0 @@
-[submodule "cli/vendors/phantomjs"]
-	path = cli/vendors/phantomjs
-	url = https://github.com/ariya/phantomjs
