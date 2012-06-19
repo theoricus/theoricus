@@ -15,7 +15,7 @@ class Theoricus
 		cmds =	"#{'model'.cyan}#{'|'.white}#{'view'.cyan}#{'|'.white}" +
 				"#{'controller'.cyan}#{'|'.white}#{'all'.cyan}"
 
-		@header = "#{'Theoricus'.bold} #{'v0.1.0\n  Blast MVC implementation for CoffeeScript targeting navigable SAP\'s.'.grey}\n\n"
+		@header = "#{'Theoricus'.bold} #{'v0.1.0\n  Blast navigable-MVC implementation for the browser.'.grey}\n\n"
 
 		@header += "#{'Usage:'.bold}\n"
 		@header += "  theoricus #{'new'.red}      #{'path'.green}\n"
