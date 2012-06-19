@@ -15,58 +15,57 @@ class Server
 		@start_server()
 
 	start_server:()->
+		@server = http.createServer( @_handler ).listen @port
+		console.log "#{'Server running at'.bold} http://localhost:#{@port}".grey
 
-		server = (request, response)=>
-			headers = request.headers
-			agent = headers['user-agent']
-			crawl = agent.indexOf( "Googlebot" ) >= 0 || agent.indexOf( "curl" ) >= 0
+	close_server:()->
+		@server.close()
 
-			uri = url.parse( request.url ).pathname
-			filename = path.join( @root, uri )
 
-			path.exists filename, (exists)=>
+	_handler:(request, response)=>
+		headers = request.headers
+		agent = headers['user-agent']
+		crawl = agent.indexOf( "Googlebot" ) >= 0 || agent.indexOf( "curl" ) >= 0
 
-				if !exists || fs.lstatSync( filename ).isDirectory()
+		uri = url.parse( request.url ).pathname
+		filename = path.join( @root, uri )
 
-					filename = path.join( @root, "/index.html" )
-					file = fs.readFileSync( filename , "utf-8")
-					response.writeHead 200, {"Content-Type": "text/html"}
+		path.exists filename, (exists)=>
 
-					if crawl is true
-						script = "#{@the.root}/crawler/phantomjs.coffee"
-						cmd = "phantomjs #{script} http://"+
-								headers.host +
-								request.url +
-								"?crawler"
+			if !exists || fs.lstatSync( filename ).isDirectory()
 
-						exec cmd, (error, stdout, stderr)->
-							throw error if error
-							response.writeHead 200, {"Content-Type": "text/html"}
-							response.write stdout
-							response.end()
-					else
-						response.write file
+				filename = path.join( @root, "/index.html" )
+				file = fs.readFileSync( filename , "utf-8")
+				response.writeHead 200, {"Content-Type": "text/html"}
+
+				if crawl is true
+					script = "#{@the.root}/crawler/phantomjs.coffee"
+					cmd = "phantomjs #{script} http://"+
+							headers.host +
+							request.url +
+							"?crawler"
+
+					exec cmd, (error, stdout, stderr)->
+						throw error if error
+						response.writeHead 200, {"Content-Type": "text/html"}
+						response.write stdout
 						response.end()
-					return
-
-				fs.readFile filename, "utf-8", (err, file)->
-					if err
-						response.writeHead 500, {"Content-Type": "text/plain"}
-						response.write err + "\n"
-						response.end()
-						return
-
-					if filename.match /.js$/m
-						response.writeHead 200, {"Content-Type": "text/javascript"}
-					else if filename.match /.css$/m
-						response.writeHead 200, {"Content-Type": "text/css"}
-
+				else
 					response.write file
 					response.end()
+				return
 
-		http.createServer( server ).listen @port
+			fs.readFile filename, "utf-8", (err, file)->
+				if err
+					response.writeHead 500, {"Content-Type": "text/plain"}
+					response.write err + "\n"
+					response.end()
+					return
 
-		console.log (
-			"#{'Server running at'.bold} http://localhost:#{@port}".grey
-			# "Hit CTRL+C to quit".grey
-		)
+				if filename.match /.js$/m
+					response.writeHead 200, {"Content-Type": "text/javascript"}
+				else if filename.match /.css$/m
+					response.writeHead 200, {"Content-Type": "text/css"}
+
+				response.write file
+				response.end()
