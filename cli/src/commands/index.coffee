@@ -4,6 +4,7 @@
 class Index
 
 	fs = require "fs"
+	exec = (require "child_process").exec
 	path = require "path"
 	FsUtil = (require "coffee-toaster").toaster.utils.FsUtil
 
@@ -11,10 +12,16 @@ class Index
 
 	constructor:( @the, @options )->
 
-		@server = new theoricus.commands.Server @the, @options
-		console.log "Start indexing...".bold.green
-		@crawler = new theoricus.crawler.Crawler =>
-			@get_page "http://localhost:11235/"
+		exec "phantomjs -v", (error, stdout, stderr)=>
+			if /phantomjs: command not found/.test stderr
+				console.log "Error ".bold.red + "Install #{'phantomjs'.yellow}"+
+							" before indexing pages."+
+							"\n\thttp://phantomjs.org/"
+			else
+				@server = new theoricus.commands.Server @the, @options
+				console.log "Start indexing...".bold.green
+				@crawler = new theoricus.crawler.Crawler =>
+					@get_page "http://localhost:11235/"
 
 
 	get_page:( url )->
