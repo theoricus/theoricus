@@ -22,17 +22,17 @@ class Compiler
 		config = {
 			folders: {},
 			vendors:[
-				"#{@the.root}/vendors/jquery.js",
-				"#{@the.root}/vendors/history.js",
-				"#{@the.root}/vendors/history.adapter.native.js",
-				"#{@the.root}/vendors/jade.runtime.js"
+				"#{@the.root}/www/vendors/jquery.js",
+				"#{@the.root}/www/vendors/history.js",
+				"#{@the.root}/www/vendors/history.adapter.native.js",
+				"#{@the.root}/www/vendors/jade.runtime.js"
 			],
 			release: "public/app.js",
 			debug: "public/app-debug.js"
 		}
 
 		config.folders[@APP_FOLDER] = "app"
-		config.folders["#{@the.root}/src"] = "theoricus"
+		config.folders["#{@the.root}/www/src"] = "theoricus"
 
 		# start watching/compiling coffeescript
 		@toaster = new Toaster @BASE_DIR, {w:1, d:1, config: config}, true

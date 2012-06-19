@@ -1,13 +1,11 @@
-toast 'cli'
+toast 'cli/src'
+	alias: 'theoricus'
 	expose: 'exports'
-	exclude: [
-		'theoricus/generators/templates'
-		'theoricus/crawler/phantom.coffee'
-	]
+	exclude: ['generators/templates']
 	release: 'lib/theoricus.cli.js'
 	debug: 'lib/theoricus.cli.debug.js'
 
-toast 'src'
+toast 'www/src'
 	alias: 'theoricus'
 	expose: 'window'
 	release: 'lib/theoricus.js'
