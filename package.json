@@ -28,6 +28,7 @@
     "jade"           : "0.26.0",
     "stylus"         : "0.27.0", 
     "colors"         : "0.5.x",
-    "http-server"    : "0.4.1"
+    "http-server"    : "0.4.1",
+    "phantom"        : "0.3.4"
   }
 }

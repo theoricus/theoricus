@@ -34,16 +34,16 @@ class Theoricus
 		@header += "         #{'version'.red}   Show theoricus version.\n"
 		@header += "            #{'help'.red}   Show this help screen.\n\n"
 
-		@header += "#{'Flags:'.bold}\n"
-		@header += "         #{'--debug'.green}   Use with 'start' to force debug mode in production or test environment   [default: false]\n"
-		@header += "           #{'--env'.green}   Use with 'start' to set environment.                                     [default: dev  ]\n"
-		@header += " #{'--skip-indexing'.green}   Use with 'start' or 'compile' to avoid static file's indexing.           [default: false]\n"
-		@header += "#{'--force-indexing'.green}   Use with 'start' or 'compile' to force static file's indexing.           [default: false]\n\n"
+		# @header += "#{'Flags:'.bold}\n"
+		# @header += "         #{'--debug'.green}   Use with 'start' to force debug mode in production or test environment   [default: false]\n"
+		# @header += "           #{'--env'.green}   Use with 'start' to set environment.                                     [default: dev  ]\n"
+		# @header += " #{'--skip-indexing'.green}   Use with 'start' or 'compile' to avoid static file's indexing.           [default: false]\n"
+		# @header += "#{'--force-indexing'.green}   Use with 'start' or 'compile' to force static file's indexing.           [default: false]\n\n"
 
-		@header += "#{'Params:'.bold}\n"
-		@header += "            #{'name'.magenta}   Name for your model, view and controller.\n"
-		@header += "          #{'fields'.yellow}   Model fields, can be used   when add new models or 'all'.\n"
-		@header += "         #{'options'.yellow}   Model fields, can be used   when add new models or 'all'.\n"
+		# @header += "#{'Params:'.bold}\n"
+		# @header += "            #{'name'.magenta}   Name for your model, view and controller.\n"
+		# @header += "          #{'fields'.yellow}   Model fields, can be used   when add new models or 'all'.\n"
+		# @header += "         #{'options'.yellow}   Model fields, can be used   when add new models or 'all'.\n"
 
 		options = process.argv.slice 2
 		cmd = options.join( " " ).match /([a-z]+)/
@@ -62,7 +62,9 @@ class Theoricus
 			when "add" then new theoricus.commands.Add @, options
 			when "rm" then new theoricus.commands.Rm @, options
 			when "start" then new theoricus.commands.Server @, options
+			when "static" then new theoricus.commands.StaticServer @, options
 			when "compile" then new theoricus.commands.Compiler @, options
+			when "index" then new theoricus.commands.Index @, options
 			when "version" then console.log "vesion"
 			else
 				console.log @header

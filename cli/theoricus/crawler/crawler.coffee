@@ -1,9 +1,19 @@
 class Crawler
 
-	call = (require "child_process").exec
-	phantom = "#{__dirname}/../cli/theoricus/crawler/phantom.coffee"
+	phantom = require "phantom"
+	page: null
 
-	constructor:( url, on_src_evaluated )->
-		call "phantomjs #{phantom} #{url}", (error, stdout, stderr)->
-			throw error if error?
-			on_src_evaluated?( stdout )
+	constructor:( after_init )->
+		phantom.create (ph) => ph.createPage (@page) => after_init?()
+
+	get_src:( url, on_get_source )->
+		@page.open url, => @keep_on_checking on_get_source
+
+	keep_on_checking:( on_get_source )->
+		@page.evaluate (-> [
+			window.crawler.is_rendered,
+			document.all[0].outerHTML
+		]), ( data )=>
+			[rendered, source] = data
+			return (on_get_source source) if rendered
+			setTimeout (=> @keep_on_checking on_get_source), 10
