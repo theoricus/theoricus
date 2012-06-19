@@ -2,7 +2,7 @@
   "author"         : "Anderson Arboleya <anderson@arboleya.me>",
   "name"           : "theoricus",
   "description"    : "Blast navigable-MVC implementation for the browser.",
-  "version"        : "0.1.0",
+  "version"        : "0.1.1",
   
   "repository"     : {
     "type"           : "git",
