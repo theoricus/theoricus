@@ -8,7 +8,7 @@ class AddProject
 		@pwd = @the.pwd
 		@root = @the.root
 
-		@app_skel = pn "#{@root}/cli/theoricus/generators/templates/app_skel"
+		@app_skel = pn "#{@root}/cli/src/generators/templates/app_skel"
 		@target = pn "#{@pwd}/#{@options[1]}"
 
 		if path.existsSync @target
