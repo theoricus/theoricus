@@ -1,6 +1,6 @@
 class Model
 	fs = require 'fs'
-	StringUtil = require( 'coffee-toaster' ).StringUtil
+	StringUtil = ( require 'coffee-toaster' ).toaster.utils.StringUtil
 
 	template =
 		body: "class ~NAMEModel extends app.models.AppModel"

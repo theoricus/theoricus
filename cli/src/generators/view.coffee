@@ -3,10 +3,9 @@ class View
 	# requirements
 	fs = require 'fs'
 
-	FsUtil = require( 'coffee-toaster' ).FsUtil
-	StringUtil = require( 'coffee-toaster' ).StringUtil
-	Toaster = require( 'coffee-toaster' ).Toaster
-
+	FsUtil = ( require 'coffee-toaster' ).toaster.utils.FsUtil
+	StringUtil = ( require 'coffee-toaster' ).toaster.utils.StringUtil
+	Toaster = ( require 'coffee-toaster' ).Toaster
 
 	template =
 		body: "class ~NAMEView extends app.views.AppView"

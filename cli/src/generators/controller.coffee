@@ -1,6 +1,6 @@
 class Controller
 	fs = require 'fs'
-	StringUtil = require( 'coffee-toaster' ).StringUtil
+	StringUtil = ( require 'coffee-toaster' ).toaster.utils.StringUtil
 
 	template =
 		body: "class ~NAMEController extends app.controllers.AppController"

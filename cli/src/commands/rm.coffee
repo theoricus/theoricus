@@ -2,7 +2,7 @@ class Rm
 	fs = require 'fs'
 	path = require 'path'
 
-	FsUtil = require( "coffee-toaster" ).FsUtil
+	FsUtil = ( require 'coffee-toaster' ).toaster.utils.FsUtil
 
 	constructor:( @the, opts )->
 
