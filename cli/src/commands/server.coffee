@@ -1,8 +1,9 @@
 class Server
 	http = require "http"
 	url = require "url"
-	path = require "path"
 	fs = require "fs"
+	path = require "path"
+	pn = path.normalize
 
 	exec = require( "child_process" ).exec
 
@@ -39,17 +40,14 @@ class Server
 				response.writeHead 200, {"Content-Type": "text/html"}
 
 				if crawl is true
-					script = "#{@the.root}/crawler/phantomjs.coffee"
-					cmd = "phantomjs #{script} http://"+
-							headers.host +
-							request.url +
-							"?crawler"
-
-					exec cmd, (error, stdout, stderr)->
-						throw error if error
+					cache = pn "#{@root}/static/#{request.url}/index.html"
+					if path.existsSync cache
+						src = fs.readFileSync cache
 						response.writeHead 200, {"Content-Type": "text/html"}
-						response.write stdout
+						response.write "#{src}\n"
 						response.end()
+					else
+						console.log "TODO: implement on-demmand cache"
 				else
 					response.write file
 					response.end()

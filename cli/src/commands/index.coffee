@@ -67,6 +67,7 @@ class Index
 		folder = path.normalize "#{@the.pwd}/public/static/#{route}"
 		FsUtil.mkdir_p folder unless path.existsSync( folder )
 
+		src = ((require 'pretty-data').pd.xml src) + "\n"
 		fs.writeFileSync (file = path.normalize "#{folder}/index.html"), src
 		route = (route || "/").bold.yellow
 		console.log "\t#{route.bold.yellow} -> #{file}"
