@@ -10,7 +10,7 @@ class Controller
 	
 	_run:( @route, @after_run )->
 		if @[ @route.api.action]?
-			@[ @route.api.action].apply @, @route.api.params
+			@[ @route.api.action ].apply @, @route.api.params
 		else
 			model = Factory.model @route.api.controller_name
 			@render @route.api.action, model

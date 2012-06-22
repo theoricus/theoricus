@@ -14,15 +14,16 @@ class View
 	constructor:( @the, opts )->
 		name = opts[2]
 
-		folderpath = "app/views/#{name}"
-		view = "#{folderpath}/index_view.coffee"
+		view_path = "app/views/#{name}"
+		static_path = "app/static/#{name}-index"
 
-		# create contaioner
-		FsUtil.mkdir_p folderpath = "#{folderpath}/index"
+		view = "#{view_path}/index_view.coffee"
+		jade = "#{static_path}/markup.jade"
+		styl = "#{static_path}/style.styl"
 
-		# compute paths
-		jade = "#{folderpath}/index.jade"
-		styl = "#{folderpath}/index.styl"
+		# create contaioners
+		FsUtil.mkdir_p view_path
+		FsUtil.mkdir_p static_path
 
 		# view
 		fs.writeFileSync view, @build_contents( "index" )

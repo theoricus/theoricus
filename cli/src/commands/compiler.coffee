@@ -40,11 +40,12 @@ class Compiler
 		# compiling everything at startup
 		@compile()
 
-		# watching jade
-		FsUtil.watch_folder @APP_FOLDER, /.jade$/, @_on_jade_stylus_change
+		# watching jade and stylus
+		reg = /.jade|.stylus$/
+		FsUtil.watch_folder "#{@APP_FOLDER}/static", reg, @_on_jade_stylus_change
 
 		# watching stylus
-		FsUtil.watch_folder @APP_FOLDER, /.styl$/, @_on_jade_stylus_change
+		# FsUtil.watch_folder @APP_FOLDER, /.styl$/, @_on_jade_stylus_change
 
 
 
@@ -79,7 +80,7 @@ class Compiler
 
 
 	compile_jade:( after_compile )->
-		files = FsUtil.find @APP_FOLDER, /.jade$/
+		files = FsUtil.find "#{@APP_FOLDER}/static", /.jade$/
 
 		output = """(function() {
 			__t('app').templates = { ~TEMPLATES };
@@ -92,7 +93,8 @@ class Compiler
 			continue if file.match( /(\_)?[^\/]+$/ )[1] is "_"
 
 			# compute alias and read file's source
-			alias = file.match( /views\/[^\.]+/ )
+			name = file.match /[^\/]+.jade$/m
+			folder = file.match( /(static\/)(.*)$/m )[2].replace "/#{name}", ""
 			source = fs.readFileSync file, "utf-8"
 
 			# compile source
@@ -103,7 +105,7 @@ class Compiler
 
 			# write template name and contents
 			compiled = compiled.toString().replace "anonymous", ""
-			buffer.push "'#{alias}': " + compiled
+			buffer.push "'#{folder}': " + compiled
 
 		# format everything
 		output = output.replace( "~TEMPLATES", buffer.join "," )
@@ -114,7 +116,7 @@ class Compiler
 
 	
 	compile_stylus:( after_compile )->
-		files = FsUtil.find @APP_FOLDER, /.styl$/
+		files = FsUtil.find "#{@APP_FOLDER}/static", /.styl$/
 		
 		buffer = []
 		@pending_stylus = 0
@@ -129,7 +131,7 @@ class Compiler
 
 			source = fs.readFileSync file, "utf-8"
 			paths = [
-				"#{@the.pwd}/app/views/_mixins/stylus"
+				"#{@APP_FOLDER}/static/_mixins/stylus"
 			]
 
 			stylus( source )

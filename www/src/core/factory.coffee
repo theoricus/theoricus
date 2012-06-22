@@ -10,10 +10,10 @@ class Factory
 		@c_tmpl = "#{app_name}.controllers.{classname}Controller"
 		@m_tmpl = "#{app_name}.models.{classname}Model"
 		@v_tmpl = "#{app_name}.views.{ns}.{classname}View"
-		@t_tmpl = "views/{ns}/{name}/index"
+		@t_tmpl = "{ns}-{name}"
 
 	controller:( name )->
-		# console.log "Factory.controller( '#{name}' )"
+		console.log "Factory.controller( '#{name}' )"
 		name = StringUtil.camelize name
 		if @controllers[ name ]?
 			return @controllers[ name ]
@@ -42,5 +42,5 @@ class Factory
 
 	template:( ns, name )->
 		path = @t_tmpl.replace( "{ns}", ns ).replace /\{name\}/g, name
-		# console.log "Factory.template( '#{path}' )"
+		console.log "Factory.template( '#{path}' )"
 		return app.templates[path]
