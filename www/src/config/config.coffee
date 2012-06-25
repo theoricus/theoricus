@@ -11,7 +11,7 @@ class Config
 		@app_name = "app"
 
 		@animate_at_startup = app.config.animate_at_startup || false
-		@disable_auto_transitions = app.disable_auto_transitions || true
+		@enable_auto_transitions = app.enable_auto_transitions || true
 
 		@no_push_state = (typeof history.pushState is not 'function')
 		@no_push_state ||= /(\?|\&)(crawler)/.test window.location

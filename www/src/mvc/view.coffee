@@ -22,9 +22,8 @@ class View
 		@in @after_in
 
 	in:( after_in )->
-		animate = !@the.config.enable_auto_transitions
-		animate ||= @the.config.disable_transitions
-		animate ||= @the.config.disable_auto_transitions
+		animate = @the.config.enable_auto_transitions
+		animate &= @the.config.disable_transitions
 
 		if animate
 			after_in?()
@@ -33,9 +32,8 @@ class View
 			@el.animate {opacity: 1}, 600, => after_in?()
 
 	out:( after_out )->
-		animate = !@the.config.enable_auto_transitions
-		animate ||= @the.config.disable_transitions
-		animate ||= @the.config.disable_auto_transitions
+		animate = @the.config.enable_auto_transitions
+		animate &= @the.config.disable_transitions
 
 		if animate
 			after_out?()
