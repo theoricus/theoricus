@@ -1,7 +1,7 @@
 {
   "author"         : "Anderson Arboleya <anderson@arboleya.me>",
   "name"           : "theoricus",
-  "description"    : "Blast navigable-MVC implementation for the browser.",
+  "description"    : "CoffeeScript browser-based MV(C, or anything alike) implementation with a powerful'n'effortless navigation mechanism based on objective deep-linked target routes. Generators and destroyers for simple code scaffolding. Embedded build system, live compliler, web server and indexing system - this one exports your application for static (javascriptless) use aimed specially at web-bots looking forward to better SEO results.",
   "version"        : "0.1.2",
   
   "repository"     : {
