@@ -24,6 +24,7 @@ class View
 	in:( after_in )->
 		animate = !@the.config.enable_auto_transitions
 		animate ||= @the.config.disable_transitions
+		animate ||= @the.config.disable_auto_transitions
 
 		if animate
 			after_in?()
@@ -34,6 +35,7 @@ class View
 	out:( after_out )->
 		animate = !@the.config.enable_auto_transitions
 		animate ||= @the.config.disable_transitions
+		animate ||= @the.config.disable_auto_transitions
 
 		if animate
 			after_out?()
