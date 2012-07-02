@@ -47,6 +47,7 @@ class Index
 
 			console.log "Pages indexed successfully.".bold.green
 
+			@crawler.exit()
 			@server.close_server()
 			@static_server = new theoricus.commands.StaticServer @the, @options
 

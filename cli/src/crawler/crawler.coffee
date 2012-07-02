@@ -4,7 +4,7 @@ class Crawler
 	page: null
 
 	constructor:( after_init )->
-		phantom.create (ph) => ph.createPage (@page) => after_init?()
+		phantom.create (@ph) => @ph.createPage (@page) => after_init?()
 
 	get_src:( url, on_get_source )->
 		@page.open url, => @keep_on_checking on_get_source
@@ -17,3 +17,6 @@ class Crawler
 			[rendered, source] = data
 			return (on_get_source source) if rendered
 			setTimeout (=> @keep_on_checking on_get_source), 10
+
+	exit:->
+		@ph.exit()
