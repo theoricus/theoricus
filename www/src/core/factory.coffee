@@ -13,7 +13,7 @@ class Factory
 		@t_tmpl = "{ns}-{name}"
 
 	controller:( name )->
-		console.log "Factory.controller( '#{name}' )"
+		# console.log "Factory.controller( '#{name}' )"
 		name = StringUtil.camelize name
 		if @controllers[ name ]?
 			return @controllers[ name ]
