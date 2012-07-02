@@ -7,7 +7,7 @@ There's simple naming conventions (as you see in rails and many others),<BR>
 with a powerful build system behind it. There's also a naviagation mechanism<BR>
 built to let your free to code your shit instead of handling url's manually.
 
-It uses some (loved | hated) pre-processed langs to accomplish the goals.
+It uses some (loved'n'hated) pre-processed langs to accomplish the goals.
 
  - [Stylus](https://github.com/learnboost/stylus) (css)
  - [Jade](https://github.com/visionmedia/jade) (html)
