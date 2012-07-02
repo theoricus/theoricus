@@ -42,5 +42,5 @@ class Factory
 
 	template:( ns, name )->
 		path = @t_tmpl.replace( "{ns}", ns ).replace /\{name\}/g, name
-		console.log "Factory.template( '#{path}' )"
+		# console.log "Factory.template( '#{path}' )"
 		return app.templates[path]
