@@ -3,6 +3,7 @@ class Compiler
 	# requirements
 	path = require "path"
 	fs = require "fs"
+	nib = require "nib"
 
 	jade = require "jade"
 	stylus = require "stylus"
@@ -41,12 +42,8 @@ class Compiler
 		@compile()
 
 		# watching jade and stylus
-		reg = /.jade|.stylus$/
+		reg = /(.jade|.styl)$/m
 		FsUtil.watch_folder "#{@APP_FOLDER}/static", reg, @_on_jade_stylus_change
-
-		# watching stylus
-		# FsUtil.watch_folder @APP_FOLDER, /.styl$/, @_on_jade_stylus_change
-
 
 
 	_on_jade_stylus_change:( info )=>
@@ -75,7 +72,17 @@ class Compiler
 				msg = "File changed".bold.cyan
 				console.log "#{msg} #{info.path.cyan}"
 
-		@compile()
+		# compile only jade
+		if info.path.match /.jade$/m
+			@compile true
+
+		# compile only stylus
+		else if info.path.match /.styl$/m
+
+			@compile_stylus ( css )=>
+				target = "#{@the.pwd}/public/app.css"
+				fs.writeFileSync target, css
+				console.log "Compiled #{target}".green
 
 
 
@@ -137,6 +144,7 @@ class Compiler
 			stylus( source )
 				.set( 'filename', file )
 				.set( 'paths', paths )
+				.use( nib() )
 				.render (err, css)=>
 					throw err if err?
 					buffer.push css
@@ -167,6 +175,7 @@ class Compiler
 		@compile_stylus ( css )=>
 			target = "#{@the.pwd}/public/app.css"
 			fs.writeFileSync target, css
+			console.log "#{'Compiled'.bold} #{target}".green
 
 
 	_get_config:()->
