@@ -18,8 +18,8 @@ class View
 		static_path = "app/static/#{name}-index"
 
 		view = "#{view_path}/index_view.coffee"
-		jade = "#{static_path}/markup.jade"
-		styl = "#{static_path}/style.styl"
+		jade = "#{static_path}/#{name}-index.jade"
+		styl = "#{static_path}/#{name}-index.styl"
 
 		# create contaioners
 		FsUtil.mkdir_p view_path
@@ -30,7 +30,7 @@ class View
 		console.log "#{'Created: '.bold} #{view}".green
 
 		# jade
-		fs.writeFileSync jade, "// put your templates (JADE) here "
+		fs.writeFileSync jade, "//- put your templates (JADE) here "
 		console.log "#{'Created: '.bold} #{jade}".green
 
 		# stylus
