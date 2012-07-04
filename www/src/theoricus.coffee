@@ -1,5 +1,4 @@
-#<< theoricus/config/*
-#<< theoricus/core/*
+#<< theoricus/*
 
 class Theoricus
 	app: null
@@ -16,3 +15,5 @@ class Theoricus
 		@config = new theoricus.config.Config @
 		@factory = new theoricus.core.Factory @
 		@processes = new theoricus.core.Processes @
+
+new theoricus.Theoricus

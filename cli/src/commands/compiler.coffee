@@ -166,7 +166,7 @@ class Compiler
 					#{conf.root}\n"""
 		
 		# formats footer
-		footer = "new theoricus.Theoricus"
+		footer = ""
 
 		# biulds all coffeescript
 		@toaster.build header, footer
