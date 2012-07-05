@@ -49,20 +49,25 @@ class Processes
 		while true && route && route.target_route
 			search = raw: route: route.target_route
 			route = ArrayUtil.find @router.routes, search
-			route = route.item if route?
+			route = route.item.clone() if route?
 			if route?
 				@pending_processes.push route
-				if route.target_route is null
-					break
+				break if route.target_route is null
 
 	# 3
 	_filter_dead_processes:()->
 		@dead_processes = []
-		for route in @active_processes
-			search = raw: route: route.raw.route
+		for active in @active_processes
+			search = raw: route: active.raw.route
 			found = ArrayUtil.find @pending_processes, search
+			
+			if found?
+				location = found.item.location
+				if location? && location != active.location
+					found = null
+
 			if found is null
-				@dead_processes.push route
+				@dead_processes.push active
 
 	# 4
 	_destroy_dead_processes:()=>

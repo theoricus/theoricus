@@ -38,8 +38,7 @@ class Router
 			url = app.root if url == "/"
 			for route in @routes
 				if route.matcher.test url
-					route.set_location url
-					@on_change?( route )
+					@on_change?( route.clone url )
 					return
 		
 		@trigger = true
