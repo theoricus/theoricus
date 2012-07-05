@@ -37,6 +37,9 @@ class Compiler
 
 		# start watching/compiling coffeescript
 		@toaster = new Toaster @BASE_DIR, {w:1, d:1, config: config}, true
+		@toaster.before_build = =>
+			@compile()
+			false
 
 		# compiling everything at startup
 		@compile()
