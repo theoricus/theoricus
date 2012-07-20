@@ -23,6 +23,7 @@ class Compiler
 		config = {
 			folders: {},
 			vendors:[
+				"#{@the.root}/www/vendors/json2.js",
 				"#{@the.root}/www/vendors/jquery.js",
 				"#{@the.root}/www/vendors/history.js",
 				"#{@the.root}/www/vendors/history.adapter.native.js",
