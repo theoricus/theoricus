@@ -23,16 +23,20 @@ class Processes
 	# --------------------------------------------------------------------------
 
 	constructor:( @the )->
+
 		Factory = @the.factory
 
 		if @the.config.animate_at_startup is false
 			@disable_transitions = @the.config.disable_transitions
 			@the.config.disable_transitions = true
 
-		@router = new theoricus.core.Router @the, @_on_router_change
+
+		$(document).ready =>
+			@router = new theoricus.core.Router @the, @_on_router_change
 
 	# 1
 	_on_router_change:( route )=>
+
 		return @router.navigate @last_route.location, false, true if @locked
 
 		@last_route = route
