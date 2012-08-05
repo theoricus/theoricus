@@ -1,6 +1,6 @@
 #<< theoricus/utils/string_util
 
-class Controller
+class theoricus.mvc.Controller
 	Factory = null
 	StringUtil = theoricus.utils.StringUtil
 

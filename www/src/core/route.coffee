@@ -5,7 +5,7 @@
 	https://github.com/haithembelhaj/RouterJs
 ###
 
-class Route
+class theoricus.core.Route
 	Factory = null
 	StringUtil = theoricus.utils.StringUtil
 

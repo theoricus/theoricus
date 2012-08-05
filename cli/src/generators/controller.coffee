@@ -1,4 +1,4 @@
-class Controller
+class theoricus.generators.Controller
 	fs = require 'fs'
 	StringUtil = ( require 'coffee-toaster' ).toaster.utils.StringUtil
 

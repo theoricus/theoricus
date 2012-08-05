@@ -1,4 +1,4 @@
-class View
+class theoricus.mvc.View
 	Factory = null
 
 	_boot:( @the )->

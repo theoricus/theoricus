@@ -1,4 +1,4 @@
-class Crawler
+class theoricus.crawler.Crawler
 
 	phantom = require "phantom"
 	page: null

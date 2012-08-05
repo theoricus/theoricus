@@ -1,4 +1,4 @@
-class Add
+class theoricus.commands.Add
 	constructor:( @the, opts )->
 
 		action = opts[1]

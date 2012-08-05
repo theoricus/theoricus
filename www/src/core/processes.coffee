@@ -1,7 +1,7 @@
 #<< theoricus/utils/array_util
 #<< theoricus/core/router
 
-class Processes
+class theoricus.core.Processes
 	Factory = null
 	ArrayUtil = theoricus.utils.ArrayUtil
 

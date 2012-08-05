@@ -1,4 +1,4 @@
-class Compiler
+class theoricus.commands.Compiler
 
 	# requirements
 	path = require "path"
@@ -194,7 +194,7 @@ class Compiler
 		return code.replace /(^\/\/.*)|([\t\n]+)/gm, ""
 
 
-class Config
+class theoricus.commands.Config
 	Compiler = theoricus.commands.Compiler
 
 	fs = require "fs"

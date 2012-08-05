@@ -1,7 +1,7 @@
 #<< theoricus/commands/server
 #<< theoricus/crawler/crawler
 
-class Index
+class theoricus.commands.Index
 
 	fs = require "fs"
 	exec = (require "child_process").exec

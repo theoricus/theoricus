@@ -1,4 +1,4 @@
-class Server
+class theoricus.commands.Server
 	http = require "http"
 	url = require "url"
 	fs = require "fs"

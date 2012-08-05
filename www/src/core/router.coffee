@@ -6,7 +6,7 @@
 	https://github.com/haithembelhaj/RouterJs
 ###
 
-class Router
+class theoricus.core.Router
 	Factory = null
 
 	routes: []

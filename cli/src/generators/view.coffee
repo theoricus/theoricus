@@ -1,4 +1,4 @@
-class View
+class theoricus.generators.View
 
 	# requirements
 	fs = require 'fs'

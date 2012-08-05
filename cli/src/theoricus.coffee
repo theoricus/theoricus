@@ -3,7 +3,7 @@
 exports.run = ->
 	new theoricus.Theoricus
 
-class Theoricus
+class theoricus.Theoricus
 
 	# requirements
 	fs = require "fs"

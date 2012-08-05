@@ -1,7 +1,7 @@
 #<< theoricus/mvc/*
 #<< theoricus/utils/string_util
 
-class Factory
+class theoricus.core.Factory
 	controllers: {}
 	StringUtil = theoricus.utils.StringUtil
 

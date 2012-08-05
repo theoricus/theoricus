@@ -1,6 +1,6 @@
 #<< theoricus/utils/object_util
 
-class ArrayUtil
+class theoricus.utils.ArrayUtil
 	ObjectUtil = theoricus.utils.ObjectUtil
 	
 	@find:( src, search )->

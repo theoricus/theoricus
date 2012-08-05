@@ -1,4 +1,4 @@
-class StaticServer
+class theoricus.commands.StaticServer
 	HTTPServer = require "http-server"
 
 	constructor:( @the, options )->

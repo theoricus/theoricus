@@ -1,6 +1,6 @@
 #<< theoricus/*
 
-class Theoricus
+class theoricus.Theoricus
 	app: null
 	root: null
 

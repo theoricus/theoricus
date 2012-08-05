@@ -1,4 +1,4 @@
-class Model
+class theoricus.generators.Model
 	fs = require 'fs'
 	StringUtil = ( require 'coffee-toaster' ).toaster.utils.StringUtil
 

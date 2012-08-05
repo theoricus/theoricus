@@ -1,4 +1,4 @@
-class AddProject
+class theoricus.commands.AddProject
 	
 	path = require 'path'
 	pn = path.normalize

@@ -1,4 +1,4 @@
-class Rm
+class theoricus.commands.Rm
 	fs = require 'fs'
 	path = require 'path'
 
