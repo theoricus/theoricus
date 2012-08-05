@@ -23,9 +23,11 @@ class theoricus.mvc.View
 
 	in:( after_in )->
 		animate = @the.config.enable_auto_transitions
-		animate &= @the.config.disable_transitions
+		# console.log "1: " + animate
+		animate &= !@the.config.disable_transitions
+		# console.log "2: " + animate
 
-		if animate
+		unless animate
 			after_in?()
 		else
 			@el.css "opacity", 0
@@ -33,9 +35,9 @@ class theoricus.mvc.View
 
 	out:( after_out )->
 		animate = @the.config.enable_auto_transitions
-		animate &= @the.config.disable_transitions
+		animate &= !@the.config.disable_transitions
 
-		if animate
+		unless animate
 			after_out?()
 		else
 			@el.animate {opacity: 0}, 300, after_out

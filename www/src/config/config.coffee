@@ -10,8 +10,8 @@ class theoricus.config.Config
 	constructor:( @the )->
 		@app_name = "app"
 
-		@animate_at_startup = app.config.animate_at_startup || false
-		@enable_auto_transitions = app.enable_auto_transitions || true
+		@animate_at_startup = app.config.animate_at_startup ? false
+		@enable_auto_transitions = app.config.enable_auto_transitions ? true
 
 		@no_push_state = (typeof history.pushState is not 'function')
 		@no_push_state ||= /(\?|\&)(crawler)/.test window.location
