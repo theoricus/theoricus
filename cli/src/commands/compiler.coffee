@@ -28,6 +28,7 @@ class theoricus.commands.Compiler
 				"#{@the.root}/www/vendors/history.adapter.native.js",
 				"#{@the.root}/www/vendors/jade.runtime.js"
 			],
+			minify: false,
 			release: "public/app.js",
 			debug: "public/app-debug.js"
 		}
@@ -90,7 +91,7 @@ class theoricus.commands.Compiler
 		files = FsUtil.find "#{@APP_FOLDER}/static", /.jade$/
 
 		output = """(function() {
-			__t('app').templates = { ~TEMPLATES };
+			app.templates = { ~TEMPLATES };
 		}).call( this );"""
 
 		buffer = []
@@ -218,7 +219,7 @@ class theoricus.commands.Config
 
 		# CONFIG
 		@config = "// CONFIG\n" + Compiler.to_single_line """(function() {
-			__t('app').config = {
+			app.config = {
 				animate_at_startup: #{tmp.animate_at_startup},
 				enable_auto_transitions: #{tmp.enable_auto_transitions}
 			};
@@ -246,13 +247,13 @@ class theoricus.commands.Config
 
 		# ROOT
 		@root = "// ROOT\n" + Compiler.to_single_line """(function() {
-			__t('app').root = '#{root}';
+			app.root = '#{root}';
 
 		}).call( this );""", true
 
 		# ROUTES
 		@routes = "// ROUTES\n" + Compiler.to_single_line """(function() {
-			__t('app').routes = {
+			app.routes = {
 				#{buffer.join "," }
 			};
 		}).call( this );""", true
