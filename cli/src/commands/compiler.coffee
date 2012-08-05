@@ -23,6 +23,7 @@ class theoricus.commands.Compiler
 		config = {
 			folders: {},
 			vendors:[
+				"#{@the.root}/www/vendors/json2.js",
 				"#{@the.root}/www/vendors/jquery.js",
 				"#{@the.root}/www/vendors/history.js",
 				"#{@the.root}/www/vendors/history.adapter.native.js",
@@ -38,6 +39,9 @@ class theoricus.commands.Compiler
 
 		# start watching/compiling coffeescript
 		@toaster = new Toaster @BASE_DIR, {w:1, d:1, config: config}, true
+		@toaster.before_build = =>
+			@compile()
+			false
 
 		# compiling everything at startup
 		@compile()

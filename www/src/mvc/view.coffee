@@ -16,8 +16,10 @@ class theoricus.mvc.View
 		@set_triggers?()
 
 	render_template:( template, data )->
+
 		template = Factory.template @route.api.controller_name, template
 		dom = template data
+
 		@el.append dom
 		@in @after_in
 

@@ -24,4 +24,4 @@ class theoricus.mvc.Controller
 	render:( view_name, data )->
 		@route.view = Factory.view @route.api.controller_name, view_name
 		@route.view.after_in = @after_run
-		@route.view._render @route, view_name, data: data
+		@route.view._render @route, view_name, data
