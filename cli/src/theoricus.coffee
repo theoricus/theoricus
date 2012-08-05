@@ -77,7 +77,7 @@ class theoricus.Theoricus
 		while true
 			app = path.normalize "#{current}/app/controllers/app_controller.coffee"
 
-			if path.existsSync app
+			if fs.existsSync app
 				contents = fs.readFileSync app, "utf-8"
 				if contents.indexOf( "theoricus.mvc.Controller" ) > 0
 					return current

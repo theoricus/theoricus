@@ -32,7 +32,7 @@ class theoricus.commands.Server
 		uri = url.parse( request.url ).pathname
 		filename = path.join( @root, uri )
 
-		path.exists filename, (exists)=>
+		fs.exists filename, (exists)=>
 
 			if !exists || fs.lstatSync( filename ).isDirectory()
 
@@ -42,7 +42,7 @@ class theoricus.commands.Server
 
 				if crawl is true
 					cache = pn "#{@root}/static/#{request.url}/index.html"
-					if path.existsSync cache
+					if fs.existsSync cache
 						src = fs.readFileSync cache
 						response.writeHead 200, {"Content-Type": "text/html"}
 						response.write "#{src}\n"

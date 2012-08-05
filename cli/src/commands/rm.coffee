@@ -39,7 +39,7 @@ class theoricus.commands.Rm
 
 	rm:( filepath )->
 		rpath = filepath.match /app\/.*/
-		if path.existsSync filepath
+		if fs.existsSync filepath
 
 			try
 				if fs.lstatSync( filepath ).isDirectory()
