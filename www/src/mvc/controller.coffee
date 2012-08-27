@@ -2,26 +2,24 @@
 
 class theoricus.mvc.Controller
 	Factory = null
-	StringUtil = theoricus.utils.StringUtil
+	{StringUtil} = theoricus.utils
 
 	_boot:( @the )->
 		Factory = @the.factory
 		@
-	
-	_run:( @route, @after_run )->
-		if @[ @route.api.action]?
-			@[ @route.api.action ].apply @, @route.api.params
-		else
-			model = Factory.model @route.api.controller_name
-			@render @route.api.action, model
-	
-	_destroy:( route, after_destroy )->
-		route.view.after_out = after_destroy
-		route.view.out =>
-			$( route.view.el ).empty()
-			route.view.after_out?()
-	
-	render:( view_name, data )->
-		@route.view = Factory.view @route.api.controller_name, view_name
-		@route.view.after_in = @after_run
-		@route.view._render @route, view_name, data
+
+	_build_action:( process )->
+		=>
+			api = process.route.api
+			[ctrl, action] = [api.controller_name, api.action_name]
+			@view( "#{ctrl}/#{action}", process ).render (@model ctrl)
+
+	view:( path )->
+		v = Factory.view path
+		v.process = @process
+		v
+
+	model:( name, init )->
+		m = Factory.model name, init
+		# m.process = @process # currently useless, so commented
+		m

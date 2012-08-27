@@ -16,4 +16,4 @@ class theoricus.config.Config
 		@no_push_state = (typeof history.pushState isnt 'function')
 		@no_push_state ||= /(\?|\&)(crawler)/.test window.location
 
-		# @disable_transitions = @no_push_state
+		@disable_transitions = @no_push_state

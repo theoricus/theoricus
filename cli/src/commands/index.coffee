@@ -6,7 +6,7 @@ class theoricus.commands.Index
 	fs = require "fs"
 	exec = (require "child_process").exec
 	path = require "path"
-	FsUtil = (require "coffee-toaster").toaster.utils.FsUtil
+	{FsUtil} = (require "coffee-toaster").toaster.utils
 
 	pages: {}
 

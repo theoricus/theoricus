@@ -1,6 +1,6 @@
 class theoricus.generators.Controller
 	fs = require 'fs'
-	StringUtil = ( require 'coffee-toaster' ).toaster.utils.StringUtil
+	{StringUtil} = ( require 'coffee-toaster' ).toaster.utils
 
 	template =
 		body: "class ~NAMEController extends app.controllers.AppController"

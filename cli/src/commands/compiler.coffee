@@ -9,8 +9,7 @@ class theoricus.commands.Compiler
 	stylus = require "stylus"
 
 	Toaster = require( 'coffee-toaster' ).Toaster
-	FsUtil = require( 'coffee-toaster' ).toaster.utils.FsUtil
-	ArrayUtil = require( 'coffee-toaster' ).toaster.utils.ArrayUtil
+	{FsUtil, ArrayUtil} = require( 'coffee-toaster' ).toaster.utils
 
 	BASE_DIR: ""
 	APP_FOLDER: ""
@@ -102,11 +101,10 @@ class theoricus.commands.Compiler
 		for file in files
 
 			# skip files that starts with "_"
-			continue if file.match( /(\_)?[^\/]+$/ )[1] is "_"
+			continue if /^_/m.test file
 
-			# compute alias and read file's source
-			name = file.match /[^\/]+.jade$/m
-			folder = file.match( /(static\/)(.*)$/m )[2].replace "/#{name}", ""
+			# compute template name and read file's source
+			name = (file.match /static\/(.*).jade$/m)[1]
 			source = fs.readFileSync file, "utf-8"
 
 			# compile source
@@ -117,7 +115,7 @@ class theoricus.commands.Compiler
 
 			# write template name and contents
 			compiled = compiled.toString().replace "anonymous", ""
-			buffer.push "'#{folder}': " + compiled
+			buffer.push "'#{name}': " + compiled
 
 		# format everything
 		output = output.replace( "~TEMPLATES", buffer.join "," )
@@ -126,7 +124,7 @@ class theoricus.commands.Compiler
 		# return all jade files compiled for use in client
 		return "// TEMPLATES\n#{output}"
 
-	
+
 	compile_stylus:( after_compile )->
 		files = FsUtil.find "#{@APP_FOLDER}/static", /.styl$/
 		

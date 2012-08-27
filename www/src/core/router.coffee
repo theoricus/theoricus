@@ -1,10 +1,8 @@
 #<< theoricus/utils/string_util
 #<< theoricus/core/route
 
-###
-	Router Logic inspired by RouterJS:
-	https://github.com/haithembelhaj/RouterJs
-###
+## Router & Route logic inspired by RouterJS:
+## https://github.com/haithembelhaj/RouterJs
 
 class theoricus.core.Router
 	Factory = null

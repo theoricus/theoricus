@@ -1,6 +1,6 @@
 class theoricus.generators.Model
 	fs = require 'fs'
-	StringUtil = ( require 'coffee-toaster' ).toaster.utils.StringUtil
+	{StringUtil} = ( require 'coffee-toaster' ).toaster.utils
 
 	template =
 		body: "class ~NAMEModel extends app.models.AppModel"

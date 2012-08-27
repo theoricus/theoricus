@@ -1,7 +1,7 @@
 #<< theoricus/utils/object_util
 
 class theoricus.utils.ArrayUtil
-	ObjectUtil = theoricus.utils.ObjectUtil
+	{ObjectUtil} = theoricus.utils
 	
 	@find:( src, search )->
 		for v, i in src

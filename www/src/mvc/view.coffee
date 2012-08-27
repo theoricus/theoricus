@@ -5,29 +5,29 @@ class theoricus.mvc.View
 		Factory = @the.factory
 		@
 
-	_render:( @route, auto_tmpl_name, @data = {} )->
-		@el = $ @route.target_el
+	render:( @data = {} )->
+		# match = @classpath.match( /^app.views.([^\.]+).(.*)$/m )
+		# aname = match[1]
+		# cname = (match[2].replace "View", "").toLowerCase()
 
-		if @render
-			@render data
-		else
-			@render_template auto_tmpl_name, data
+		api = @process.route.api
+		cname = api.controller_name
+		aname = api.action_name
 
-		@set_triggers?()
+		@el = $ @process.route.el
 
-	render_template:( template, data )->
-
-		template = Factory.template @route.api.controller_name, template
+		template = Factory.template "#{cname}/#{aname}"
 		dom = template data
 
 		@el.append dom
 		@in @after_in
 
+		@set_triggers?()
+		@
+
 	in:( after_in )->
 		animate = @the.config.enable_auto_transitions
-		# console.log "1: " + animate
 		animate &= !@the.config.disable_transitions
-		# console.log "2: " + animate
 
 		unless animate
 			after_in?()

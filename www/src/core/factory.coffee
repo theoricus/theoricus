@@ -3,12 +3,11 @@
 
 class theoricus.core.Factory
 	controllers: {}
-	StringUtil = theoricus.utils.StringUtil
+	{StringUtil} = theoricus.utils
 
 	constructor:( @the )->
 		@m_tmpl = "app.models.{classname}Model"
 		@v_tmpl = "app.views.{ns}.{classname}View"
-		@t_tmpl = "{ns}-{name}"
 
 	controller:( name )->
 		# console.log "Factory.controller( '#{name}' )"
@@ -20,18 +19,33 @@ class theoricus.core.Factory
 			controller._boot @the
 			@controllers[ name ] = controller
 
-	model:( name )->
+	model:( name, init = {} )->
 		# console.log "Factory.model( '#{name}' )"
+
 		name = StringUtil.camelize name
 		model = new (app.models[ "#{name}Model" ])
 		model._boot @the
+		model[prop] = value for prop, value of init
+		model
 
-	view:( ns, name )->
-		# console.log "Factory.view( '#{ns}', '#{name}' )"
+	view:( path )->
+		# console.log "Factory.view( '#{path}' )"
+		classpath = "app.views"
+		klass = app.views
+		name = (parts = path.split '/').pop()
+
+		while parts.length
+			classpath += "." + (p = parts.shift())
+			klass = klass[p]
+
 		name = StringUtil.camelize name
-		view = new (app.views[ns]["#{name}View"])
+		classpath += "." + (p = "#{name}View")
+		klass = klass[p]
+
+		view = new (klass)
+		view.classpath = classpath
 		view._boot @the
 
-	template:( ns, name )->
-		# console.log "Factory.template( ns, name )"
-		return app.templates["#{ns}-#{name}"]
+	template:( path )->
+		# console.log "Factory.template( #{path} )"
+		return app.templates[path]

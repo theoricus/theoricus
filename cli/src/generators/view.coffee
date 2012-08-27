@@ -2,10 +2,10 @@ class theoricus.generators.View
 
 	# requirements
 	fs = require 'fs'
+	toaster = (require 'coffee-toaster').toaster
 
-	FsUtil = ( require 'coffee-toaster' ).toaster.utils.FsUtil
-	StringUtil = ( require 'coffee-toaster' ).toaster.utils.StringUtil
-	Toaster = ( require 'coffee-toaster' ).Toaster
+	{FsUtil, StringUtil} = toaster.utils
+	{Toaster} = toaster
 
 	template =
 		body: "class ~NAMEView extends app.views.AppView"

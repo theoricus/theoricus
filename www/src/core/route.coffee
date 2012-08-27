@@ -1,47 +1,29 @@
-#<< theoricus/utils/string_util
-
-###
-	Router Logic inspired by RouterJS:
-	https://github.com/haithembelhaj/RouterJs
-###
+## Router & Route logic inspired by RouterJS:
+## https://github.com/haithembelhaj/RouterJs
 
 class theoricus.core.Route
-	Factory = null
-	StringUtil = theoricus.utils.StringUtil
 
+	# static regex for reuse
 	@named_param_reg: /:\w+/g
 	@splat_param_reg: /\*\w+/g
 
+	# variables
 	api: null
 	location: null
 
-	constructor:( route, to, at, el, @router, @location = null )->
-		Factory = @router.the.factory
-		
-		@raw = route:route, to:to, at:at, el: el
-
-		@matcher = route.replace Route.named_param_reg, '([^\/]+)'
+	constructor:( @match, @to, @at, @el, @router, @location = null )->
+		@matcher = @match.replace Route.named_param_reg, '([^\/]+)'
 		@matcher = @matcher.replace Route.splat_param_reg, '(.*?)'
 		@matcher = new RegExp "^#{@matcher}$"
 
 		@api = {}
-		@api.controller_name = to.split( "/" )[0]
-		@api.controller = Factory.controller @api.controller_name
-		@api.action = to.split( "/" )[1]
+		try
+			@api.controller_name = to.split( "/" )[0]
+			@api.action_name = to.split( "/" )[1]
+		catch error
+			console.log "TODO: handle error"
+
 		@api.params = @matcher.exec( location ).slice 1 if location?
 
-		@target_route = at
-		@target_el = el
-
-	run:( after_run )->
-		@api.controller._run @, after_run
-
-	destroy:( after_destroy )->
-		@api.controller._destroy @, after_destroy
-
-	# set_location:( location )->
-	# 	@location = location
-	# 	@api.params = @matcher.exec( location ).slice 1
-
 	clone:( location )->
-		new Route @raw.route, @raw.to, @raw.at, @raw.el, @router, location
+		new Route @match, @to, @at, @el, @router, location
