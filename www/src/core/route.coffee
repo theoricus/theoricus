@@ -23,7 +23,7 @@ class theoricus.core.Route
 		catch error
 			console.log "TODO: handle error"
 
-		@api.params = @matcher.exec( location ).slice 1 if location?
+		@api.params = (@matcher.exec( location ).slice 1 if location?) or []
 
 	clone:( location )->
 		new Route @match, @to, @at, @el, @router, location

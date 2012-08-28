@@ -24,8 +24,7 @@ class theoricus.commands.Compiler
 			vendors:[
 				"#{@the.root}/www/vendors/json2.js",
 				"#{@the.root}/www/vendors/jquery.js",
-				"#{@the.root}/www/vendors/history.js",
-				"#{@the.root}/www/vendors/history.adapter.native.js",
+				"#{@the.root}/www/vendors/native.history.js",
 				"#{@the.root}/www/vendors/jade.runtime.js"
 			],
 			minify: false,
