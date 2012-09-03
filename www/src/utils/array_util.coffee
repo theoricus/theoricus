@@ -5,9 +5,9 @@ class theoricus.utils.ArrayUtil
 	
 	@find:( src, search )->
 		for v, i in src
-			if search instanceof String
+			unless (search instanceof Object)
 				return item: v, index:i if v == search
-			else if search instanceof Object
+			else
 				return {item: v, index:i } if ObjectUtil.find(v, search)?
 		return null
 

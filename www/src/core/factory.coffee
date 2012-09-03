@@ -9,26 +9,19 @@ class theoricus.core.Factory
 		@m_tmpl = "app.models.{classname}Model"
 		@v_tmpl = "app.views.{ns}.{classname}View"
 
-	controller:( name )->
-		# console.log "Factory.controller( '#{name}' )"
-		name = StringUtil.camelize name
-		if @controllers[ name ]?
-			return @controllers[ name ]
-		else
-			controller = new (app.controllers[ "#{name}Controller" ])
-			controller._boot @the
-			@controllers[ name ] = controller
-
-	model:( name, init = {} )->
+	@model=@::model=( name, init = {} )->
 		# console.log "Factory.model( '#{name}' )"
+		classname = (StringUtil.camelize name) + 'Model'
+		classpath = "app.models.#{name}"
 
-		name = StringUtil.camelize name
-		model = new (app.models[ "#{name}Model" ])
-		model._boot @the
+		model = new (app.models[ classname ] )
+		# model._boot @the
+		model.classpath = classpath
+		model.classname = classname
 		model[prop] = value for prop, value of init
 		model
 
-	view:( path )->
+	view:( path, el )->
 		# console.log "Factory.view( '#{path}' )"
 		classpath = "app.views"
 		klass = app.views
@@ -43,9 +36,24 @@ class theoricus.core.Factory
 		klass = klass[p]
 
 		view = new (klass)
-		view.classpath = classpath
 		view._boot @the
+		view.classpath = classpath
+		view.classname = name
+		view
 
-	template:( path )->
+	controller:( name )->
+		# console.log "Factory.controller( '#{name}' )"
+		classpath = "app.models"
+		classname = StringUtil.camelize name
+		if @controllers[ classname ]?
+			return @controllers[ classname ]
+		else
+			controller = new (app.controllers[ "#{classname}Controller" ])
+			controller.classpath = classpath
+			controller.classname = classname
+			controller._boot @the
+			@controllers[ classname ] = controller
+
+	@template=@::template=( path )->
 		# console.log "Factory.template( #{path} )"
 		return app.templates[path]

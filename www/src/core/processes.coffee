@@ -22,7 +22,7 @@ class theoricus.core.Processes
 	#	3. _filter_dead_processes
 	#	4. _destroy_dead_processes - one by one, waiting or not foll callback
 	#		4.1 Timing can be sync/async
-	#	5. _run - one by one, waiting or not foll callback
+	#	5. _run_pending_process - one by one, waiting or not foll callback
 	#		5.1 timing can be sync/async
 	# --------------------------------------------------------------------------
 
