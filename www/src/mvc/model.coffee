@@ -91,7 +91,7 @@ class theoricus.mvc.Model
 
 
 
-	# INSTANTIATING ############################################################
+	# INSTANTIATING NEW RECORDS ################################################
 
 	@_instantiate=( data )->
 		Factory = theoricus.core.Factory
