@@ -37,6 +37,12 @@ class theoricus.commands.Compiler
 
 		# start watching/compiling coffeescript
 		@toaster = new Toaster @BASE_DIR, {w:1, d:1, config: config}, true
+
+		# The 'before_build' filter is called by Toaster everytime some file
+		# changes. If this method returns TRUE, then toaster will build
+		# everything automatically, otherwise if this method returns FALSE
+		# user can call the build() method manually with some injection options.
+ 		# Check the compile().
 		@toaster.before_build = =>
 			@compile()
 			false
@@ -56,24 +62,27 @@ class theoricus.commands.Compiler
 		# skipe all folder creation
 		return if info.type == "folder" and info.action == "created"
 
+		# date for CLI notifications
+		now = ("#{new Date}".match /[0-9]{2}\:[0-9]{2}\:[0-9]{2}/)[0]
+
 		# switch over created, deleted, updated and watching
 		switch info.action
 
 			# when a new file is created
 			when "created"
 				msg = "New file created".bold.cyan
-				console.log "#{msg} #{info.path.green}"
+				console.log "[#{now}] #{msg} #{info.path}".green
 
 			# when a file is deleted
 			when "deleted"
 				type = if info.type == "file" then "File" else "Folder"
 				msg = "#{type} deleted".bold.red
-				console.log "#{msg} #{info.path.red}"
+				console.log "[#{now}] {msg} #{info.path}".red
 
 			# when a file is updated
 			when "updated"
 				msg = "File changed".bold.cyan
-				console.log "#{msg} #{info.path.cyan}"
+				console.log "[#{now}] #{msg} #{info.path}".cyan
 
 		# compile only jade
 		if info.path.match /.jade$/m
@@ -85,7 +94,7 @@ class theoricus.commands.Compiler
 			@compile_stylus ( css )=>
 				target = "#{@the.pwd}/public/app.css"
 				fs.writeFileSync target, css
-				console.log "Compiled #{target}".green
+				console.log "[#{now}] #{'Compiled'.bold} #{target}".green
 
 
 
@@ -170,14 +179,17 @@ class theoricus.commands.Compiler
 		# formats footer
 		footer = ""
 
-		# biulds all coffeescript
+		# build everything
 		@toaster.build header, footer
+
+		# formatted time to CLI notifications
+		now = ("#{new Date}".match /[0-9]{2}\:[0-9]{2}\:[0-9]{2}/)[0]
 
 		# compile sytlus
 		@compile_stylus ( css )=>
 			target = "#{@the.pwd}/public/app.css"
 			fs.writeFileSync target, css
-			console.log "#{'Compiled'.bold} #{target}".green
+			console.log "[#{now}] #{'Compiled'.bold} #{target}".green
 
 
 	_get_config:()->
