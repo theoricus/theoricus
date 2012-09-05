@@ -22,10 +22,10 @@ class theoricus.commands.Compiler
 		config = {
 			folders: {},
 			vendors:[
-				"#{@the.root}/www/vendors/json2.js",
-				"#{@the.root}/www/vendors/jquery.js",
-				"#{@the.root}/www/vendors/native.history.js",
-				"#{@the.root}/www/vendors/jade.runtime.js"
+				"#{@the.root}/www/vendors/JSON-js/json2.js",
+				"#{@the.root}/www/vendors/history.js/scripts/bundled/html4+html5/native.history.js",
+				"#{@the.root}/www/vendors/jade/runtime.js",
+				"#{@the.root}/www/vendors/jquery.js"
 			],
 			minify: false,
 			release: "public/app.js",
