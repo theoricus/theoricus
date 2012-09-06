@@ -4,7 +4,6 @@ class theoricus.core.Factory
 	controllers: {}
 
 	constructor:( @the )->
-		window.onbeforeunload = -> "CALMAE!"
 
 	@model=@::model=( name, init = {} )->
 		# console.log "Factory.model( '#{name}' )"
