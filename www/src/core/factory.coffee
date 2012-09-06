@@ -7,7 +7,7 @@ class theoricus.core.Factory
 		window.onbeforeunload = -> "CALMAE!"
 
 	@model=@::model=( name, init = {} )->
-		console.log "Factory.model( '#{name}' )"
+		# console.log "Factory.model( '#{name}' )"
 
 		classname = name.camelize()
 		classpath = "app.models.#{name}"
@@ -24,7 +24,7 @@ class theoricus.core.Factory
 		model
 
 	view:( path, el )->
-		console.log "Factory.view( '#{path}' )"
+		# console.log "Factory.view( '#{path}' )"
 
 		klass = app.views
 		classpath = "app.views"
@@ -70,4 +70,5 @@ class theoricus.core.Factory
 
 	@template=@::template=( path )->
 		# console.log "Factory.template( #{path} )"
-		return app.templates[path]
+		
+		app.templates[path]
