@@ -14,7 +14,7 @@ class theoricus.mvc.Controller
 		=>
 			api = process.route.api
 			[ctrl, action] = [api.controller_name, api.action_name]
-			model_name = (StringUtil.camelize api.controller_name) + "Model"
+			model_name = api.controller_name.singularize().camelize()
 			model = app.models[model_name]
 
 			if model.all?

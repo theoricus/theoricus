@@ -75,7 +75,7 @@ class theoricus.Theoricus
 		current = path.resolve "."
 
 		while true
-			app = path.normalize "#{current}/app/controllers/app_controller.coffee"
+			app = path.normalize "#{current}/app/app_controller.coffee"
 
 			if fs.existsSync app
 				contents = fs.readFileSync app, "utf-8"
@@ -89,4 +89,4 @@ class theoricus.Theoricus
 					return null
 				else
 					current = tmp
-					continue
+					continuewww

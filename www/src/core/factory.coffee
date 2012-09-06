@@ -1,57 +1,71 @@
 #<< theoricus/mvc/*
-#<< theoricus/utils/string_util
 
 class theoricus.core.Factory
 	controllers: {}
-	{StringUtil} = theoricus.utils
 
 	constructor:( @the )->
-		@m_tmpl = "app.models.{classname}Model"
-		@v_tmpl = "app.views.{ns}.{classname}View"
+		window.onbeforeunload = -> "CALMAE!"
 
 	@model=@::model=( name, init = {} )->
-		# console.log "Factory.model( '#{name}' )"
-		classname = (StringUtil.camelize name) + 'Model'
+		console.log "Factory.model( '#{name}' )"
+
+		classname = name.camelize()
 		classpath = "app.models.#{name}"
 
 		model = new (app.models[ classname ] )
-		# model._boot @the
 		model.classpath = classpath
 		model.classname = classname
 		model[prop] = value for prop, value of init
+
+		# console.log "----------------- MODEL"
+		# console.log model
+		# console.log "-----------------"
+
 		model
 
 	view:( path, el )->
-		# console.log "Factory.view( '#{path}' )"
-		classpath = "app.views"
+		console.log "Factory.view( '#{path}' )"
+
 		klass = app.views
-		name = (parts = path.split '/').pop()
+		classpath = "app.views"
+		classname = (parts = path.split '/').pop().camelize()
 
 		while parts.length
 			classpath += "." + (p = parts.shift())
 			klass = klass[p]
 
-		name = StringUtil.camelize name
-		classpath += "." + (p = "#{name}View")
-		klass = klass[p]
+		klass = klass[classname]
+		classpath += "." + classname
 
 		view = new (klass)
 		view._boot @the
 		view.classpath = classpath
-		view.classname = name
+		view.classname = classname
+
+		# console.log "----------------- VIEW"
+		# console.log view
+		# console.log "-----------------"
+
 		view
 
 	controller:( name )->
 		# console.log "Factory.controller( '#{name}' )"
-		classpath = "app.models"
-		classname = StringUtil.camelize name
+
+		classname = name.camelize()
+		classpath = "app.models.#{classname}"
+
 		if @controllers[ classname ]?
 			return @controllers[ classname ]
 		else
-			controller = new (app.controllers[ "#{classname}Controller" ])
+			controller = new (app.controllers[ classname ])
 			controller.classpath = classpath
 			controller.classname = classname
 			controller._boot @the
+
+			# console.log "----------------- CONTROLLER"
+			# console.log controller
+			# console.log "-----------------"
+
 			@controllers[ classname ] = controller
 
 	@template=@::template=( path )->

@@ -43,7 +43,7 @@ class theoricus.mvc.Model
 	@_build_gs=( field, type )->
 		_val = null
 
-		classname = ("#{@}".match /function\s(\w+)Model/)[1]
+		classname = ("#{@}".match /function\s(\w+)/)[1]
 		stype = ("#{type}".match /function\s(\w+)/)[1]
 		ltype = stype.toLowerCase()
 
@@ -95,7 +95,7 @@ class theoricus.mvc.Model
 
 	@_instantiate=( data )->
 		Factory = theoricus.core.Factory
-		classname = ("#{@}".match /function\s(\w+)Model/)[1].toLowerCase()
+		classname = ("#{@}".match /function\s(\w+)/)[1]
 		records = []
 		for record in [].concat data
 			model = (Factory.model classname, record)
