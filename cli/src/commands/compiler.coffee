@@ -22,18 +22,19 @@ class theoricus.commands.Compiler
 		config = {
 			folders: {},
 			vendors:[
-				"#{@the.root}/www/vendors/JSON-js/json2.js",
-				"#{@the.root}/www/vendors/history.js/scripts/bundled/html4+html5/native.history.js",
-				"#{@the.root}/www/vendors/jade/runtime.js",
-				"#{@the.root}/www/vendors/jquery.js"
+				# "#{@the.root}/www/vendors/JSON-js/json2.js",
+				# "#{@the.root}/www/vendors/history.js/scripts/bundled/html4+html5/native.history.js",
+				# "#{@the.root}/www/vendors/jade/runtime.js",
+				# "#{@the.root}/www/vendors/jquery.js"
+				"#{@the.root}/lib/theoricus.js"
 			],
-			minify: false,
+			minify: false,	
 			release: "public/app.js",
 			debug: "public/app-debug.js"
 		}
 
 		config.folders[@APP_FOLDER] = "app"
-		config.folders["#{@the.root}/www/src"] = "theoricus"
+		# config.folders["#{@the.root}/www/src"] = "theoricus"
 
 		# start watching/compiling coffeescript
 		@toaster = new Toaster @BASE_DIR, {w:1, d:1, config: config}, true
@@ -177,7 +178,7 @@ class theoricus.commands.Compiler
 					#{conf.root}\n"""
 		
 		# formats footer
-		footer = ""
+		footer = "new theoricus.Theoricus"
 
 		# build everything
 		@toaster.build header, footer
