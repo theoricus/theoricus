@@ -1,6 +1,3 @@
-[submodule "www/vendors/inflection"]
-	path = www/vendors/inflection
-	url = https://github.com/viatropos/inflection.git
 [submodule "www/vendors/JSON-js"]
 	path = www/vendors/JSON-js
 	url = https://github.com/douglascrockford/JSON-js.git
