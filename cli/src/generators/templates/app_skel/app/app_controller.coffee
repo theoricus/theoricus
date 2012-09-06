@@ -1,0 +1,1 @@
+class app.AppController extends theoricus.mvc.Controller

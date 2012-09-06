@@ -3,17 +3,16 @@ class theoricus.generators.Controller
 	{StringUtil} = ( require 'coffee-toaster' ).toaster.utils
 
 	template =
-		body: "class ~NAMEController extends app.controllers.AppController"
-		# actions: "home:( data )->\t@render 'home', new app.models.HomeModel
+		body: """class ~NAME extends app.AppController
+				~MODEL = app.models.~MODEL
+			"""
 
 	constructor:( @the, opts )->
 		name = opts[2]
-		filepath = "app/controllers/" + name + "_controller.coffee"
+		filepath = "app/controllers/#{name}.coffee"
 
-		contents = @build_contents name
+		contents = template.body.replace /~NAME/g, name.camelize()
+		contents = contents.replace /~MODEL/g, name.singularize().camelize()
+
 		fs.writeFileSync filepath, contents
 		console.log "#{'Created: '.bold} #{filepath}".green
-
-	build_contents:( name )->
-		buffer = ""
-		buffer += template.body.replace "~NAME", StringUtil.ucasef name

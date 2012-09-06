@@ -1,1 +1,0 @@
-class MainModel extends app.models.AppModel
