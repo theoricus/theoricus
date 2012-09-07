@@ -1,11 +1,9 @@
-#<< theoricus/utils/string_util
 #<< theoricus/mvc/model
 #<< theoricus/mvc/view
 
 class theoricus.mvc.Controller
 
 	{Fetcher} = theoricus.mvc
-	{StringUtil} = theoricus.utils
 	{Model,View} = theoricus.mvc
 
 	_boot:( @the )-> @

@@ -11,7 +11,7 @@ class theoricus.commands.AddProject
 		@app_skel = pn "#{@root}/cli/src/generators/templates/app_skel"
 		@target = pn "#{@pwd}/#{@options[1]}"
 
-		if fs.existsSync @target
+		if path.existsSync @target
 			console.log "ERROR".bold.red + " Target directory already existis."+
 						"\n\t#{@target}".yellow
 			return

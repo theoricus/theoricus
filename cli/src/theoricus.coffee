@@ -89,4 +89,4 @@ class theoricus.Theoricus
 					return null
 				else
 					current = tmp
-					continuewww
+					continue
