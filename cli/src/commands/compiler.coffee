@@ -14,7 +14,7 @@ class theoricus.commands.Compiler
 	BASE_DIR: ""
 	APP_FOLDER: ""
 
-	constructor:( @the, options )->
+	constructor:( @the, watch = false )->
 
 		@BASE_DIR = @the.pwd
 		@APP_FOLDER = "#{@BASE_DIR}/app"
@@ -29,7 +29,12 @@ class theoricus.commands.Compiler
 		config.folders[@APP_FOLDER] = "app"
 
 		# start watching/compiling coffeescript
-		@toaster = new Toaster @BASE_DIR, {w:1, d:1, config: config}, true
+		@toaster = new Toaster @BASE_DIR,
+			w: watch
+			c: !watch
+			d:1
+			config: config
+		, true
 
 		# The 'before_build' filter is called by Toaster everytime some file
 		# changes. If this method returns TRUE, then toaster will build
@@ -44,6 +49,7 @@ class theoricus.commands.Compiler
 		@compile()
 
 		# watching jade and stylus
+		return unless watch
 		reg = /(.jade|.styl)$/m
 		FsUtil.watch_folder "#{@APP_FOLDER}/static", reg, @_on_jade_stylus_change
 

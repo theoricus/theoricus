@@ -7,12 +7,12 @@ class theoricus.commands.Server
 
 	exec = require( "child_process" ).exec
 
-	constructor:( @the, options )->
+	constructor:( @the )->
 		@port = "11235"
 		@root = "#{@the.pwd}/public"
 
 		# console.log  "Server is born()"
-		@compiler = new theoricus.commands.Compiler @the, options
+		@compiler = new theoricus.commands.Compiler @the, true
 		@start_server()
 
 	start_server:()->
