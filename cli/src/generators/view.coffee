@@ -1,41 +1,46 @@
 class theoricus.generators.View
 
-	# requirements
 	fs = require 'fs'
-	toaster = (require 'coffee-toaster').toaster
+	{FsUtil} = (require 'coffee-toaster').toaster.utils
 
-	{FsUtil, StringUtil} = toaster.utils
-	{Toaster} = toaster
+	constructor:( @the, name, controller_name_lc, mvc = false )->
+		name_camel = name.camelize()
+		name_lc = name.toLowerCase()
 
-	template =
-		body: "class ~NAMEView extends app.views.AppView"
-		# actions: "home:( data )->\t@render 'home', new app.models.HomeModel
+		view_folder = "app/views/#{controller_name_lc}"
+		static_folder = "app/static/#{controller_name_lc}"
 
-	constructor:( @the, opts )->
-		name = opts[2]
+		if mvc
+			view_path = "#{view_folder}/index.coffee"
+		else
+			view_path = "#{view_folder}/#{name_lc}.coffee"
 
-		view_path = "app/views/#{name}"
-		static_path = "app/static/#{name}-index"
+		jade_path = "#{static_folder}/index.jade"
+		styl_path = "#{static_folder}/index.styl"
 
-		view = "#{view_path}/index_view.coffee"
-		jade = "#{static_path}/#{name}-index.jade"
-		styl = "#{static_path}/#{name}-index.styl"
+		# prepare contents
+		tmpl_path = "#{@the.root}/cli/src/generators/templates/mvc"
+		tmpl_view = "#{tmpl_path}/view.coffee"
+		tmpl_jade = "#{tmpl_path}/view.jade"
+		tmpl_styl = "#{tmpl_path}/view.styl"
 
-		# create contaioners
-		FsUtil.mkdir_p view_path
-		FsUtil.mkdir_p static_path
+		# create static container
+		FsUtil.mkdir_p view_folder	
+		FsUtil.mkdir_p static_folder
 
-		# view
-		fs.writeFileSync view, @build_contents( "index" )
-		console.log "#{'Created: '.bold} #{view}".green
+		# prepare view contents
+		contents = (fs.readFileSync tmpl_view).toString()
+		contents = contents.replace /~NAME_CAMEL/g, name_camel
+		contents = contents.replace /~CONTROLLER_NAME_LC/g, controller_name_lc
 
-		# jade
-		fs.writeFileSync jade, "//- put your templates (JADE) here "
-		console.log "#{'Created: '.bold} #{jade}".green
+		# write view
+		fs.writeFileSync view_path, contents
+		console.log "#{'Created'.bold} #{view_path}".green
 
-		# stylus
-		fs.writeFileSync styl, "// put your styles (STYLUS) here"
-		console.log "#{'Created: '.bold} #{styl}".green
+		# write jade
+		fs.writeFileSync jade_path, (fs.readFileSync tmpl_jade)
+		console.log "#{'Created'.bold} #{jade_path}".green
 
-	build_contents:( name )->
-		return template.body.replace "~NAME", StringUtil.ucasef name
+		# write stylus
+		fs.writeFileSync styl_path, fs.readFileSync tmpl_styl
+		console.log "#{'Created'.bold} #{styl_path}".green

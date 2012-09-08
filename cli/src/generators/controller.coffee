@@ -1,18 +1,21 @@
 class theoricus.generators.Controller
 	fs = require 'fs'
-	{StringUtil} = ( require 'coffee-toaster' ).toaster.utils
 
-	template =
-		body: """class ~NAME extends app.AppController
-				~MODEL = app.models.~MODEL
-			"""
+	constructor:( @the, name )->
+		name_camel = name.camelize()
+		name_lc = name.toLowerCase()
 
-	constructor:( @the, opts )->
-		name = opts[2]
-		filepath = "app/controllers/#{name}.coffee"
+		model_name = name.singularize().camelize()
+		model_name_lc = model_name.toLowerCase()
 
-		contents = template.body.replace /~NAME/g, name.camelize()
-		contents = contents.replace /~MODEL/g, name.singularize().camelize()
+		tmpl = "#{@the.root}/cli/src/generators/templates/mvc/controller.coffee"
+		filepath = "app/controllers/#{name.toLowerCase()}.coffee"
+
+		contents = (fs.readFileSync tmpl).toString()
+		contents = contents.replace /~NAME_CAMEL/g, name_camel
+		contents = contents.replace /~NAME_LC/g, name_lc
+		contents = contents.replace /~MODEL_CAMEL/g, model_name
+		contents = contents.replace /~MODEL_LCASE/g, model_name_lc
 
 		fs.writeFileSync filepath, contents
-		console.log "#{'Created: '.bold} #{filepath}".green
+		console.log "#{'Created'.bold} #{filepath}".green

@@ -7,12 +7,12 @@ class theoricus.mvc.View
 
 	render:( @data = {} )->
 		api = @process.route.api
-		cname = api.controller_name
-		aname = api.action_name
+		tmpl_folder = api.controller_name.singularize()
+		tmpl_name = api.action_name
 
 		@el = $ @process.route.el
 
-		template = Factory.template "#{cname}/#{aname}"
+		template = Factory.template "#{tmpl_folder}/#{tmpl_name}"
 		@el.append (template @data)
 		@set_triggers?()
 		@in()

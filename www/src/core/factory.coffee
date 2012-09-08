@@ -1,29 +1,43 @@
 #<< theoricus/mvc/*
 
 class theoricus.core.Factory
+
+	{Model,View,Controller} = theoricus.mvc
+
 	controllers: {}
 
 	constructor:( @the )->
 
+	_is =( src, comparison )->
+		while src = src.__proto__
+			return true if src instanceof comparison
+			src = src.__proto__
+		return false
+
 	@model=@::model=( name, init = {} )->
-		console.log "Factory.model( '#{name}' )"
+		# console.log "Factory.model( '#{name}' )"
 
 		classname = name.camelize()
 		classpath = "app.models.#{name}"
 
-		model = new (app.models[ classname ] )
+		unless (klass = app.models[ classname ])?
+			throw new Error 'Model not found: ' + classpath
+
+		unless (model = new (klass)) instanceof Model
+			throw new Error 'Not a Model instance: ' + klass
+
 		model.classpath = classpath
 		model.classname = classname
 		model[prop] = value for prop, value of init
 
-		console.log "----------------- MODEL"
-		console.log model
-		console.log "-----------------"
+		# console.log "----------------- MODEL"
+		# console.log model
+		# console.log "-----------------"
 
 		model
 
 	view:( path, el )->
-		console.log "Factory.view( '#{path}' )"
+		# console.log "Factory.view( '#{path}' )"
 
 		klass = app.views
 		classpath = "app.views"
@@ -33,22 +47,26 @@ class theoricus.core.Factory
 			classpath += "." + (p = parts.shift())
 			klass = klass[p]
 
-		klass = klass[classname]
 		classpath += "." + classname
 
-		view = new (klass)
+		unless (klass = klass[ classname ])?
+			throw new Error 'View not found: ' + classpath
+
+		unless (view = new (klass)) instanceof View
+			throw new Error 'Not a View instance: ' + klass
+
 		view._boot @the
 		view.classpath = classpath
 		view.classname = classname
 
-		console.log "----------------- VIEW"
-		console.log view
-		console.log "-----------------"
+		# console.log "----------------- VIEW"
+		# console.log view
+		# console.log "-----------------"
 
 		view
 
 	controller:( name )->
-		console.log "Factory.controller( '#{name}' )"
+		# console.log "Factory.controller( '#{name}' )"
 
 		classname = name.camelize()
 		classpath = "app.controllers.#{classname}"
@@ -56,24 +74,23 @@ class theoricus.core.Factory
 		if @controllers[ classname ]?
 			return @controllers[ classname ]
 		else
-			console.log "INSTANCIA -> #{classpath}"
-			controller = new (app.controllers[ classname ])
+
+			unless (klass = app.controllers[ classname ])?
+				throw new Error 'Controller not found: ' + classpath
+
+			unless (controller = new (klass)) instanceof Controller
+				throw new Error 'Not a Controller instance: ' + controller
+
 			controller.classpath = classpath
 			controller.classname = classname
-
-			console.log "----------------- CONTROLLER"
-			console.log controller
-			console.log "-----------------"
-
 			controller._boot @the
+
+			# console.log "----------------- CONTROLLER"
+			# console.log controller
+			# console.log "-----------------"
 
 			@controllers[ classname ] = controller
 
 	@template=@::template=( path )->
-		console.log "Factory.template( #{path} )"
-		
-		console.log app.templates
-		t = app.templates[path]
-		console.log "----------->>>>>>>>"
-		console.log t
-		t
+		# console.log "Factory.template( #{path} )"
+		app.templates[path]

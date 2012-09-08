@@ -5,50 +5,66 @@ class theoricus.commands.Rm
 	{FsUtil} = ( require 'coffee-toaster' ).toaster.utils
 
 	constructor:( @the, opts )->
+		type = opts[1]
+		name = opts[2]
+		@recursive = opts[3]? and /\-\-rf/.test opts[3]
 
-		@kind = opts[1]
-		@name = opts[2]
 		@APP_FOLDER = "#{@the.pwd}/app"
 
-		switch @kind
-			when "controller" then @rm_controller()
-			when "model" then @rm_model()
-			when "view" then @rm_view()
-			when "mvc"
-				@rm_model()
-				@rm_controller()
-				@rm_view()
-			else
-				console.log "ERROR: Valid options: controller,model,view,mvc."
+		unless @[type]?
+			error_msg = "Valid options: controller, model, view, mvc."
+			throw new Error error_msg
 
-	rm_view:()->
-		static_reg = new RegExp "#{@name}\-.*"
-		views_reg = new RegExp "/#{@name}((/.*)|$)", "m"
+		@[type]( name )
 
-		statics = FsUtil.find "#{@APP_FOLDER}/static/", static_reg, true
-		views = FsUtil.find "#{@APP_FOLDER}/views", views_reg, true, true
-		files = ( statics.reverse() ).concat( views.reverse() )
+	mvc:( name )->
+		@model name.singularize()
+		@view "#{name.singularize()}/index"
+		@controller name
 
-		@rm file for file in files
+	model:( name )->
+		@rm "#{@APP_FOLDER}/models/#{name}.coffee"
+		
 
-	rm_model:()->
-		@rm "#{@APP_FOLDER}/models/#{@name}_model.coffee"
+	view:( path)->
+		folder = (parts = path.split '/')[0]
+		name = parts[1]
 
-	rm_controller:()->
-		@rm "#{@APP_FOLDER}/controllers/#{@name}_controller.coffee"
+		unless (name? or @recursive)
+			error_msg = """
+				Views should be removed with path-style notation.\n
+				\ti.e.:
+				\t\t theoricus rm view person/index
+				\t\t theoricus rm view user/list\n
+			"""
+			throw new Error error_msg
+			return
+
+		if @recursive
+			@rm "#{@APP_FOLDER}/views/#{folder}"
+			@rm "#{@APP_FOLDER}/static/#{folder}"
+		else
+			@rm "#{@APP_FOLDER}/views/#{folder}/#{name}.coffee"
+			@rm "#{@APP_FOLDER}/static/#{folder}/#{name}.jade"
+			@rm "#{@APP_FOLDER}/static/#{folder}/#{name}.styl"
+
+	controller:( name, args, mvc = false )->
+		@rm "#{@APP_FOLDER}/controllers/#{name}.coffee"
+
 
 	rm:( filepath )->
 		rpath = filepath.match /app\/.*/
 		if fs.existsSync filepath
-
 			try
 				if fs.lstatSync( filepath ).isDirectory()
-					fs.rmdirSync filepath
+					if @recursive
+						FsUtil.rmdir_rf filepath
+					else
+						fs.rmDirSync filepath
 				else
 					fs.unlinkSync filepath
-					is_file = true
 			catch err
-				if err.errno is -1
-					console.log "#{'ERROR '.bold} Not empty: #{rpath}".yellow
-
-			console.log "#{'Removed '.bold} #{rpath}".green if is_file
+				throw new Error err
+			console.log "#{'Removed'.bold} #{rpath}".red
+		else
+			console.log "#{'Not found'.bold} #{rpath}".yellow

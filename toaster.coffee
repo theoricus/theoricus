@@ -1,6 +1,7 @@
 toast 'cli/src'
 	alias: 'theoricus'
 	expose: 'exports'
+	vendors: ['cli/vendors/inflection.js']
 	exclude: ['generators/templates']
 	minify: false
 	release: 'lib/theoricus.cli.js'
