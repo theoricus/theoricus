@@ -16,7 +16,9 @@ Have fun. :)
 
 # Installation
 
+````
 npm install -g theoricus
+````
 
 # Help
 
@@ -33,7 +35,7 @@ Options:
              new   Creates a new working project in the file system.
              add   Generates a new model|view|controller file.
               rm   Destroy some model|view|controller file.
-           start   Starts app in watch'n'compile mode at http://localhost:1123
+           start   Starts app in watch'n'compile mode at http://localhost:11235
          compile   Compile app to release destination.
            index   Index the whole application to a static non-js version.
          version   Show theoricus version.
@@ -44,44 +46,45 @@ Options:
 
 To scaffold a new working project:
 
-````bash
-
+````
 theoricus new myawesomeapp
 ````
 
 It'll produce the following structure:
 
-    myawesomeapp
-    |-- app
-    |   |-- app_controller.coffee
-    |   |-- app_model.coffee
-    |   |-- app_view.coffee
-    |   |-- controllers
-    |   |   `-- mains.coffee
-    |   |-- models
-    |   |   `-- main.coffee
-    |   |-- static
-    |   |   |-- _mixins
-    |   |   |   |-- jade
-    |   |   |   |-- stylus
-    |   |   `-- main
-    |   |       |-- index.jade
-    |   |       `-- index.styl
-    |   `-- views
-    |       `-- main
-    |           `-- index.coffee
-    |-- config
-    |   |-- app.coffee
-    |   `-- routes.coffee
-    `-- public
-        |-- app.css
-        |-- app.js
-        `-- index.html
-
+````
+myawesomeapp
+|-- app
+|   |-- app_controller.coffee
+|   |-- app_model.coffee
+|   |-- app_view.coffee
+|   |-- controllers
+|   |   `-- mains.coffee
+|   |-- models
+|   |   `-- main.coffee
+|   |-- static
+|   |   |-- _mixins
+|   |   |   |-- jade
+|   |   |   `-- stylus
+|   |   |       `-- global_mixins.styl
+|   |   `-- main
+|   |       |-- index.jade
+|   |       `-- index.styl
+|   `-- views
+|       `-- main
+|           `-- index.coffee
+|-- config
+|   |-- app.coffee
+|   `-- routes.coffee
+`-- public
+		|-- app.css
+		|-- app.js
+		`-- index.html
+````
 
 # Starting up
 
-````javascript
+````
 cd myawesomeapp
 theoricus start
 ````
