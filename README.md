@@ -97,5 +97,7 @@ https://github.com/serpentem/theoricus-demo-app
 
 # Sites Made with Theoricus
 
- * http://www.codeman.co/
- * http://rolltheclips.tv/
+## Codeman
+> http://www.codeman.co/
+* Source: https://github.com/giuliandrimba/codeman
+* Credits: [Giulian Drimba](https://github.com/giuliandrimba)
