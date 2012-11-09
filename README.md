@@ -94,3 +94,8 @@ Visit the url [http://localhost:11235](http://localhost:11235) and you should se
 
 There's a basic demo application here: <BR>
 https://github.com/serpentem/theoricus-demo-app
+
+# Sites Made with Theoricus
+
+ * http://www.codeman.co/
+ * http://rolltheclips.tv/
