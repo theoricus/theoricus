@@ -68,7 +68,7 @@ class theoricus.core.Processes
 			if (found = ArrayUtil.find @pending_processes, search)?
 				location = found.item.route.location
 				if location? && location != active.route.location
-					found = null
+					@dead_processes.push active
 			else
 				@dead_processes.push active
 
