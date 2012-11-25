@@ -246,7 +246,7 @@ class theoricus.commands.Config
 		catch error
 			return throw error
 
-		@vendors = tmp.vendors
+		@vendors = tmp.vendors ? []
 
 		# CONFIG
 		@config = "// CONFIG\n" + Compiler.to_single_line """(function() {
