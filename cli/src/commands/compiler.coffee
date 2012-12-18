@@ -16,25 +16,12 @@ class theoricus.commands.Compiler
 
 	constructor:( @the, watch = false )->
 
-		@BASE_DIR = @the.pwd
+		@BASE_DIR   = @the.pwd
 		@APP_FOLDER = "#{@BASE_DIR}/app"
 
-		config =
-			folders: {}
-			vendors:["#{@the.root}/lib/theoricus.js"]
-			minify: false
-			release: "public/app.js"
-			debug: "public/app-debug.js"
-
-		config.folders[@APP_FOLDER] = "app"
-
 		# start watching/compiling coffeescript
-		@toaster = new Toaster @BASE_DIR,
-			w: watch
-			c: !watch
-			d:1
-			config: config
-		, true
+		@toaster = new Toaster @BASE_DIR, if watch then w: on else c: on
+
 
 		# The 'before_build' filter is called by Toaster everytime some file
 		# changes. If this method returns TRUE, then toaster will build
@@ -50,8 +37,12 @@ class theoricus.commands.Compiler
 
 		# watching jade and stylus
 		return unless watch
+
 		reg = /(.jade|.styl)$/m
 		FsUtil.watch_folder "#{@APP_FOLDER}/static", reg, @_on_jade_stylus_change
+
+		reg = /(.coffee)$/m
+		FsUtil.watch_folder "#{@APP_FOLDER}/../config", reg, @_on_jade_stylus_change
 
 
 	_on_jade_stylus_change:( info )=>
@@ -83,12 +74,12 @@ class theoricus.commands.Compiler
 				msg = "File changed".bold.cyan
 				console.log "[#{now}] #{msg} #{info.path}".cyan
 
-		# compile only jade
-		if info.path.match /.jade$/m
-			@compile true
+		# compile jade and/or coffee
+		if ( info.path.match /.jade$/m  ) || ( info.path.match /.coffee$/m )
+			@compile()
 
 		# compile only stylus
-		else if info.path.match /.styl$/m
+		if info.path.match /.styl$/m
 
 			@compile_stylus ( css )=>
 				target = "#{@the.pwd}/public/app.css"
@@ -115,6 +106,7 @@ class theoricus.commands.Compiler
 			source = fs.readFileSync file, "utf-8"
 
 			# compile source
+			# TODO: move compile options to config file
 			compiled = jade.compile source,
 				filename: file
 				client: true
@@ -151,10 +143,12 @@ class theoricus.commands.Compiler
 				"#{@APP_FOLDER}/static/_mixins/stylus"
 			]
 
+			# TODO: move compile options to config file
 			stylus( source )
 				.set( 'filename', file )
 				.set( 'paths', paths )
 				.use( nib() )
+				.import( 'nib' )
 				.render (err, css)=>
 					throw err if err?
 					buffer.push css
@@ -176,7 +170,7 @@ class theoricus.commands.Compiler
 					#{conf.root}\n"""
 		
 		# formats footer
-		footer = "new theoricus.Theoricus"
+		footer = ""
 
 		# build everything
 		@toaster.build header, footer
@@ -192,10 +186,10 @@ class theoricus.commands.Compiler
 
 
 	_get_config:()->
-		app = "#{@the.pwd}/config/app.coffee"
+		app    = "#{@the.pwd}/config/app.coffee"
 		routes = "#{@the.pwd}/config/routes.coffee"
 
-		app = fs.readFileSync app, "utf-8"
+		app    = fs.readFileSync app, "utf-8"
 		routes = fs.readFileSync routes, "utf-8"
 
 		new theoricus.commands.Config app, routes
