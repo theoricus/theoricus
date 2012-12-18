@@ -1,5 +1,10 @@
 class theoricus.utils.ObjectUtil
 
+	###
+	@param [] str
+	@param [] search
+	@param [Boolean] strong_typing
+	###
 	@find:( src, search, strong_typing = false )->
 
 		for k, v of search
