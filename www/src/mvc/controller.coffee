@@ -6,35 +6,51 @@ class theoricus.mvc.Controller
 	{Fetcher} = theoricus.mvc
 	{Model,View} = theoricus.mvc
 
-	_boot:( @the )-> @
+	###
+	@param [theoricus.Theoricus] @the   Shortcut for app's instance
+	###
+	_boot: ( @the ) -> @
 
-	_build_action:( process )->
+	###
+	Build a default action ( renders the view passing all model records as data)
+	in case the controller doesn't have an action for current process call
+
+	@param [theoricus.core.Process] process path to view on the app tree
+	###
+	_build_action: ( process ) ->
 		=>
 			api = process.route.api
 
 			model_name = api.controller_name.singularize().camelize()
-			model = app.models[model_name]
+			model      = app.models[model_name]
 
 			view_folder = api.controller_name.singularize()
-			view_name = api.action_name
+			view_name   = api.action_name
 
 			if model.all?
 				@render "#{view_folder}/#{view_name}", model.all()
 			else
 				@render "#{view_folder}/#{view_name}", null
 
-	render:( path, data )->
-		view = @the.factory.view path, @process.route.el
-		view.process = @process
+	###
+	Renders view
+
+	@param [String] path 	path to view on the app tree
+	@param [String] data 	data to be rendered on the template
+	@param [Object] element element where it will be rendered, defaults to @process.route.el
+	###
+	render: ( path, data, el = @process.route.el, view ) ->
+		view = view || @the.factory.view path, @process
+
 		view.after_in = view.process.after_run
 
 		if data instanceof Fetcher
 			if data.loaded
-				view.render data.records
+				view.render data.records, el
 			else
-				data.onload = ( records )->
-					view.render records
+				data.onload = ( records ) =>
+					@render path, records, el, view
 		else
-			view.render data
+			view.render data, el
 
 		view
