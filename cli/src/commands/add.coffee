@@ -25,11 +25,11 @@ class theoricus.commands.Add
 
 	view:( path )->
 		folder = (parts = path.split '/')[0]
-		name =  parts[1]
+		name   =  parts[1]
 
 		unless name?
 			error_msg = """
-				Views should be removed with path-style notation.\n
+				Views should be added with path-style notation.\n
 				\ti.e.:
 				\t\t theoricus add view person/index
 				\t\t theoricus add view user/list\n

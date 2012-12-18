@@ -1,19 +1,19 @@
 class theoricus.commands.Server
 	http = require "http"
-	url = require "url"
-	fs = require "fs"
+	url  = require "url"
+	fs   = require "fs"
 	path = require "path"
-	pn = path.normalize
+	pn   = path.normalize
 
 	exec = require( "child_process" ).exec
 
-	constructor:( @the )->
-		@port = "11235"
+	constructor:( @the, options )->
+		@port = if options[1]? then options[1] else "11235"
 		@root = "#{@the.pwd}/public"
 
 		# console.log  "Server is born()"
-		@compiler = new theoricus.commands.Compiler @the, true
 		@start_server()
+		@compiler = new theoricus.commands.Compiler @the, true
 
 	start_server:()->
 		@server = http.createServer( @_handler ).listen @port

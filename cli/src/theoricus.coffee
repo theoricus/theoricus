@@ -25,7 +25,7 @@ class theoricus.Theoricus
 		@header += "  theoricus #{'new'.red}      #{'path'.green}\n"
 		@header += "  theoricus #{'add'.red}      #{cmds} \n" #[#{'name'.magenta}] [#{'field1'.yellow}] [#{'field2'.yellow}]\n"
 		@header += "  theoricus #{'rm'.red}       #{cmds} \n" #[#{'name'.magenta}]\n"
-		@header += "  theoricus #{'start'.red}    \n" #"[#{'port'.magenta}] [#{'--no-indexing'.green}] [#{'--force-indexing'.green}] [#{'--debug'.green}] [#{'--env'.green} #{'production'.cyan}#{'|'.white}#{'test'.cyan}#{'|'.white}#{'development'.cyan}]\n"
+		@header += "  theoricus #{'start'.red}    #{'port'.green} default is #{'11235'.yellow}\n" #"[#{'port'.magenta}] [#{'--no-indexing'.green}] [#{'--force-indexing'.green}] [#{'--debug'.green}] [#{'--env'.green} #{'production'.cyan}#{'|'.white}#{'test'.cyan}#{'|'.white}#{'development'.cyan}]\n"
 		@header += "  theoricus #{'compile'.red}  \n" #[#{'--no-indexing'.green}] [#{'--force-indexing'.green}]\n"
 		@header += "  theoricus #{'index'.red}    \n\n" #[#{'--no-indexing'.green}] [#{'--force-indexing'.green}]\n\n"
 		# @header += "  theoricus #{'release'.red}  \n" #[#{'--no-indexing'.green}] [#{'--force-indexing'.green}]\n\n"
@@ -53,7 +53,7 @@ class theoricus.Theoricus
 
 		options = process.argv.slice 2
 		cmd = options.join( " " ).match /([a-z]+)/
-		cmd = cmd[1] if cmd?
+		cmd = if cmd? then cmd[1] else 'help'
 		
 
 		if @app_root == null and cmd != "help" and cmd != "new"
@@ -63,13 +63,13 @@ class theoricus.Theoricus
 		options.watch ?= false
 
 		switch cmd
-			when "new" then new theoricus.commands.AddProject @, options
-			when "add" then new theoricus.commands.Add @, options
-			when "rm" then new theoricus.commands.Rm @, options
-			when "start" then new theoricus.commands.Server @
-			when "static" then new theoricus.commands.StaticServer @, options
+			when "new"     then new theoricus.commands.AddProject @, options
+			when "add"     then new theoricus.commands.Add @, options
+			when "rm"      then new theoricus.commands.Rm @, options
+			when "start"   then new theoricus.commands.Server @, options
+			when "static"  then new theoricus.commands.StaticServer @, options
 			when "compile" then new theoricus.commands.Compiler @
-			when "index" then new theoricus.commands.Index @, options
+			when "index"   then new theoricus.commands.Index @, options
 			when "version"
 				console.log @version
 			else
