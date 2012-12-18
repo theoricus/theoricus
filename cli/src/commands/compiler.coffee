@@ -51,11 +51,15 @@ class theoricus.commands.Compiler
 
 		# watching jade and stylus
 		return unless watch
-		reg = /(.jade|.styl)$/m
-		watcher = fsu.watch "#{@APP_FOLDER}/static", reg
-		watcher.on 'create', FnUtil.proxy @_on_jade_stylus_change, 'create'
-		watcher.on 'update', FnUtil.proxy @_on_jade_stylus_change, 'update'
-		watcher.on 'delete', FnUtil.proxy @_on_jade_stylus_change, 'delete'
+
+		fsw_static = fsu.watch "#{@APP_FOLDER}/static", /(.jade|.styl)$/m
+		fsw_static.on 'create', FnUtil.proxy @_on_jade_stylus_change, 'create'
+		fsw_static.on 'update', FnUtil.proxy @_on_jade_stylus_change, 'update'
+		fsw_static.on 'delete', FnUtil.proxy @_on_jade_stylus_change, 'delete'
+
+		fsw_config = fsu.watch "#{@APP_FOLDER}/static", /(.coffee)$/m
+		fsw_config.on 'update', FnUtil.proxy @_on_jade_stylus_change, 'update'
+
 
 	_on_jade_stylus_change:( ev, f )=>
 		# skipe all folder creation
@@ -65,7 +69,7 @@ class theoricus.commands.Compiler
 		now = ("#{new Date}".match /[0-9]{2}\:[0-9]{2}\:[0-9]{2}/)[0]
 
 		# switch over created, deleted, updated and watching
-		switch info.action
+		switch ev
 
 			# when a new file is created
 			when "created"
@@ -83,12 +87,12 @@ class theoricus.commands.Compiler
 				msg = "File changed".bold.cyan
 				console.log "[#{now}] #{msg} #{info.path}".cyan
 
-		# compile only jade
-		if info.path.match /.jade$/m
-			@compile true
+		# compile jade and/or coffee
+		if ( f.location.match /.jade$/m  ) || ( f.location.match /.coffee$/m )
+			@compile()
 
 		# compile only stylus
-		else if info.path.match /.styl$/m
+		else if f.location.match /.styl$/m
 
 			@compile_stylus ( css )=>
 				target = "#{@the.pwd}/public/app.css"
@@ -115,6 +119,7 @@ class theoricus.commands.Compiler
 			source = fs.readFileSync file, "utf-8"
 
 			# compile source
+			# TODO: move compile options to config file
 			compiled = jade.compile source,
 				filename: file
 				client: true
@@ -151,10 +156,12 @@ class theoricus.commands.Compiler
 				"#{@APP_FOLDER}/static/_mixins/stylus"
 			]
 
+			# TODO: move compile options to config file
 			stylus( source )
 				.set( 'filename', file )
 				.set( 'paths', paths )
 				.use( nib() )
+				.import( 'nib' )
 				.render (err, css)=>
 					throw err if err?
 					buffer.push css
@@ -176,7 +183,7 @@ class theoricus.commands.Compiler
 					#{conf.root}\n"""
 		
 		# formats footer
-		footer = "new theoricus.Theoricus"
+		footer = ""
 
 		# build everything
 		@toaster.build header, footer
@@ -192,10 +199,10 @@ class theoricus.commands.Compiler
 
 
 	_get_config:()->
-		app = "#{@the.pwd}/config/app.coffee"
+		app    = "#{@the.pwd}/config/app.coffee"
 		routes = "#{@the.pwd}/config/routes.coffee"
 
-		app = fs.readFileSync app, "utf-8"
+		app    = fs.readFileSync app, "utf-8"
 		routes = fs.readFileSync routes, "utf-8"
 
 		new theoricus.commands.Config app, routes
