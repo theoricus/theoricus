@@ -25,5 +25,8 @@ class theoricus.core.Route
 
 		@api.params = (@matcher.exec( location ).slice 1 if location?) or []
 
+	###
+	@param [String] location
+	###
 	clone:( location )->
 		new Route @match, @to, @at, @el, @router, location
