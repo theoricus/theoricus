@@ -6,6 +6,9 @@ class theoricus.core.Factory
 
 	controllers: {}
 
+	###
+	@param [theoricus.Theoricus] @the   Shortcut for app's instance
+	###
 	constructor:( @the )->
 
 	_is =( src, comparison )->
