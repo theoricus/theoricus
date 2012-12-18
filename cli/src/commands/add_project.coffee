@@ -1,8 +1,8 @@
 class theoricus.commands.AddProject
 	
-	fs = require 'fs'
+	fs   = require 'fs'
 	path = require 'path'
-	pn = path.normalize
+	pn   = path.normalize
 	exec = (require "child_process").exec
 
 	constructor:( @the, @options )->
@@ -10,11 +10,14 @@ class theoricus.commands.AddProject
 		@root = @the.root
 
 		@app_skel = pn "#{@root}/cli/src/generators/templates/app_skel"
-		@target = pn "#{@pwd}/#{@options[1]}"
+		@target   = pn "#{@pwd}/#{@options[1]}"
 
 		if fs.existsSync @target
-			console.log "ERROR".bold.red + " Target directory already existis."+
-						"\n\t#{@target}".yellow
+
+			console.log "ERROR".bold.red + " Target directory already existis."
+			console.log "\n\t"
+			console.log "#{@target}".yellow
+						
 			return
 
 		cmd = "cp -r #{@app_skel} #{@target}"
