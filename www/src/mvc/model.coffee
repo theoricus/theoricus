@@ -20,7 +20,14 @@ class theoricus.mvc.Model
 
 	# SETUP HELPERS ############################################################
 
-	# Build a static rest call for the given params
+	###
+	Build a static rest call for the given params
+
+	@param [String] key 	
+	@param [String] method 	
+	@param [String] url 	
+	@param [String] domain 	
+	###
 	@_build_rest=( key, method, url, domain )->
 		( args... )->
 			if key is "read" and _collection.length
@@ -39,7 +46,12 @@ class theoricus.mvc.Model
 			url = "#{domain}/#{url}".replace /\/\//g, '/' if domain?
 			@_request method, url, data
 
-	# Builds local getters/setters for the given params
+	###
+	Builds local getters/setters for the given params
+
+	@param [String] field
+	@param [String] type
+	###
 	@_build_gs=( field, type )->
 		_val = null
 
@@ -68,8 +80,13 @@ class theoricus.mvc.Model
 
 
 
-	# GENERAL REQUEST METHOD (ajax) ############################################
+	###
+	General request method
 
+	@param [String] method 	URL request method
+	@param [String] url 	URL to be requested
+	@param [Object] data 	Data to be send
+	###
 	@_request=( method, url, data='' )->
 		fetcher = new theoricus.mvc.Fetcher
 
@@ -91,8 +108,11 @@ class theoricus.mvc.Model
 
 
 
-	# INSTANTIATING NEW RECORDS ################################################
+	###
+	Instantiate new Model instances passing items as initial data
 
+	@param [Object] data	Data to be parsed
+	###
 	@_instantiate=( data )->
 		Factory = theoricus.core.Factory
 		classname = ("#{@}".match /function\s(\w+)/)[1]

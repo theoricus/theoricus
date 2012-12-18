@@ -94,6 +94,15 @@ class theoricus.core.Factory
 
 			@controllers[ classname ] = controller
 
+	###
+	Returns a compiled jade template
+
+	@param [String] path	path to the template
+	###
 	@template=@::template=( path )->
 		# console.log "Factory.template( #{path} )"
-		app.templates[path]
+		if app.templates[path]?
+			return app.templates[path]
+
+		console.error "Template ( " + path + " ) doesn't exit"
+		null
