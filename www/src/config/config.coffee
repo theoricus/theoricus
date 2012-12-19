@@ -7,6 +7,9 @@ class theoricus.config.Config
 	no_push_state: null
 	disable_transitions: null
 
+	###
+	@param [theoricus.Theoricus] @the   Shortcut for app's instance
+	###
 	constructor:( @the )->
 		@app_name = "app"
 

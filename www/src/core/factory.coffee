@@ -6,6 +6,9 @@ class theoricus.core.Factory
 
 	controllers: {}
 
+	###
+	@param [theoricus.Theoricus] @the   Shortcut for app's instance
+	###
 	constructor:( @the )->
 
 	_is =( src, comparison )->
@@ -36,16 +39,30 @@ class theoricus.core.Factory
 
 		model
 
-	view:( path, el )->
+	###
+	Returns an instantiated [theoricus.mvc.View] View
+
+	@param [String] path	path to the view file
+	@param [theoricus.core.Process] process process responsible for the view
+	###
+	view:( path, process = null )->
 		# console.log "Factory.view( '#{path}' )"
 
 		klass = app.views
 		classpath = "app.views"
 		classname = (parts = path.split '/').pop().camelize()
+			
+		len = parts.length - 1
+		namespace  = parts[ len ]
 
 		while parts.length
 			classpath += "." + (p = parts.shift())
-			klass = klass[p]
+
+			if klass[p]?
+				klass = klass[p]
+			else
+				throw new Error "Namespace '#{p} not found in app.views..."
+
 
 		classpath += "." + classname
 
@@ -53,11 +70,13 @@ class theoricus.core.Factory
 			throw new Error 'View not found: ' + classpath
 
 		unless (view = new (klass)) instanceof View
-			throw new Error 'Not a View instance: ' + klass
+			throw new Error "#{classpath} is not a View instance - you probably forgot to extend thoricus.mvc.View"
 
 		view._boot @the
 		view.classpath = classpath
 		view.classname = classname
+		view.namespace = namespace
+		view.process  = process if process?
 
 		# console.log "----------------- VIEW"
 		# console.log view
@@ -65,6 +84,11 @@ class theoricus.core.Factory
 
 		view
 
+	###
+	Returns an instantiated [theoricus.mvc.Controller] Controller
+
+	@param [String] name	controller name
+	###
 	controller:( name )->
 		# console.log "Factory.controller( '#{name}' )"
 
@@ -91,6 +115,15 @@ class theoricus.core.Factory
 
 			@controllers[ classname ] = controller
 
+	###
+	Returns a compiled jade template
+
+	@param [String] path	path to the template
+	###
 	@template=@::template=( path )->
 		# console.log "Factory.template( #{path} )"
-		app.templates[path]
+		if app.templates[path]?
+			return app.templates[path]
+
+		console.error "Template ( " + path + " ) doesn't exit"
+		null

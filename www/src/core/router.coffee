@@ -4,6 +4,9 @@
 ## Router & Route logic inspired by RouterJS:
 ## https://github.com/haithembelhaj/RouterJs
 
+###
+Proxyes browser's History API, routing request to and from the aplication
+###
 class theoricus.core.Router
 	Factory = null
 
@@ -12,6 +15,10 @@ class theoricus.core.Router
 
 	trigger: true
 
+	###
+	@param [theoricus.Theoricus] @the   Shortcut for app's instance
+	@param [Function] @on_change	state/url change handler
+	###
 	constructor:( @the, @on_change )->
 		Factory = @the.factory
 
@@ -27,6 +34,14 @@ class theoricus.core.Router
 			@run url
 		, 1
 
+	###
+	Creates and store a route
+	
+	@param [String] route
+	@param [String] to
+	@param [String] at
+	@param [String] el
+	###
 	map:( route, to, at, el )->
 		@routes.push new theoricus.core.Route route, to, at, el, @
 
@@ -37,6 +52,12 @@ class theoricus.core.Router
 			# url from HistoryJS
 			url = state.hash || state.title
 
+			# FIXME: quickfix for IE8 bug
+			url = url.replace( '.', '' )
+
+			#remove base path from incoming url
+			( url = url.replace @the.base_path, '' ) if @the.base_path?
+			
 			# removes the prepended '.' from HistoryJS
 			url = url.slice 1 if (url.slice 0, 1) is '.'
 
@@ -54,16 +75,16 @@ class theoricus.core.Router
 		@trigger = true
 
 	navigate:( url, trigger = true, replace = false )->
-		# console.log "NAVIGATE ->>> '#{url}'"
-		
 		@trigger = trigger
-		action = if replace then "replaceState" else "pushState"
+
+		action   = if replace then "replaceState" else "pushState"
 		History[action] null, null, url
 
-	run:( url, trigger = true )->
-		# console.log "Router.run #{url}, #{trigger}"
+	run:( url, trigger = true )=>
+		( url = url.replace @the.base_path, '' ) if @the.base_path?
+
 		@trigger = trigger
-		@route {title:url}
+		@route { title: url }
 
 	go:( index )->
 		History.go index

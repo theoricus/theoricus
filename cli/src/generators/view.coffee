@@ -5,7 +5,7 @@ class theoricus.generators.View
 
 	constructor:( @the, name, controller_name_lc, mvc = false )->
 		name_camel = name.camelize()
-		name_lc = name.toLowerCase()
+		name_lc    = name.toLowerCase()
 
 		view_folder = "app/views/#{controller_name_lc}"
 		static_folder = "app/static/#{controller_name_lc}"
@@ -24,9 +24,13 @@ class theoricus.generators.View
 		tmpl_jade = "#{tmpl_path}/view.jade"
 		tmpl_styl = "#{tmpl_path}/view.styl"
 
-		# create static container
-		FsUtil.mkdir_p view_folder	
-		FsUtil.mkdir_p static_folder
+		try
+			# create static container
+			FsUtil.mkdir_p view_folder	
+			FsUtil.mkdir_p static_folder
+		catch e
+			# folder already exists
+			# just add the files
 
 		# prepare view contents
 		contents = (fs.readFileSync tmpl_view).toString()
@@ -38,9 +42,15 @@ class theoricus.generators.View
 		console.log "#{'Created'.bold} #{view_path}".green
 
 		# write jade
-		fs.writeFileSync jade_path, (fs.readFileSync tmpl_jade)
-		console.log "#{'Created'.bold} #{jade_path}".green
+		unless fs.existsSync jade_path
+			fs.writeFileSync jade_path, (fs.readFileSync tmpl_jade)
+			console.log "#{'Created'.bold} #{jade_path}".green
+		else
+			console.log "#{'Already exists'.bold} #{jade_path}".green
 
 		# write stylus
-		fs.writeFileSync styl_path, fs.readFileSync tmpl_styl
-		console.log "#{'Created'.bold} #{styl_path}".green
+		unless fs.existsSync styl_path
+			fs.writeFileSync styl_path, fs.readFileSync tmpl_styl
+			console.log "#{'Created'.bold} #{styl_path}".green
+		else
+			console.log "#{'Already exists'.bold} #{styl_path}".green
