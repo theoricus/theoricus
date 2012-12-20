@@ -4,12 +4,13 @@ class theoricus.commands.Compiler
 	path = require "path"
 	fs = require "fs"
 	nib = require "nib"
+	fsu = require 'fs-util'
 
 	jade = require "jade"
 	stylus = require "stylus"
 
 	Toaster = require( 'coffee-toaster' ).Toaster
-	{FsUtil, ArrayUtil} = require( 'coffee-toaster' ).toaster.utils
+	{FnUtil,ArrayUtil} = require( 'coffee-toaster' ).toaster.utils
 
 	BASE_DIR: ""
 	APP_FOLDER: ""
@@ -51,15 +52,14 @@ class theoricus.commands.Compiler
 		# watching jade and stylus
 		return unless watch
 		reg = /(.jade|.styl)$/m
-		FsUtil.watch_folder "#{@APP_FOLDER}/static", reg, @_on_jade_stylus_change
+		watcher = fsu.watch "#{@APP_FOLDER}/static", reg
+		watcher.on 'create', FnUtil.proxy @_on_jade_stylus_change, 'create'
+		watcher.on 'update', FnUtil.proxy @_on_jade_stylus_change, 'update'
+		watcher.on 'delete', FnUtil.proxy @_on_jade_stylus_change, 'delete'
 
-
-	_on_jade_stylus_change:( info )=>
-		# skip all watching notifications
-		return if info.action == "watching" 
-
+	_on_jade_stylus_change:( ev, f )=>
 		# skipe all folder creation
-		return if info.type == "folder" and info.action == "created"
+		return if f.type == "dir" and ev == "created"
 
 		# date for CLI notifications
 		now = ("#{new Date}".match /[0-9]{2}\:[0-9]{2}\:[0-9]{2}/)[0]
@@ -98,7 +98,7 @@ class theoricus.commands.Compiler
 
 
 	compile_jade:( after_compile )->
-		files = FsUtil.find "#{@APP_FOLDER}/static", /.jade$/
+		files = fsu.find "#{@APP_FOLDER}/static", /.jade$/
 
 		output = """(function() {
 			app.templates = { ~TEMPLATES };
@@ -133,7 +133,7 @@ class theoricus.commands.Compiler
 
 
 	compile_stylus:( after_compile )->
-		files = FsUtil.find "#{@APP_FOLDER}/static", /.styl$/
+		files = fsu.find "#{@APP_FOLDER}/static", /.styl$/
 		
 		buffer = []
 		@pending_stylus = 0

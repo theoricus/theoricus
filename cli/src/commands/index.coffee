@@ -6,7 +6,7 @@ class theoricus.commands.Index
 	fs = require "fs"
 	exec = (require "child_process").exec
 	path = require "path"
-	{FsUtil} = (require "coffee-toaster").toaster.utils
+	fsu = require "fs-util"
 
 	pages: {}
 
@@ -66,7 +66,7 @@ class theoricus.commands.Index
 
 		route = (/(http:\/\/)([\w]+)(:)?([0-9]+)?\/(.*)/g.exec url)[5]
 		folder = path.normalize "#{@the.pwd}/public/static/#{route}"
-		FsUtil.mkdir_p folder unless fs.existsSync( folder )
+		fsu.mkdir_p folder unless fs.existsSync( folder )
 
 		src = ((require 'pretty-data').pd.xml src) + "\n"
 		fs.writeFileSync (file = path.normalize "#{folder}/index.html"), src

@@ -2,7 +2,7 @@ class theoricus.commands.Rm
 	fs = require 'fs'
 	path = require 'path'
 
-	{FsUtil} = ( require 'coffee-toaster' ).toaster.utils
+	fsu = require "fs-util"
 
 	constructor:( @the, opts )->
 		type = opts[1]
@@ -58,7 +58,7 @@ class theoricus.commands.Rm
 			try
 				if fs.lstatSync( filepath ).isDirectory()
 					if @recursive
-						FsUtil.rmdir_rf filepath
+						fsu.rmdir_rf filepath
 					else
 						fs.rmDirSync filepath
 				else
