@@ -24,10 +24,10 @@ class theoricus.core.Factory
 		classpath = "app.models.#{name}"
 
 		unless (klass = app.models[ classname ])?
-			throw new Error 'Model not found: ' + classpath
+			console.error Error 'Model not found: ' + classpath
 
 		unless (model = new (klass)) instanceof Model
-			throw new Error 'Not a Model instance: ' + klass
+			console.error 'Not a Model instance: ' + klass
 
 		model.classpath = classpath
 		model.classname = classname
@@ -61,16 +61,16 @@ class theoricus.core.Factory
 			if klass[p]?
 				klass = klass[p]
 			else
-				throw new Error "Namespace '#{p} not found in app.views..."
+				console.error "Namespace '#{p} not found in app.views..."
 
 
 		classpath += "." + classname
 
 		unless (klass = klass[ classname ])?
-			throw new Error 'View not found: ' + classpath
+			console.error 'View not found: ' + classpath
 
 		unless (view = new (klass)) instanceof View
-			throw new Error "#{classpath} is not a View instance - you probably forgot to extend thoricus.mvc.View"
+			console.error "#{classpath} is not a View instance - you probably forgot to extend thoricus.mvc.View"
 
 		view._boot @the
 		view.classpath = classpath
@@ -100,10 +100,10 @@ class theoricus.core.Factory
 		else
 
 			unless (klass = app.controllers[ classname ])?
-				throw new Error 'Controller not found: ' + classpath
+				console.error 'Controller not found: ' + classpath
 
 			unless (controller = new (klass)) instanceof Controller
-				throw new Error 'Not a Controller instance: ' + controller
+				console.error "#{classpath} is not a Controller instance - you probably forgot to extend thoricus.mvc.Controller"
 
 			controller.classpath = classpath
 			controller.classname = classname
