@@ -22,7 +22,7 @@ class theoricus.commands.Compiler
 
 		config =
 			folders: {}
-			vendors:["#{@the.root}/lib/theoricus.js"]
+			vendors:@_get_vendors()
 			minify: false
 			release: "public/app.js"
 			debug: "public/app-debug.js"
@@ -60,6 +60,23 @@ class theoricus.commands.Compiler
 		fsw_config = fsu.watch "#{@APP_FOLDER}/static", /(.coffee)$/m
 		fsw_config.on 'update', FnUtil.proxy @_on_jade_stylus_change, 'update'
 
+	_get_vendors:=>
+
+		toaster_vendors = ["#{@the.root}/lib/theoricus.js"]
+
+		# Vendors setted in app/config of theoricus app
+		app_vendors = @_get_config().vendors
+
+		for vendor, i in app_vendors
+			# Get the absolute path of the vendor
+			app_vendors[i] = path.join @the.pwd, 'vendors', vendor
+
+		# Create new vendors array merging the toaster and theoricus vendors
+		vendors = []
+		vendors.push vendor for vendor in toaster_vendors
+		vendors.push vendor for vendor in app_vendors
+
+		vendors
 
 	_on_jade_stylus_change:( ev, f )=>
 		# skipe all folder creation
@@ -223,6 +240,7 @@ class theoricus.commands.Config
 	config: null
 	routes: null
 	root: null
+	vendors:null
 
 	constructor:( app, routes )->
 		@_parse_app app
@@ -236,11 +254,14 @@ class theoricus.commands.Config
 		catch error
 			return throw error
 
+		@vendors = tmp.vendors ? []
+
 		# CONFIG
 		@config = "// CONFIG\n" + Compiler.to_single_line """(function() {
 			app.config = {
 				animate_at_startup: #{tmp.animate_at_startup},
-				enable_auto_transitions: #{tmp.enable_auto_transitions}
+				enable_auto_transitions: #{tmp.enable_auto_transitions},
+				vendors:["#{tmp.vendors}"]
 			};
 		}).call( this );"""
 

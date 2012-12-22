@@ -16,3 +16,4 @@ class theoricus.config.Config
 		@disable_transitions = app.config.disable_transitions ? false
 		@animate_at_startup = app.config.animate_at_startup ? true
 		@enable_auto_transitions = app.config.enable_auto_transitions ? true
+		@vendors = app.config.vendors
