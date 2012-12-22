@@ -16,13 +16,13 @@ Have fun. :)
 
 # Installation
 
-````
+````bash
 npm install -g theoricus
 ````
 
 # Help
 
-````
+````bash
 Usage:
   theoricus new      path
   theoricus add      model|view|controller|mvc 
@@ -46,13 +46,13 @@ Options:
 
 To scaffold a new working project:
 
-````
+````bash
 theoricus new myawesomeapp
 ````
 
 It'll produce the following structure:
 
-````
+````bash
 myawesomeapp
 |-- app
 |   |-- app_controller.coffee
@@ -84,7 +84,7 @@ myawesomeapp
 
 # Starting up
 
-````
+````bash
 cd myawesomeapp
 theoricus start
 ````
@@ -95,3 +95,8 @@ Visit the url [http://localhost:11235](http://localhost:11235) and you should se
 
 There's a basic demo application here:
 > https://github.com/serpentem/theoricus-demo-app
+
+# Changelog
+----
+
+> [CHANGELOG.md](https://github.com/serpentem/theoricus/tree/master/build/CHANGELOG.md)
