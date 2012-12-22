@@ -37,5 +37,8 @@ class theoricus.mvc.View
 		else
 			@el.animate {opacity: 0}, 300, after_out
 
+	destroy:->
+		@el.empty()
+
 	navigate:( url )->
 		@the.processes.router.navigate url

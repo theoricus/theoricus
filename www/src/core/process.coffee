@@ -58,9 +58,7 @@ class theoricus.core.Process
 		# call the OUT transition with the given callback
 		if not @view?
 			console.warn "View isn't defined, please check if you controller method is returning the rendered view"
-
 			@after_destroy()
-			
 			return
 
 		@view.out =>
