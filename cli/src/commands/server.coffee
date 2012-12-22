@@ -1,19 +1,19 @@
-class Server
+class theoricus.commands.Server
 	http = require "http"
-	url = require "url"
-	fs = require "fs"
+	url  = require "url"
+	fs   = require "fs"
 	path = require "path"
-	pn = path.normalize
+	pn   = path.normalize
 
 	exec = require( "child_process" ).exec
 
 	constructor:( @the, options )->
-		@port = "11235"
+		@port = options[1] or 11235
 		@root = "#{@the.pwd}/public"
 
 		# console.log  "Server is born()"
-		@compiler = new theoricus.commands.Compiler @the, options
 		@start_server()
+		@compiler = new theoricus.commands.Compiler @the, true
 
 	start_server:()->
 		@server = http.createServer( @_handler ).listen @port
@@ -24,6 +24,7 @@ class Server
 
 
 	_handler:(request, response)=>
+
 		headers = request.headers
 		agent = headers['user-agent']
 		crawl = agent.indexOf( "Googlebot" ) >= 0 || agent.indexOf( "curl" ) >= 0
@@ -31,7 +32,7 @@ class Server
 		uri = url.parse( request.url ).pathname
 		filename = path.join( @root, uri )
 
-		path.exists filename, (exists)=>
+		fs.exists filename, (exists)=>
 
 			if !exists || fs.lstatSync( filename ).isDirectory()
 
@@ -41,7 +42,7 @@ class Server
 
 				if crawl is true
 					cache = pn "#{@root}/static/#{request.url}/index.html"
-					if path.existsSync cache
+					if fs.existsSync cache
 						src = fs.readFileSync cache
 						response.writeHead 200, {"Content-Type": "text/html"}
 						response.write "#{src}\n"
@@ -53,7 +54,8 @@ class Server
 					response.end()
 				return
 
-			fs.readFile filename, "utf-8", (err, file)->
+
+			fs.readFile filename, "binary", (err, file)->
 				if err
 					response.writeHead 500, {"Content-Type": "text/plain"}
 					response.write err + "\n"
@@ -62,8 +64,10 @@ class Server
 
 				if filename.match /.js$/m
 					response.writeHead 200, {"Content-Type": "text/javascript"}
+				else if (mime = filename.match /(jpg|png|gif)$/m)
+					response.writeHead 200, {"Content-Type": "image/#{mime[1]}"}
 				else if filename.match /.css$/m
 					response.writeHead 200, {"Content-Type": "text/css"}
 
-				response.write file
+				response.write file, "binary"
 				response.end()

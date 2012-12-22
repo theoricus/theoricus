@@ -1,19 +1,17 @@
-class Model
+class theoricus.generators.Model
 	fs = require 'fs'
-	StringUtil = ( require 'coffee-toaster' ).toaster.utils.StringUtil
 
-	template =
-		body: "class ~NAMEModel extends app.models.AppModel"
-		# actions: "home:( data )->\t@render 'home', new app.models.HomeModel
+	constructor:( @the, name )->
+		name_camel = name.camelize()
+		name_lc = name.toLowerCase()
+		controller_name_lc = name.pluralize().toLowerCase()
 
-	constructor:( @the, opts )->
-		name = opts[2]
-		filepath = "app/models/" + name + "_model.coffee"
+		tmpl = "#{@the.root}/cli/src/generators/templates/mvc/model.coffee"
+		filepath = "app/models/#{name}.coffee"
 
-		contents = @build_contents name
+		contents = (fs.readFileSync tmpl).toString()
+		contents = contents.replace /~NAME_CAMEL/g, name_camel
+		contents = contents.replace /~CONTROLLER_LC/g, controller_name_lc
+
 		fs.writeFileSync filepath, contents
-		console.log "#{'Created: '.bold} #{filepath}".green
-
-	build_contents:( name )->
-		buffer = ""
-		buffer += template.body.replace "~NAME", StringUtil.ucasef name
+		console.log "#{'Created'.bold} #{filepath}".green

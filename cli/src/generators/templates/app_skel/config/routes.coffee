@@ -1,6 +1,6 @@
 # MAIN
 match "/main"
-	to: "main/index"
+	to: "mains/index"
 	at: null
 	el: "body"
 

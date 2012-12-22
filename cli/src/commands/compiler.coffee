@@ -1,103 +1,125 @@
-class Compiler
+class theoricus.commands.Compiler
 
 	# requirements
 	path = require "path"
 	fs = require "fs"
+	nib = require "nib"
+	fsu = require 'fs-util'
 
 	jade = require "jade"
 	stylus = require "stylus"
 
 	Toaster = require( 'coffee-toaster' ).Toaster
-	FsUtil = require( 'coffee-toaster' ).toaster.utils.FsUtil
-	ArrayUtil = require( 'coffee-toaster' ).toaster.utils.ArrayUtil
+	{FnUtil,ArrayUtil} = require( 'coffee-toaster' ).toaster.utils
 
 	BASE_DIR: ""
 	APP_FOLDER: ""
 
-	constructor:( @the, options )->
+	constructor:( @the, watch = false )->
 
 		@BASE_DIR = @the.pwd
 		@APP_FOLDER = "#{@BASE_DIR}/app"
 
-		config = {
-			folders: {},
-			vendors:[
-				"#{@the.root}/www/vendors/jquery.js",
-				"#{@the.root}/www/vendors/history.js",
-				"#{@the.root}/www/vendors/history.adapter.native.js",
-				"#{@the.root}/www/vendors/jade.runtime.js"
-			],
-			release: "public/app.js",
+		config =
+			folders: {}
+			vendors:["#{@the.root}/lib/theoricus.js"]
+			minify: false
+			release: "public/app.js"
 			debug: "public/app-debug.js"
-		}
 
 		config.folders[@APP_FOLDER] = "app"
-		config.folders["#{@the.root}/www/src"] = "theoricus"
 
 		# start watching/compiling coffeescript
-		@toaster = new Toaster @BASE_DIR, {w:1, d:1, config: config}, true
+		@toaster = new Toaster @BASE_DIR,
+			w: watch
+			c: !watch
+			d:1
+			config: config
+		, true
+
+		# The 'before_build' filter is called by Toaster everytime some file
+		# changes. If this method returns TRUE, then toaster will build
+		# everything automatically, otherwise if this method returns FALSE
+		# user can call the build() method manually with some injection options.
+ 		# Check the compile().
+		@toaster.before_build = =>
+			@compile()
+			false
 
 		# compiling everything at startup
 		@compile()
 
 		# watching jade and stylus
-		reg = /.jade|.stylus$/
-		FsUtil.watch_folder "#{@APP_FOLDER}/static", reg, @_on_jade_stylus_change
+		return unless watch
 
-		# watching stylus
-		# FsUtil.watch_folder @APP_FOLDER, /.styl$/, @_on_jade_stylus_change
+		fsw_static = fsu.watch "#{@APP_FOLDER}/static", /(.jade|.styl)$/m
+		fsw_static.on 'create', FnUtil.proxy @_on_jade_stylus_change, 'create'
+		fsw_static.on 'update', FnUtil.proxy @_on_jade_stylus_change, 'update'
+		fsw_static.on 'delete', FnUtil.proxy @_on_jade_stylus_change, 'delete'
+
+		fsw_config = fsu.watch "#{@APP_FOLDER}/static", /(.coffee)$/m
+		fsw_config.on 'update', FnUtil.proxy @_on_jade_stylus_change, 'update'
 
 
-
-	_on_jade_stylus_change:( info )=>
-		# skip all watching notifications
-		return if info.action == "watching" 
-
+	_on_jade_stylus_change:( ev, f )=>
 		# skipe all folder creation
-		return if info.type == "folder" and info.action == "created"
+		return if f.type == "dir" and ev == "created"
+
+		# date for CLI notifications
+		now = ("#{new Date}".match /[0-9]{2}\:[0-9]{2}\:[0-9]{2}/)[0]
 
 		# switch over created, deleted, updated and watching
-		switch info.action
+		switch ev
 
 			# when a new file is created
 			when "created"
 				msg = "New file created".bold.cyan
-				console.log "#{msg} #{info.path.green}"
+				console.log "[#{now}] #{msg} #{info.path}".green
 
 			# when a file is deleted
 			when "deleted"
 				type = if info.type == "file" then "File" else "Folder"
 				msg = "#{type} deleted".bold.red
-				console.log "#{msg} #{info.path.red}"
+				console.log "[#{now}] {msg} #{info.path}".red
 
 			# when a file is updated
 			when "updated"
 				msg = "File changed".bold.cyan
-				console.log "#{msg} #{info.path.cyan}"
+				console.log "[#{now}] #{msg} #{info.path}".cyan
 
-		@compile()
+		# compile jade and/or coffee
+		if ( f.location.match /.jade$/m  ) || ( f.location.match /.coffee$/m )
+			@compile()
+
+		# compile only stylus
+		else if f.location.match /.styl$/m
+
+			@compile_stylus ( css )=>
+				target = "#{@the.pwd}/public/app.css"
+				fs.writeFileSync target, css
+				console.log "[#{now}] #{'Compiled'.bold} #{target}".green
 
 
 
 	compile_jade:( after_compile )->
-		files = FsUtil.find "#{@APP_FOLDER}/static", /.jade$/
+		files = fsu.find "#{@APP_FOLDER}/static", /.jade$/
 
 		output = """(function() {
-			__t('app').templates = { ~TEMPLATES };
+			app.templates = { ~TEMPLATES };
 		}).call( this );"""
 
 		buffer = []
 		for file in files
 
 			# skip files that starts with "_"
-			continue if file.match( /(\_)?[^\/]+$/ )[1] is "_"
+			continue if /^_/m.test file
 
-			# compute alias and read file's source
-			name = file.match /[^\/]+.jade$/m
-			folder = file.match( /(static\/)(.*)$/m )[2].replace "/#{name}", ""
+			# compute template name and read file's source
+			name = (file.match /static\/(.*).jade$/m)[1]
 			source = fs.readFileSync file, "utf-8"
 
 			# compile source
+			# TODO: move compile options to config file
 			compiled = jade.compile source,
 				filename: file
 				client: true
@@ -105,7 +127,7 @@ class Compiler
 
 			# write template name and contents
 			compiled = compiled.toString().replace "anonymous", ""
-			buffer.push "'#{folder}': " + compiled
+			buffer.push "'#{name}': " + compiled
 
 		# format everything
 		output = output.replace( "~TEMPLATES", buffer.join "," )
@@ -114,9 +136,9 @@ class Compiler
 		# return all jade files compiled for use in client
 		return "// TEMPLATES\n#{output}"
 
-	
+
 	compile_stylus:( after_compile )->
-		files = FsUtil.find "#{@APP_FOLDER}/static", /.styl$/
+		files = fsu.find "#{@APP_FOLDER}/static", /.styl$/
 		
 		buffer = []
 		@pending_stylus = 0
@@ -134,9 +156,12 @@ class Compiler
 				"#{@APP_FOLDER}/static/_mixins/stylus"
 			]
 
+			# TODO: move compile options to config file
 			stylus( source )
 				.set( 'filename', file )
 				.set( 'paths', paths )
+				.use( nib() )
+				.import( 'nib' )
 				.render (err, css)=>
 					throw err if err?
 					buffer.push css
@@ -158,22 +183,26 @@ class Compiler
 					#{conf.root}\n"""
 		
 		# formats footer
-		footer = "new theoricus.Theoricus"
+		footer = ""
 
-		# biulds all coffeescript
+		# build everything
 		@toaster.build header, footer
+
+		# formatted time to CLI notifications
+		now = ("#{new Date}".match /[0-9]{2}\:[0-9]{2}\:[0-9]{2}/)[0]
 
 		# compile sytlus
 		@compile_stylus ( css )=>
 			target = "#{@the.pwd}/public/app.css"
 			fs.writeFileSync target, css
+			console.log "[#{now}] #{'Compiled'.bold} #{target}".green
 
 
 	_get_config:()->
-		app = "#{@the.pwd}/config/app.coffee"
+		app    = "#{@the.pwd}/config/app.coffee"
 		routes = "#{@the.pwd}/config/routes.coffee"
 
-		app = fs.readFileSync app, "utf-8"
+		app    = fs.readFileSync app, "utf-8"
 		routes = fs.readFileSync routes, "utf-8"
 
 		new theoricus.commands.Config app, routes
@@ -185,7 +214,7 @@ class Compiler
 		return code.replace /(^\/\/.*)|([\t\n]+)/gm, ""
 
 
-class Config
+class theoricus.commands.Config
 	Compiler = theoricus.commands.Compiler
 
 	fs = require "fs"
@@ -209,7 +238,7 @@ class Config
 
 		# CONFIG
 		@config = "// CONFIG\n" + Compiler.to_single_line """(function() {
-			__t('app').config = {
+			app.config = {
 				animate_at_startup: #{tmp.animate_at_startup},
 				enable_auto_transitions: #{tmp.enable_auto_transitions}
 			};
@@ -237,13 +266,13 @@ class Config
 
 		# ROOT
 		@root = "// ROOT\n" + Compiler.to_single_line """(function() {
-			__t('app').root = '#{root}';
+			app.root = '#{root}';
 
 		}).call( this );""", true
 
 		# ROUTES
 		@routes = "// ROUTES\n" + Compiler.to_single_line """(function() {
-			__t('app').routes = {
+			app.routes = {
 				#{buffer.join "," }
 			};
 		}).call( this );""", true

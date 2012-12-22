@@ -1,12 +1,13 @@
 #<< theoricus/utils/string_util
 #<< theoricus/core/route
 
-###
-	Router Logic inspired by RouterJS:
-	https://github.com/haithembelhaj/RouterJs
-###
+## Router & Route logic inspired by RouterJS:
+## https://github.com/haithembelhaj/RouterJs
 
-class Router
+###
+Proxyes browser's History API, routing request to and from the aplication
+###
+class theoricus.core.Router
 	Factory = null
 
 	routes: []
@@ -14,6 +15,10 @@ class Router
 
 	trigger: true
 
+	###
+	@param [theoricus.Theoricus] @the   Shortcut for app's instance
+	@param [Function] @on_change	state/url change handler
+	###
 	constructor:( @the, @on_change )->
 		Factory = @the.factory
 
@@ -29,34 +34,57 @@ class Router
 			@run url
 		, 1
 
+	###
+	Creates and store a route
+	
+	@param [String] route
+	@param [String] to
+	@param [String] at
+	@param [String] el
+	###
 	map:( route, to, at, el )->
 		@routes.push new theoricus.core.Route route, to, at, el, @
 
 	route:( state )->
+
 		if @trigger
-			url = state.title or state.hash
+
+			# url from HistoryJS
+			url = state.hash || state.title
+
+			# FIXME: quickfix for IE8 bug
+			url = url.replace( '.', '' )
+
+			#remove base path from incoming url
+			( url = url.replace @the.base_path, '' ) if @the.base_path?
+			
+			# removes the prepended '.' from HistoryJS
+			url = url.slice 1 if (url.slice 0, 1) is '.'
+
+			# adding back the first slash '/' in cases it's removed by HistoryJS
+			url = "/#{url}" if (url.slice 0, 1) isnt '/'
+
+			# fallback to root url in case user enter the '/'
 			url = app.root if url == "/"
+
 			for route in @routes
 				if route.matcher.test url
-					route.set_location url
-					@on_change?( route )
+					@on_change?( route.clone url )
 					return
 		
 		@trigger = true
 
 	navigate:( url, trigger = true, replace = false )->
-		if @the.config.no_push_state
-			window.location = url
-			return
-		else
-			@trigger = trigger
-			action = if replace then "replaceState" else "pushState"
-			History[action] null, url, url
-
-	run:( url, trigger = true )->
-		# console.log "Router.run #{url}, #{trigger}"
 		@trigger = trigger
-		@route {title:url}
+
+		action   = if replace then "replaceState" else "pushState"
+		History[action] null, null, url
+
+	run:( url, trigger = true )=>
+		( url = url.replace @the.base_path, '' ) if @the.base_path?
+
+		@trigger = trigger
+		@route { title: url }
 
 	go:( index )->
 		History.go index

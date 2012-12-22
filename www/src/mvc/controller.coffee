@@ -1,27 +1,56 @@
-#<< theoricus/utils/string_util
+#<< theoricus/mvc/model
+#<< theoricus/mvc/view
 
-class Controller
-	Factory = null
-	StringUtil = theoricus.utils.StringUtil
+class theoricus.mvc.Controller
 
-	_boot:( @the )->
-		Factory = @the.factory
-		@
-	
-	_run:( @route, @after_run )->
-		if @[ @route.api.action]?
-			@[ @route.api.action ].apply @, @route.api.params
+	{Fetcher} = theoricus.mvc
+	{Model,View} = theoricus.mvc
+
+	###
+	@param [theoricus.Theoricus] @the   Shortcut for app's instance
+	###
+	_boot: ( @the ) -> @
+
+	###
+	Build a default action ( renders the view passing all model records as data)
+	in case the controller doesn't have an action for current process call
+
+	@param [theoricus.core.Process] process path to view on the app tree
+	###
+	_build_action: ( process ) ->
+		=>
+			api = process.route.api
+
+			model_name = api.controller_name.singularize().camelize()
+			model      = app.models[model_name]
+
+			view_folder = api.controller_name.singularize()
+			view_name   = api.action_name
+
+			if model.all?
+				@render "#{view_folder}/#{view_name}", model.all()
+			else
+				@render "#{view_folder}/#{view_name}", null
+
+	###
+	Renders view
+
+	@param [String] path 	path to view on the app tree
+	@param [String] data 	data to be rendered on the template
+	@param [Object] element element where it will be rendered, defaults to @process.route.el
+	###
+	render: ( path, data, el = @process.route.el, view ) ->
+		view = view || @the.factory.view path, @process
+
+		view.after_in = view.process.after_run
+
+		if data instanceof Fetcher
+			if data.loaded
+				view.render data.records, el
+			else
+				data.onload = ( records ) =>
+					@render path, records, el, view
 		else
-			model = Factory.model @route.api.controller_name
-			@render @route.api.action, model
-	
-	_destroy:( route, after_destroy )->
-		route.view.after_out = after_destroy
-		route.view.out =>
-			$( route.view.el ).empty()
-			route.view.after_out?()
-	
-	render:( view_name, data )->
-		@route.view = Factory.view @route.api.controller_name, view_name
-		@route.view.after_in = @after_run
-		@route.view._render @route, view_name, data: data
+			view.render data, el
+
+		view

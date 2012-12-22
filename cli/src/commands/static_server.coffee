@@ -1,8 +1,8 @@
-class StaticServer
+class theoricus.commands.StaticServer
 	HTTPServer = require "http-server"
 
 	constructor:( @the, options )->
-		@port = "11235"
+		@port = options[1] or 11235
 		@root = "#{@the.pwd}/public/static"
 
 		server = HTTPServer.createServer
