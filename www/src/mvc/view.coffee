@@ -58,6 +58,9 @@ class theoricus.mvc.View
 			$( window ).bind   'resize', @on_resize
 			@on_resize()
 
+	###
+	TODO: Document method.
+	###
 	require: ( view, container, data = @data, template ) ->
 		view = @view view
 
@@ -117,7 +120,12 @@ class theoricus.mvc.View
 		else
 			@el.animate {opacity: 0}, 300, after_out
 
-
+	###
+	Destroy the view after the 'out' animation, the default behavior is to just
+	empty it's container element.
+	###
+	destroy:->
+		@el.empty()
 
 	# ~> Shortcuts
 

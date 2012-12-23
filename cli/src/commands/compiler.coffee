@@ -4,24 +4,38 @@ class theoricus.commands.Compiler
 	path = require "path"
 	fs = require "fs"
 	nib = require "nib"
+	fsu = require 'fs-util'
 
 	jade = require "jade"
 	stylus = require "stylus"
 
 	Toaster = require( 'coffee-toaster' ).Toaster
-	{FsUtil, ArrayUtil} = require( 'coffee-toaster' ).toaster.utils
+	{FnUtil,ArrayUtil} = require( 'coffee-toaster' ).toaster.utils
 
 	BASE_DIR: ""
 	APP_FOLDER: ""
 
 	constructor:( @the, watch = false )->
 
-		@BASE_DIR   = @the.pwd
+		@BASE_DIR = @the.pwd
 		@APP_FOLDER = "#{@BASE_DIR}/app"
 
-		# start watching/compiling coffeescript
-		@toaster = new Toaster @BASE_DIR, if watch then w: on else c: on
+		config =
+			folders: {}
+			vendors:["#{@the.root}/lib/theoricus.js"]
+			minify: false
+			release: "public/app.js"
+			debug: "public/app-debug.js"
 
+		config.folders[@APP_FOLDER] = "app"
+
+		# start watching/compiling coffeescript
+		@toaster = new Toaster @BASE_DIR,
+			w: watch
+			c: !watch
+			d:1
+			config: config
+		, true
 
 		# The 'before_build' filter is called by Toaster everytime some file
 		# changes. If this method returns TRUE, then toaster will build
@@ -38,25 +52,24 @@ class theoricus.commands.Compiler
 		# watching jade and stylus
 		return unless watch
 
-		reg = /(.jade|.styl)$/m
-		FsUtil.watch_folder "#{@APP_FOLDER}/static", reg, @_on_jade_stylus_change
+		fsw_static = fsu.watch "#{@APP_FOLDER}/static", /(.jade|.styl)$/m
+		fsw_static.on 'create', FnUtil.proxy @_on_jade_stylus_change, 'create'
+		fsw_static.on 'update', FnUtil.proxy @_on_jade_stylus_change, 'update'
+		fsw_static.on 'delete', FnUtil.proxy @_on_jade_stylus_change, 'delete'
 
-		reg = /(.coffee)$/m
-		FsUtil.watch_folder "#{@APP_FOLDER}/../config", reg, @_on_jade_stylus_change
+		fsw_config = fsu.watch "#{@APP_FOLDER}/static", /(.coffee)$/m
+		fsw_config.on 'update', FnUtil.proxy @_on_jade_stylus_change, 'update'
 
 
-	_on_jade_stylus_change:( info )=>
-		# skip all watching notifications
-		return if info.action == "watching" 
-
+	_on_jade_stylus_change:( ev, f )=>
 		# skipe all folder creation
-		return if info.type == "folder" and info.action == "created"
+		return if f.type == "dir" and ev == "created"
 
 		# date for CLI notifications
 		now = ("#{new Date}".match /[0-9]{2}\:[0-9]{2}\:[0-9]{2}/)[0]
 
 		# switch over created, deleted, updated and watching
-		switch info.action
+		switch ev
 
 			# when a new file is created
 			when "created"
@@ -75,11 +88,11 @@ class theoricus.commands.Compiler
 				console.log "[#{now}] #{msg} #{info.path}".cyan
 
 		# compile jade and/or coffee
-		if ( info.path.match /.jade$/m  ) || ( info.path.match /.coffee$/m )
+		if ( f.location.match /.jade$/m  ) || ( f.location.match /.coffee$/m )
 			@compile()
 
 		# compile only stylus
-		if info.path.match /.styl$/m
+		else if f.location.match /.styl$/m
 
 			@compile_stylus ( css )=>
 				target = "#{@the.pwd}/public/app.css"
@@ -89,7 +102,7 @@ class theoricus.commands.Compiler
 
 
 	compile_jade:( after_compile )->
-		files = FsUtil.find "#{@APP_FOLDER}/static", /.jade$/
+		files = fsu.find "#{@APP_FOLDER}/static", /.jade$/
 
 		output = """(function() {
 			app.templates = { ~TEMPLATES };
@@ -125,7 +138,7 @@ class theoricus.commands.Compiler
 
 
 	compile_stylus:( after_compile )->
-		files = FsUtil.find "#{@APP_FOLDER}/static", /.styl$/
+		files = fsu.find "#{@APP_FOLDER}/static", /.styl$/
 		
 		buffer = []
 		@pending_stylus = 0

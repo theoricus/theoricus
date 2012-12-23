@@ -1,7 +1,7 @@
 class theoricus.generators.View
 
 	fs = require 'fs'
-	{FsUtil} = (require 'coffee-toaster').toaster.utils
+	fsu = require 'fs-util'
 
 	constructor:( @the, name, controller_name_lc, mvc = false )->
 		name_camel = name.camelize()
@@ -24,10 +24,11 @@ class theoricus.generators.View
 		tmpl_jade = "#{tmpl_path}/view.jade"
 		tmpl_styl = "#{tmpl_path}/view.styl"
 
+		# create static container
 		try
 			# create static container
-			FsUtil.mkdir_p view_folder	
-			FsUtil.mkdir_p static_folder
+			fsu.mkdir_p view_folder	
+			fsu.mkdir_p static_folder
 		catch e
 			# folder already exists
 			# just add the files
