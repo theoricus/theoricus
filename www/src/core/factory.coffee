@@ -25,10 +25,16 @@ class theoricus.core.Factory
 
 		unless (klass = app.models[ classname ])?
 			console.error Error 'Model not found: ' + classpath
-
 		else
-			unless (model = new (klass)) instanceof Model
-				console.error "#{classpath} is not a Model instance - you probably forgot to extend thoricus.mvc.Model"
+			try model = new klass
+			catch e
+				console.error e
+
+		if not model instanceof Model
+			console.error "#{classpath} is not a Model instance - you probably forgot to extend thoricus.mvc.Model"
+
+		if not model?
+			model = ( model = new ( eval 'app.AppModel' ) ) ? model : new theoricus.mvc.Model
 
 		model.classpath = classpath
 		model.classname = classname
