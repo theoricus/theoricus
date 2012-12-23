@@ -25,10 +25,13 @@ class theoricus.core.Factory
 
 		unless (klass = app.models[ classname ])?
 			console.error Error 'Model not found: ' + classpath
-
 		else
 			unless (model = new (klass)) instanceof Model
 				console.error "#{classpath} is not a Model instance - you probably forgot to extend thoricus.mvc.Model"
+		
+		# defaults to AppModel if given model is  is not found
+		# (cant see any sense on this, will probably be removed later)
+		model = new app.AppModel unless model?
 
 		model.classpath = classpath
 		model.classname = classname
@@ -69,13 +72,12 @@ class theoricus.core.Factory
 
 		unless (klass = klass[ classname ])?
 			console.error 'View not found: ' + classpath
-
 		else 
 			unless (view = new (klass)) instanceof View
 				console.error "#{classpath} is not a View instance - you probably forgot to extend thoricus.mvc.View"
 
 		# defaults to AppView if given view is not found
-		# (not sure why this is really need by now but it's here)
+		# (cant see any sense on this, will probably be removed later)
 		view = new app.AppView unless view?
 
 		view._boot @the
