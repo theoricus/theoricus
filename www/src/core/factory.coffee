@@ -24,10 +24,17 @@ class theoricus.core.Factory
 		classpath = "app.models.#{name}"
 
 		unless (klass = app.models[ classname ])?
-			throw new Error 'Model not found: ' + classpath
+			console.error Error 'Model not found: ' + classpath
+		else
+			try model = new klass
+			catch e
+				console.error e
 
-		unless (model = new (klass)) instanceof Model
-			throw new Error 'Not a Model instance: ' + klass
+		if not model instanceof Model
+			console.error "#{classpath} is not a Model instance - you probably forgot to extend thoricus.mvc.Model"
+
+		if not model?
+			model = ( model = new ( eval 'app.AppModel' ) ) ? model : new theoricus.mvc.Model
 
 		model.classpath = classpath
 		model.classname = classname
@@ -61,16 +68,20 @@ class theoricus.core.Factory
 			if klass[p]?
 				klass = klass[p]
 			else
-				throw new Error "Namespace '#{p} not found in app.views..."
+				console.error "Namespace '#{p} not found in app.views..."
 
 
 		classpath += "." + classname
 
 		unless (klass = klass[ classname ])?
-			throw new Error 'View not found: ' + classpath
+			console.error 'View not found: ' + classpath
 
-		unless (view = new (klass)) instanceof View
-			throw new Error "#{classpath} is not a View instance - you probably forgot to extend thoricus.mvc.View"
+		else 
+			unless (view = new (klass)) instanceof View
+				console.error "#{classpath} is not a View instance - you probably forgot to extend thoricus.mvc.View"
+
+		if not view?
+			view = ( view = new ( eval 'app.AppView' ) ) ? view : new theoricus.mvc.View
 
 		view._boot @the
 		view.classpath = classpath
@@ -100,10 +111,10 @@ class theoricus.core.Factory
 		else
 
 			unless (klass = app.controllers[ classname ])?
-				throw new Error 'Controller not found: ' + classpath
+				console.error 'Controller not found: ' + classpath
 
 			unless (controller = new (klass)) instanceof Controller
-				throw new Error 'Not a Controller instance: ' + controller
+				console.error "#{classpath} is not a Controller instance - you probably forgot to extend thoricus.mvc.Controller"
 
 			controller.classpath = classpath
 			controller.classname = classname
