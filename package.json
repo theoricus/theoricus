@@ -19,7 +19,7 @@
   
   "dependencies"   : {
     "fs-util"          : "0.3.4",
-    "coffee-toaster"   : "0.6.9",
+    "coffee-toaster"   : "0.6.10",
     "coffee-script"    : "1.4.0",
     "jade"             : "0.27.7",
     "stylus"           : "0.31.0", 
