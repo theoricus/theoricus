@@ -54,13 +54,16 @@ Have fun. :)
     - [Scaffolding new app](#scaffolding)
     - [Starting up](#starting-up)
   - [Demo Application](#demo-app)
-  - [Sites made with Theoricus](#cases)
   - [Contributing](#contributing)
    - [Setup](#setup)
+   - [Branching](#branching)
+   - [Committing](#committing)
+   - [Pull Requests](#pull-requests)
    - [Building](#building)
    - [Watching](#watching)
    - [Testing](#testing)
    - [Generating Docs](#generating-docs)
+  - [Sites made with Theoricus](#cases)
   - [CHANGELOG](#changelog)
 
 <a name="installing" />
@@ -155,15 +158,6 @@ see a success status.
 There's a basic demo application here: <BR>
 https://github.com/serpentem/theoricus-demo-app
 
-<a name="cases" />
-# Sites Made with Theoricus
-----
-
-## Codeman
-> http://www.codeman.co/
-* Source: https://github.com/giuliandrimba/codeman
-* Credits: [Giulian Drimba](https://github.com/giuliandrimba)
-
 <a name="contributing"/>
 # Contributing
 ----
@@ -178,6 +172,68 @@ Environment setup is simple achieved by:
   cd coffee-toaster && git submodule update --init
   npm link
 ````
+
+<a name="branching"/>
+## Branching
+
+Before anything else, start a named branch. If you're fixing the View rendering
+routine, this would be nice:
+
+`````
+git checkout -b fixing-view-rendering
+[...comits...]
+[pull request]
+````
+
+Always isolate your implementations into separated branches, it'll make it easy
+for others to look inside of it, easy to open pull requests (and those to get
+merged), easy to discuss the proposal or adopted solution, and so on.
+
+<a name="committing"/>
+## Committing
+
+Try to not repeat yourself, *never* explain **what** you did -- it's easy to see
+with a simple DIFF. 
+
+Instead, explains **WHY** you did it -- put into words the reasons that led you
+to implement something, expose the scenario, the studied cases, be solid.
+
+The more other people can understand your *reasons*, the more they can get
+together with your idea.
+
+<a name="pull-requests"/>
+## Pull Requests
+
+Pull requests must to have two requirements:
+
+ * 1) A **problem**, a **need**, an **improvement**, a **proposal**, etc.
+ * 2) A **solution** for requirement #1.
+
+Ideally one pull request will point to a specific branch aiming to fix or
+implement something *specifically*. Never combine more than one *problem* or
+*solution* into one single branch or pull request.
+
+This way the noise is crucially reduced and things can be discussed clearly.
+Poorly specified pull requests are hard to understand, to diff and to merge.
+
+A good and very simple template message for new Pull Requests:
+
+
+Subject: [Short description of what you've done]
+
+````
+The [problem/feature/improvement/etc]:
+[...solid explanation of the issue...]
+
+The solution:
+[...clearly explanation of the fix...]
+````
+
+Don't be shy, try to avoid short messages here as well in the commits.
+
+NOTE: There's currently no test suite available, so to open proper Pull Requests
+you'll need to work on a semi-controlled enviroment with the *Demo App*. Check
+the [tests](#testing) section.
 
 <a name="building"/>
 ## Building
@@ -204,9 +260,14 @@ Far from ideal, currently there are no tests available.
 
 All the principles and design's decisions are made based in a paried way with
 the [Demo Apllication](http://github.com/serpentem/theoricus). Both `theoricus`
-and `theoricus-demo-app` repos are always in sync. For each new feature in
-Theoricus, a new use for that will be made in the demo application to elucidate
-thigns.
+and `theoricus-demo-app` repos are always in sync (mirroring branch names). For
+each new feature in Theoricus, a new use for that will be made in the demo
+application to elucidate thigns.
+
+So, in this meantime while a proper tests suite is not started, always combine
+the changes you make in *Theoricus* also in the *Demo Application*.
+
+When openning a pull request, open one in *Theoricus* and on in the *Demo App*.
 
 <a name="docs"/>
 ## Generating Docs
@@ -223,8 +284,15 @@ make docs.www
 make docs.cli
 ````
 
-<a name="installing" />
-# Changelog
+<a name="cases" />
+# Sites Made with Theoricus
 ----
 
-> [CHANGELOG.md](https://github.com/serpentem/theoricus/tree/master/build/CHANGELOG.md)
+## Codeman
+* URL: http://www.codeman.co/
+* Source: https://github.com/giuliandrimba/codeman
+* Credits: [Giulian Drimba](https://github.com/giuliandrimba)
+
+<a name="installing" />
+# Changelog
+ * [CHANGELOG.md](https://github.com/serpentem/theoricus/tree/master/build/CHANGELOG.md)
