@@ -1,3 +1,5 @@
+#<< theoricus/mvc/model
+
 class theoricus.mvc.View
 	Factory = null
 
@@ -40,8 +42,11 @@ class theoricus.mvc.View
 				template = Factory.template "#{tmpl_folder}/#{tmpl_name}"
 
 			dom = template(@data) if template?
+			dom = @el.append dom
 
-			@el.append dom || $ '<div>'
+			# binds item if the data passed is a valid Model
+			if @data instanceof theoricus.mvc.Model and dom?
+				@data.bind dom
 
 			@in()
 
@@ -86,7 +91,6 @@ class theoricus.mvc.View
 	###
 	destroy: () ->
 		@before_destroy?()
-
 		@el.empty()
 
 	###
