@@ -47,6 +47,11 @@ class theoricus.core.Process
 
 		# executes the action and catches the resulting view
 		@view = @controller[ action ].apply @controller, @route.api.params
+		unless @view instanceof theoricus.mvc.View
+			controller_name = @route.api.controller_name.camelize()
+			msg = "Check your `#{controller_name}` controller, the action "
+			msg += "`#{action}` must return a View instance."
+			console.error msg
 
 	###
 	Executes view's transition "out" method, wait for its end
@@ -56,9 +61,13 @@ class theoricus.core.Process
 	###
 	destroy:( @after_destroy )->
 		# call the OUT transition with the given callback
-		if not @view?
-			console.warn "View isn't defined, please check if you controller method is returning the rendered view"
-			@after_destroy()
+		unless (@view instanceof theoricus.mvc.View)
+			controller_name = @route.api.controller_name.camelize()
+			action_name = @route.api.action_name
+			msg = "Can't destroy View because it isn't a proper View instance. "
+			msg += "Check your `#{controller_name}` controller, the action "
+			msg += "`#{action_name}` must return a View instance."
+			console.error msg
 			return
 
 		@view.out =>
