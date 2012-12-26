@@ -3,7 +3,7 @@
 
 class theoricus.mvc.Controller
 
-	{Fetcher} = theoricus.mvc
+	{Fetcher} = theoricus.mvc.lib
 	{Model,View} = theoricus.mvc
 
 	###
