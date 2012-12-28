@@ -268,7 +268,8 @@ class theoricus.commands.Config
 			app.config = {
 				animate_at_startup: #{tmp.animate_at_startup},
 				enable_auto_transitions: #{tmp.enable_auto_transitions},
-				vendors:["#{tmp.vendors}"]
+				vendors: ["#{tmp.vendors}"],
+				autobind: #{tmp.autobind}
 			};
 		}).call( this );"""
 

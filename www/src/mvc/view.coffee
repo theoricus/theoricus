@@ -45,8 +45,8 @@ class theoricus.mvc.View
 			dom = @el.append dom
 
 			# binds item if the data passed is a valid Model
-			if @data instanceof theoricus.mvc.Model and dom?
-				@data.bind dom
+			if (@data instanceof theoricus.mvc.Model)
+				@data.bind dom, !@the.config.autobind
 
 			@in()
 
