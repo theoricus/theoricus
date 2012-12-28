@@ -14,16 +14,12 @@ class theoricus.mvc.lib.Binder
 	# container for all found binds
 	binds: null
 
-
-	constructor:->
-		@binds = {}
-
-	bind:( dom )->
-		@binds = (parse dom)
+	bind:( dom, just_clean_attrs )->
+		parse (@binds = {}), dom, just_clean_attrs
 
 	update:( field, val )->
-
-		return if @binds[field] is null
+		return unless @binds?
+		return unless @binds[field]?
 
 		for item in (@binds[field] || [])
 			
@@ -39,7 +35,7 @@ class theoricus.mvc.lib.Binder
 				when 'attr'
 					node.attr item.attr, val
 
-	parse = (dom, binds = {})->
+	parse = (binds, dom, just_clean_attrs)->
 		dom.children().each ->
 			# searching for binds in node attributes
 			for attr in this.attributes
@@ -51,30 +47,29 @@ class theoricus.mvc.lib.Binder
 				if match_single.test value
 					key = (value.match bind_name_reg)[2]
 					(($ this).attr name, (value.match match_single)[2])
-					collect binds, this, 'attr', key, name
 
-			# preparing node to start the search for binds
-			match_all = new RegExp context_reg, 'g'
-			text = ($ this ).clone().children().remove().end().html()
-			text = "#{text}"
+					if just_clean_attrs is false
+						collect binds, this, 'attr', key, name
 
-			# get all binds (multiple binds per node is allowed)
-			keys = (text.match match_all) or []
+			if just_clean_attrs is false
+				# preparing node to start the search for binds
+				match_all = new RegExp context_reg, 'g'
+				text = ($ this ).clone().children().remove().end().html()
+				text = "#{text}"
 
-			# collects all found binds for the node value
-			for key in keys
-				key = (key.match bind_name_reg)[2]
-				collect binds, this, 'node', key
+				# get all binds (multiple binds per node is allowed)
+				keys = (text.match match_all) or []
 
-			
+				# collects all found binds for the node value
+				for key in keys
+					key = (key.match bind_name_reg)[2]
+					collect binds, this, 'node', key
 
 			# keep parsing the dom recursively
-			parse ($ this), binds
-
-		binds
+			parse binds, ($ this), just_clean_attrs
 
 	collect = (binds, target, type, variable, attr)->
 		bind = (binds[variable] ?= [])
 		tmp = type: type, target: target
 		tmp.attr = attr if attr?
-		bind.push tmp
+		bind.push tmp	
