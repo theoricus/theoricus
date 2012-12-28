@@ -53,12 +53,12 @@ class theoricus.commands.Compiler
 		return unless watch
 
 		fsw_static = fsu.watch "#{@APP_FOLDER}/static", /(.jade|.styl)$/m
-		fsw_static.on 'create', FnUtil.proxy @_on_jade_stylus_change, 'create'
-		fsw_static.on 'update', FnUtil.proxy @_on_jade_stylus_change, 'update'
-		fsw_static.on 'delete', FnUtil.proxy @_on_jade_stylus_change, 'delete'
+		fsw_static.on 'create', (FnUtil.proxy @_on_jade_stylus_change, 'create')
+		fsw_static.on 'change', (FnUtil.proxy @_on_jade_stylus_change, 'change')
+		fsw_static.on 'delete', (FnUtil.proxy @_on_jade_stylus_change, 'delete')
 
-		fsw_config = fsu.watch "#{@APP_FOLDER}/static", /(.coffee)$/m
-		fsw_config.on 'update', FnUtil.proxy @_on_jade_stylus_change, 'update'
+		fsw_config = fsu.watch "#{@BASE_DIR}/config", /(.coffee)$/m
+		fsw_config.on 'change', (FnUtil.proxy @_on_jade_stylus_change, 'change')
 
 	_get_vendors:=>
 
@@ -89,24 +89,24 @@ class theoricus.commands.Compiler
 		switch ev
 
 			# when a new file is created
-			when "created"
+			when "create"
 				msg = "New file created".bold.cyan
-				console.log "[#{now}] #{msg} #{info.path}".green
+				console.log "[#{now}] #{msg} #{f.location}".green
 
 			# when a file is deleted
-			when "deleted"
-				type = if info.type == "file" then "File" else "Folder"
+			when "delete"
+				type = if f.type == "file" then "File" else "Folder"
 				msg = "#{type} deleted".bold.red
-				console.log "[#{now}] {msg} #{info.path}".red
+				console.log "[#{now}] {msg} #{f.location}".red
 
 			# when a file is updated
-			when "updated"
-				msg = "File changed".bold.cyan
-				console.log "[#{now}] #{msg} #{info.path}".cyan
+			when "change"
+				msg = "File changed".bold
+				console.log "[#{now}] #{msg} #{f.location}".cyan
 
 		# compile jade and/or coffee
 		if ( f.location.match /.jade$/m  ) || ( f.location.match /.coffee$/m )
-			@compile()
+			@compile false
 
 		# compile only stylus
 		else if f.location.match /.styl$/m
@@ -191,7 +191,7 @@ class theoricus.commands.Compiler
 						after_compile( buffer.join "\n" ) 
 
 	# updates the release files
-	compile:()->
+	compile:( compile_stylus = true )->
 		# read conf
 		conf = @_get_config()
 
@@ -212,6 +212,8 @@ class theoricus.commands.Compiler
 
 		# formatted time to CLI notifications
 		now = ("#{new Date}".match /[0-9]{2}\:[0-9]{2}\:[0-9]{2}/)[0]
+
+		return unless compile_stylus
 
 		# compile sytlus
 		@compile_stylus ( css )=>
