@@ -169,7 +169,7 @@ Environment setup is simple achieved by:
 
 ````bash
   git clone git://github.com/serpentem/theoricus.git
-  cd coffee-toaster && git submodule update --init
+  cd theoricus && git submodule update --init
   npm link
 ````
 
