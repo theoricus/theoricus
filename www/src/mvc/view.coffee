@@ -1,158 +1,158 @@
 #<< theoricus/mvc/model
 
 class theoricus.mvc.View
-	Factory = null
+    Factory = null
 
-	# $ reference to dom element
-	el: null
+    # $ reference to dom element
+    el: null
 
-	# @property [String] class path
-	classpath : null
-	# @property [String] class name
-	classname : null
-	# @property [String] namespace
-	namespace : null
-	# @property [theoricus.core.Process] process
-	process   : null
+    # @property [String] class path
+    classpath : null
+    # @property [String] class name
+    classname : null
+    # @property [String] namespace
+    namespace : null
+    # @property [theoricus.core.Process] process
+    process   : null
 
-	###
-	@param [theoricus.Theoricus] @the   Shortcut for app's instance
-	###
-	_boot:( @the )->
-		Factory = @the.factory
-		@
+    ###
+    @param [theoricus.Theoricus] @the   Shortcut for app's instance
+    ###
+    _boot:( @the )->
+        Factory = @the.factory
+        @
 
-	###
-	@param [Object] @data   Data to be passed to the template
-	@param [Object] @el 	Element where the view will be "attached/appended"
-	###
-	render:( @data = {}, el = @process.route.el, template = null )=>
-		@before_render?(@data)
+    ###
+    @param [Object] @data   Data to be passed to the template
+    @param [Object] @el     Element where the view will be "attached/appended"
+    ###
+    render:( @data = {}, el = @process.route.el, template = null )=>
+        @before_render?(@data)
 
-		if not @el
-			api = @process.route.api
+        if not @el
+            api = @process.route.api
 
-			@el = $ el
+            @el = $ el
 
-			if template == null
+            if template == null
 
-				tmpl_folder = @namespace.singularize()
-				tmpl_name   = @classname.underscore()
+                tmpl_folder = @namespace.singularize()
+                tmpl_name   = @classname.underscore()
 
-				template = Factory.template "#{tmpl_folder}/#{tmpl_name}"
+                template = Factory.template "#{tmpl_folder}/#{tmpl_name}"
 
-			dom = template(@data) if template?
-			dom = @el.append dom
+            dom = template(@data) if template?
+            dom = @el.append dom
 
-			# binds item if the data passed is a valid Model
-			if (@data instanceof theoricus.mvc.Model)
-				@data.bind dom, !@the.config.autobind
+            # binds item if the data passed is a valid Model
+            if (@data instanceof theoricus.mvc.Model)
+                @data.bind dom, !@the.config.autobind
 
-			@in()
+            @in()
 
-		@set_triggers?()
+        @set_triggers?()
 
-		@after_render?(@data)
+        @after_render?(@data)
 
-		###
-		In case you define an "on_resize" handler it will be automatically 
-		binded and triggered
-		###
-		if @on_resize?
-			$( window ).unbind 'resize', @on_resize
-			$( window ).bind   'resize', @on_resize
-			@on_resize()
+        ###
+        In case you define an "on_resize" handler it will be automatically 
+        binded and triggered
+        ###
+        if @on_resize?
+            $( window ).unbind 'resize', @on_resize
+            $( window ).bind   'resize', @on_resize
+            @on_resize()
 
-	###
-	TODO: Document method.
-	###
-	require: ( view, container, data = @data, template ) ->
-		view = @view view
+    ###
+    TODO: Document method.
+    ###
+    require: ( view, container, data = @data, template ) ->
+        view = @view view
 
-		if container
-			view.render data, @el.find container, template
+        if container
+            view.render data, @el.find container, template
 
-		view
+        view
 
-	###
-	In case you defined @events in your view they will be automatically binded
-	###
-	set_triggers: () =>
-		return if not @events?
+    ###
+    In case you defined @events in your view they will be automatically binded
+    ###
+    set_triggers: () =>
+        return if not @events?
 
-		for sel, funk of @events
-			[all, sel, ev] = sel.match /(.*)[\s|\t]+([\S]+)$/m
+        for sel, funk of @events
+            [all, sel, ev] = sel.match /(.*)[\s|\t]+([\S]+)$/m
 
-			( @el.find sel ).unbind ev, null, @[funk]
-			( @el.find sel ).bind   ev, null, @[funk]
+            ( @el.find sel ).unbind ev, null, @[funk]
+            ( @el.find sel ).bind   ev, null, @[funk]
 
-	###
-	Called before completely erasing the view
-	###
-	destroy: () ->
-		@before_destroy?()
-		@el.empty()
+    ###
+    Called before completely erasing the view
+    ###
+    destroy: () ->
+        @before_destroy?()
+        @el.empty()
 
-	###
-	Triggers view "animation in", "@after_in" must be called in the end
-	###
-	in:()->
-		@before_in?()
+    ###
+    Triggers view "animation in", "@after_in" must be called in the end
+    ###
+    in:()->
+        @before_in?()
 
-		animate  = @the.config.enable_auto_transitions
-		animate &= !@the.config.disable_transitions
+        animate  = @the.config.enable_auto_transitions
+        animate &= !@the.config.disable_transitions
 
-		unless animate
-			@after_in?()
-		else
-			@el.css "opacity", 0
-			@el.animate {opacity: 1}, 600, => @after_in?()
+        unless animate
+            @after_in?()
+        else
+            @el.css "opacity", 0
+            @el.animate {opacity: 1}, 600, => @after_in?()
 
-	###
-	Triggers view "animation out", "after_out" must be called in the end
+    ###
+    Triggers view "animation out", "after_out" must be called in the end
 
-	@param [Function] after_out	Callback function to be triggered in the end
-	###
-	out:( after_out )->
-		@before_out?()
+    @param [Function] after_out Callback function to be triggered in the end
+    ###
+    out:( after_out )->
+        @before_out?()
 
-		animate  = @the.config.enable_auto_transitions
-		animate &= !@the.config.disable_transitions
+        animate  = @the.config.enable_auto_transitions
+        animate &= !@the.config.disable_transitions
 
-		unless animate
-			after_out()
-		else
-			@el.animate {opacity: 0}, 300, after_out
+        unless animate
+            after_out()
+        else
+            @el.animate {opacity: 0}, 300, after_out
 
-	###
-	Destroy the view after the 'out' animation, the default behavior is to just
-	empty it's container element.
-	###
-	destroy:->
-		@el.empty()
+    ###
+    Destroy the view after the 'out' animation, the default behavior is to just
+    empty it's container element.
+    ###
+    destroy:->
+        @el.empty()
 
-	# ~> Shortcuts
+    # ~> Shortcuts
 
-	###
-	Shortcut for application navigate
+    ###
+    Shortcut for application navigate
 
-	@param [String] url	URL to navigate
-	###
-	navigate:( url )->
-		@the.processes.router.navigate url
+    @param [String] url URL to navigate
+    ###
+    navigate:( url )->
+        @the.processes.router.navigate url
 
-	###
-	Shortcut for Factory.view method
+    ###
+    Shortcut for Factory.view method
 
-	@param [String] path	Path to view file
-	###
-	view:( path )->
-		Factory.view path, @process
+    @param [String] path    Path to view file
+    ###
+    view:( path )->
+        Factory.view path, @process
 
-	###
-	Shortcut for Factory.template method
+    ###
+    Shortcut for Factory.template method
 
-	@param [String] url	Path to template file
-	###
-	template:( path )->
-		Factory.template path
+    @param [String] url Path to template file
+    ###
+    template:( path )->
+        Factory.template path
