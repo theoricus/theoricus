@@ -13,5 +13,9 @@ class theoricus.generators.Model
 		contents = contents.replace /~NAME_CAMEL/g, name_camel
 		contents = contents.replace /~CONTROLLER_LC/g, controller_name_lc
 
-		fs.writeFileSync filepath, contents
-		console.log "#{'Created'.bold} #{filepath}".green
+		# write jade
+		unless fs.existsSync filepath
+			fs.writeFileSync filepath, contents
+			console.log "#{'Created'.bold} #{filepath}".green
+		else
+			console.log "#{'Already exists'.red.bold} #{filepath}".green
