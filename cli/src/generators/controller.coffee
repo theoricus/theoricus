@@ -17,7 +17,7 @@ class theoricus.generators.Controller
 		contents = contents.replace /~MODEL_CAMEL/g, model_name
 		contents = contents.replace /~MODEL_LCASE/g, model_name_lc
 
-		# write jade
+		# write controller
 		unless fs.existsSync filepath
 			fs.writeFileSync filepath, contents
 			console.log "#{'Created'.bold} #{filepath}".green
