@@ -10,8 +10,13 @@ watch:
 build:
 	$(TOASTER) . -c
 
-test: build
-	# TODO: add testing routine
+test.clean:
+	rm -rf tests/tmp-* tests/a
+
+test: test.clean build
+	node_modules/mocha/bin/mocha tests/* \
+		--compilers coffee:coffee-script \
+		--require should --reporter spec
 
 docs.cli:
 	rm -rf docs-cli
