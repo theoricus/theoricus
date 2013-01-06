@@ -37,6 +37,5 @@ exports.spawn_theoricus = (args, options) ->
   # No magic need for *unix systems.
   else
     runner = theoricus_path
-    spawn theoricus_path, args, options || cwd: __dirname
 
   spawn runner, args, options || {cwd: __dirname}
