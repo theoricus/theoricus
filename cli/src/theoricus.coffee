@@ -57,7 +57,7 @@ class theoricus.Theoricus
 		
 
 		if @app_root == null and cmd != "help" and cmd != "new"
-			console.log "ERROR".bold.red + " Not a Theoricus app."
+			console.error "ERROR".bold.red + " Not a Theoricus app."
 			return
 
 		options.watch ?= false
