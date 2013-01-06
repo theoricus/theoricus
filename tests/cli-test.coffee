@@ -24,7 +24,7 @@ describe '• Theoricus CLI', ->
 
       theo.stderr.on 'error', ( e ) -> done e
 
-      theo.stdout.on 'data' , ( d ) -> done()
+      theo.stdout.on 'exit' , ( d ) -> done()
 
   describe 'When calling theoricus help on the cli', ->
     it "should be ok", (done) ->
@@ -33,13 +33,13 @@ describe '• Theoricus CLI', ->
 
       theo.stderr.on 'error', ( e ) -> done e
 
-      theo.stdout.on 'data' , ( d ) -> done()
+      theo.stdout.on 'exit' , ( d ) -> done()
 
-  describe 'When calling theoricus start on the cli', ->
+  describe 'When calling theoricus compile on the cli', ->
     it "should be ok", (done) ->
 
-      theo = spawn_theoricus ['start']
+      theo = spawn_theoricus ['compile']
 
       theo.stderr.on 'error', ( e ) -> done e
 
-      theo.stdout.on 'data' , ( d ) -> done()
+      theo.stdout.on 'exit' , ( d ) -> done()
