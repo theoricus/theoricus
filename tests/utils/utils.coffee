@@ -25,7 +25,7 @@ snapshot = exports.snapshot = ( folderpath, buffer = {} )->
   buffer
 
 #spawn theoricus on the command line
-exports.spawn_theoricus = (args, options) ->
+exports.spawn = (args, options) ->
   theoricus_path = path.join __dirname, '../../bin/theoricus'
 
   # Win32 urges some MAGIC in order to do basic things such as spawn a node

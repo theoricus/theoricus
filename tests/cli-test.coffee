@@ -2,53 +2,44 @@
 # requirements
 fs     = require 'fs'
 path   = require 'path'
-{exec} = require 'child_process'
 
-{spawn_theoricus,snapshot} = require "#{__dirname}/utils/utils"
+{spawn,snapshot} = require "#{__dirname}/utils/utils"
+
+# static
+APP_NAME = 'tmp-app'
+APP_DIR  = path.join __dirname, APP_NAME
 
 # ...
 # outputting version
 version = fs.readFileSync (path.join __dirname, '../package.json'), 'utf-8'
 console.log '\nCurrent version is: ' + (JSON.parse version).version
 
-# ...
-# defining global watcher var
-base_path = path.join __dirname, 'tmp-tools'
-fs.mkdirSync base_path, '0755'
+cli = ( args ) -> spawn args, cwd: __dirname
+app = ( args ) -> spawn args, cwd: APP_DIR
 
 describe '• Theoricus CLI', ->
   describe 'When calling theoricus', ->
+
     it "should be ok", (done) ->
 
-      theo = spawn_theoricus []
+      theo = cli [""]
 
       theo.stderr.on 'error', ( e ) -> done e
 
-      theo.on 'exit' , ( d ) -> done()
+      theo.on 'exit' , -> done()
 
-  describe 'When calling theoricus help', ->
+  describe 'When calling theoricus new', ->
     it "should be ok", (done) ->
 
-      theo = spawn_theoricus ['help']
+      theo = cli ['new', APP_NAME]
 
       theo.stderr.on 'error', ( e ) -> done e
 
-      theo.on 'exit' , ( d ) -> done()
+      theo.on 'exit' , -> done()
 
-  describe 'When calling theoricus compile', ->
-    it "should be ok", (done) ->
+    it "should create a folder #{APP_NAME}", (done) ->
 
-      theo = spawn_theoricus ['compile']
-
-      theo.stderr.on 'error', ( e ) -> done e
-
-      theo.on 'exit' , ( d ) -> done()
-
-  describe 'When calling theoricus index', ->
-    it "should be ok", (done) ->
-
-      theo = spawn_theoricus ['index']
-
-      theo.stderr.on 'error', ( e ) -> done e
-
-      theo.on 'exit' , ( d ) -> done()
+      if fs.existsSync APP_DIR
+        done()
+      else
+        done( "didn't create the folder" )
