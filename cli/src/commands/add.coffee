@@ -25,6 +25,10 @@ class theoricus.commands.Add extends theoricus.generators.Question
       
     args = opts.slice 3
 
+    unless @[type]?
+      error_msg = "Valid options: controller, model, view, mvc."
+      throw new Error error_msg
+
     @[type]( name, args )
 
   mvc:( name, args )->
