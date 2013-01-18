@@ -58,6 +58,7 @@ class theoricus.commands.Index
     reg = /a\shref=(\"|\')(\/)?([^\'\"]+)/g
 
     while (matched = (reg.exec src))?
+      return if /^http/m.test matched[3]
       url = "#{domain}/#{matched[3]}"
       @pages[url] = false unless @pages[url] is true
 
