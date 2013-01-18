@@ -26,8 +26,6 @@ class theoricus.commands.Server
 
       console.log 'client connected'
 
-    @server = http.createServer( @_handler ).listen @port
-
     console.log "#{'Server running at'.bold} http://localhost:#{@port}".grey
 
   close_server:()->

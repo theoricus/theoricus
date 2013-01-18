@@ -216,10 +216,10 @@ class theoricus.commands.Compiler
     ###
     send message through socket.io asking browser to refresh
     ###
-    Server = theoricus.commands.Server
+    # Server = theoricus.commands.Server
     
-    if Server.io?
-      Server.io.sockets.emit( 'refresh', null );
+    # if Server.io?
+    #   Server.io.sockets.emit( 'refresh', null );
 
     return unless compile_stylus
 
