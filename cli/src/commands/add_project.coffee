@@ -6,7 +6,7 @@ class theoricus.commands.AddProject
 	exec = (require "child_process").exec
 
 	constructor:( @the, @options )->
-		if not options.length[1]?
+		if not options[1]?
 
 			console.log "ERROR".bold.red + " You must specify a name for your project"
 						
