@@ -5,16 +5,16 @@ class theoricus.commands.AddProject
   pn   = path.normalize
   exec = (require "child_process").exec
 
-	constructor:( @the, @options )->
-		if not options[1]?
+  constructor:( @the, @options )->
+    if not options[1]?
 
-			console.log "ERROR".bold.red + " You must specify a name for your project"
-						
-			return
+      console.log "ERROR".bold.red + " You must specify a name for your project"
+            
+      return
 
 
-		@pwd = @the.pwd
-		@root = @the.root
+    @pwd = @the.pwd
+    @root = @the.root
 
     @app_skel = pn "#{@root}/cli/src/generators/templates/app_skel"
     @target   = pn "#{@pwd}/#{@options[1]}"
