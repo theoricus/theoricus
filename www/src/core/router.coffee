@@ -8,89 +8,89 @@
 Proxyes browser's History API, routing request to and from the aplication
 ###
 class theoricus.core.Router
-	Factory = null
+  Factory = null
 
-	routes: []
-	listeners: []
+  routes: []
+  listeners: []
 
-	trigger: true
+  trigger: true
 
-	###
-	@param [theoricus.Theoricus] @the   Shortcut for app's instance
-	@param [Function] @on_change	state/url change handler
-	###
-	constructor:( @the, @on_change )->
-		Factory = @the.factory
+  ###
+  @param [theoricus.Theoricus] @the   Shortcut for app's instance
+  @param [Function] @on_change  state/url change handler
+  ###
+  constructor:( @the, @on_change )->
+    Factory = @the.factory
 
-		for route, opts of app.routes
-			@map route, opts.to, opts.at, opts.el, @
+    for route, opts of app.routes
+      @map route, opts.to, opts.at, opts.el, @
 
-		History.Adapter.bind window, 'statechange', =>
-			@route History.getState()
+    History.Adapter.bind window, 'statechange', =>
+      @route History.getState()
 
-		setTimeout =>
-			url = window.location.pathname
-			url = app.root if url == "/"
-			@run url
-		, 1
+    setTimeout =>
+      url = window.location.pathname
+      url = app.root if url == "/"
+      @run url
+    , 1
 
-	###
-	Creates and store a route
-	
-	@param [String] route
-	@param [String] to
-	@param [String] at
-	@param [String] el
-	###
-	map:( route, to, at, el )->
-		@routes.push new theoricus.core.Route route, to, at, el, @
+  ###
+  Creates and store a route
+  
+  @param [String] route
+  @param [String] to
+  @param [String] at
+  @param [String] el
+  ###
+  map:( route, to, at, el )->
+    @routes.push new theoricus.core.Route route, to, at, el, @
 
-	route:( state )->
+  route:( state )->
 
-		if @trigger
+    if @trigger
 
-			# url from HistoryJS
-			url = state.hash || state.title
+      # url from HistoryJS
+      url = state.hash || state.title
 
-			# FIXME: quickfix for IE8 bug
-			url = url.replace( '.', '' )
+      # FIXME: quickfix for IE8 bug
+      url = url.replace( '.', '' )
 
-			#remove base path from incoming url
-			( url = url.replace @the.base_path, '' ) if @the.base_path?
-			
-			# removes the prepended '.' from HistoryJS
-			url = url.slice 1 if (url.slice 0, 1) is '.'
+      #remove base path from incoming url
+      ( url = url.replace @the.base_path, '' ) if @the.base_path?
+      
+      # removes the prepended '.' from HistoryJS
+      url = url.slice 1 if (url.slice 0, 1) is '.'
 
-			# adding back the first slash '/' in cases it's removed by HistoryJS
-			url = "/#{url}" if (url.slice 0, 1) isnt '/'
+      # adding back the first slash '/' in cases it's removed by HistoryJS
+      url = "/#{url}" if (url.slice 0, 1) isnt '/'
 
-			# fallback to root url in case user enter the '/'
-			url = app.root if url == "/"
+      # fallback to root url in case user enter the '/'
+      url = app.root if url == "/"
 
-			for route in @routes
-				if route.matcher.test url
-					@on_change?( route.clone url )
-					return
-		
-		@trigger = true
+      for route in @routes
+        if route.matcher.test url
+          @on_change?( route.clone url )
+          return
+    
+    @trigger = true
 
-	navigate:( url, trigger = true, replace = false )->
-		@trigger = trigger
+  navigate:( url, trigger = true, replace = false )->
+    @trigger = trigger
 
-		action   = if replace then "replaceState" else "pushState"
-		History[action] null, null, url
+    action   = if replace then "replaceState" else "pushState"
+    History[action] null, null, url
 
-	run:( url, trigger = true )=>
-		( url = url.replace @the.base_path, '' ) if @the.base_path?
+  run:( url, trigger = true )=>
+    ( url = url.replace @the.base_path, '' ) if @the.base_path?
 
-		@trigger = trigger
-		@route { title: url }
+    @trigger = trigger
+    @route { title: url }
 
-	go:( index )->
-		History.go index
+  go:( index )->
+    History.go index
 
-	back:()->
-		History.back()
+  back:()->
+    History.back()
 
-	forward:()->
-		History.forward()
+  forward:()->
+    History.forward()
