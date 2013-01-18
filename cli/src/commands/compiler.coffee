@@ -213,6 +213,14 @@ class theoricus.commands.Compiler
 		# formatted time to CLI notifications
 		now = ("#{new Date}".match /[0-9]{2}\:[0-9]{2}\:[0-9]{2}/)[0]
 
+		###
+		send message through socket.io asking browser to refresh
+		###
+		Server = theoricus.commands.Server
+		
+		if Server.io?
+			Server.io.sockets.emit( 'refresh', null );
+
 		return unless compile_stylus
 
 		# compile sytlus
