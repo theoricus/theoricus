@@ -1,12 +1,28 @@
 #<< theoricus/generators/*
 
-class theoricus.commands.Add
-  {Model,Controller,View} =  theoricus.generators
+class theoricus.commands.Add extends theoricus.generators.Question
+  {Model,Controller,View,Questions} =  theoricus.generators
 
-  constructor:( @the, opts )->
+  constructor:( @the, opts )-> @create opts
 
-    type = opts[1]
-    name = opts[2]
+  create: (opts)->
+
+    if opts[1]?
+      type = opts[1]
+    else
+      q = "Which you would like to create? [controller|model|view|mvc] : "
+      f = /(controller|model|view|mvc)/
+
+      return @ask q, f, (type) => opts[1] = type; @create opts
+
+    if opts[2]?
+      name = opts[2]
+    else
+      q = "Please give it a name : "
+      f = /([^\s]*)/ # not empty
+
+      return @ask q, f, (name) => opts[2] = name; @create opts
+      
     args = opts.slice 3
 
     unless @[type]?

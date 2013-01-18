@@ -231,9 +231,7 @@ The solution:
 
 Don't be shy, try to avoid short messages here as well in the commits.
 
-NOTE: There's currently no test suite available, so to open proper Pull Requests
-you'll need to work on a semi-controlled enviroment with the *Demo App*. Check
-the [tests](#testing) section.
+NOTE: To open a Pull Request please refer to the [Testing](#testing) section.
 
 <a name="building"/>
 ## Building
@@ -256,18 +254,14 @@ Starts watching in auto-compile mode.
 <a name="testing"/>
 ## Testing
 
-Far from ideal, currently there are no tests available.
+Tests ( for cli and framework ) are being created in branch "tests", currently we are using [mocha](https://github.com/visionmedia/mocha) and [should.js](https://github.com/visionmedia/should.js/)
 
-All the principles and design's decisions are made based in a paried way with
-the [Demo Apllication](http://github.com/serpentem/theoricus). Both `theoricus`
-and `theoricus-demo-app` repos are always in sync (mirroring branch names). For
-each new feature in Theoricus, a new use for that will be made in the demo
-application to elucidate thigns.
+For each new feature in Theoricus, a new example should be made in the demo
+application to elucidate things.
 
-So, in this meantime while a proper tests suite is not started, always combine
-the changes you make in *Theoricus* also in the *Demo Application*.
+Please keep the examples in the *Demo Application* up to date with changes you make in *Theoricus*, ideally when openning a pull request, open one in *Theoricus* and on in the *Demo App*.
 
-When openning a pull request, open one in *Theoricus* and on in the *Demo App*.
+To run the tests run `make test`
 
 <a name="docs"/>
 ## Generating Docs
