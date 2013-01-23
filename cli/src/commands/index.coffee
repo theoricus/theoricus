@@ -1,4 +1,3 @@
-#<< theoricus/commands/server
 #<< theoricus/crawler/crawler
 
 class theoricus.commands.Index
@@ -8,9 +7,19 @@ class theoricus.commands.Index
   path = require "path"
   fsu = require "fs-util"
 
+  #
+  # key -> value ( address -> is_crawled)
+  #
   pages: {}
 
+  #
+  # the address to be crawled
+  #
+  address: null
+
   constructor:( @the, @options )->
+
+    @address = options[1] or "http://localhost:11235/"
 
     exec "phantomjs -v", (error, stdout, stderr)=>
       if /phantomjs: command not found/.test stderr
@@ -18,10 +27,9 @@ class theoricus.commands.Index
               " before indexing pages."+
               "\n\thttp://phantomjs.org/"
       else
-        @server = new theoricus.commands.Server @the, @options
-        console.log "Start indexing...".bold.green
-        @crawler = new theoricus.crawler.Crawler =>
-          @get_page "http://localhost:11235/"
+        console.log "Start indexing: #{@address}".bold.green
+        
+        @crawler = new theoricus.crawler.Crawler => @get_page @address
 
 
   get_page:( url )->
@@ -48,8 +56,6 @@ class theoricus.commands.Index
       console.log "Pages indexed successfully.".bold.green
 
       @crawler.exit()
-      @server.close_server()
-      @static_server = new theoricus.commands.StaticServer @the, @options
 
 
   get_links:( url, src )->
