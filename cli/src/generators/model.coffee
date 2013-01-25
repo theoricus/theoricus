@@ -1,17 +1,17 @@
 class theoricus.generators.Model
-	fs = require 'fs'
+  fs = require 'fs'
 
-	constructor:( @the, name )->
-		name_camel = name.camelize()
-		name_lc = name.toLowerCase()
-		controller_name_lc = name.pluralize().toLowerCase()
+  constructor:( @the, name )->
+    name_camel = name.camelize()
+    name_lc = name.toLowerCase()
+    controller_name_lc = name.pluralize().toLowerCase()
 
-		tmpl = "#{@the.root}/cli/src/generators/templates/mvc/model.coffee"
-		filepath = "app/models/#{name}.coffee"
+    tmpl = "#{@the.root}/cli/src/generators/templates/mvc/model.coffee"
+    filepath = "app/models/#{name}.coffee"
 
-		contents = (fs.readFileSync tmpl).toString()
-		contents = contents.replace /~NAME_CAMEL/g, name_camel
-		contents = contents.replace /~CONTROLLER_LC/g, controller_name_lc
+    contents = (fs.readFileSync tmpl).toString()
+    contents = contents.replace /~NAME_CAMEL/g, name_camel
+    contents = contents.replace /~CONTROLLER_LC/g, controller_name_lc
 
-		fs.writeFileSync filepath, contents
-		console.log "#{'Created'.bold} #{filepath}".green
+    fs.writeFileSync filepath, contents
+    console.log "#{'Created'.bold} #{filepath}".green
