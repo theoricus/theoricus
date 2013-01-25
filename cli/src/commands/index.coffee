@@ -13,62 +13,130 @@ class theoricus.commands.Index
   pages: {}
 
   #
-  # the address to be crawled
+  # the initial address to be crawled
   #
-  address: null
+  url: null
+
+  #
+  # max number of connections
+  #
+  max_connections: 10
+
+  #
+  # current connections
+  #
+  connections: 0
+
+  #
+  #
+  #
+  crawlers: []
 
   constructor:( @the, @options )->
 
-    @address = options[1] or "http://localhost:11235/"
+    @url = options[1] or "http://localhost:11235/"
 
     exec "phantomjs -v", (error, stdout, stderr)=>
+
       if /phantomjs: command not found/.test stderr
+
         console.log "Error ".bold.red + "Install #{'phantomjs'.yellow}"+
               " before indexing pages."+
               "\n\thttp://phantomjs.org/"
+
       else
-        console.log "Start indexing: #{@address}".bold.green
+
+        console.log " - initializing..."
+
+        console.log " #{'>'.yellow} " + @url.grey
         
-        @crawler = new theoricus.crawler.Crawler => @get_page @address
+        @get @url
 
 
-  get_page:( url )->
+  get:( url )->
 
-    @crawler.get_src url, (src)=>
+    crawler = new theoricus.crawler.Crawler()
 
-      @get_links url, src
+    @connections++
+
+    @crawlers.push crawler
+
+    @pages[url] = true
+
+    crawler.get_url url, ( src ) => 
+
+      @after_render( url, src )
+
+      crawler.exit()
+
+      crawler = null
+
+  after_render:(url, src)->
+
+    #
+    # IF source is null
+    #   - mark crawled and continue 
+    # ELSE
+    #   - get links and save pages
+    #
+    if src
+
+      @parse_links url, src
+
       @save_page url, src
-      @pages[url] = true
 
-      for url, crawled of @pages
-        return (@get_page url) unless crawled
+    else
 
-      from = "#{@the.pwd}/public"
-      to = "#{@the.pwd}/public/static"
+      console.log " ? skipping, source is empty or null or some problem occured #{url}"
+
+    @connections--
+
+    # crawl next pages
+    for url, crawled of @pages
+
+      continue if @pages[url]
+
+      @get url
+
+      if @connections == @max_connections
+        break
+
+    @done() unless @connections > 0
       
-      # src = fs.readFileSync "#{from}/app.js", "utf-8"
-      # fs.writeFileSync "#{to}/app.js", src
-      fs.writeFileSync "#{to}/app.js", ""
 
-      src = fs.readFileSync "#{from}/app.css", "utf-8"
-      fs.writeFileSync "#{to}/app.css", src
+  ###
+  Parse Source code for giving URL indexing links to be cralwed 
 
-      console.log "Pages indexed successfully.".bold.green
-
-      @crawler.exit()
-
-
-  get_links:( url, src )->
+  @param url: String 
+  @param src: String
+  ###
+  parse_links:( url, src )->
 
     domain = url.match /(http:\/\/[\w]+:?[0-9]*)/g
-    reg = /a\shref=(\"|\')(\/)?([^\'\"]+)/g
+    reg    = /a\shref=(\"|\')(\/)?([^\'\"]+)/g
+
+    console.log " - scanning links - #{url}"
 
     while (matched = (reg.exec src))?
 
+      # skip if its external link
       continue if /^http/m.test matched[3]
 
       url = "#{domain}/#{matched[3]}"
-      @pages[url] = false unless @pages[url] is true
+
+      # skip if it was already crawled
+      continue if @pages[url]
+
+      continue if url.indexOf( @url ) != 0
+
+      # skip if was already rendered
+      # if @has_rendered( url )
+      #   console.log " - skipping, already saved - #{url}"
+      #   continue
+
+      console.log " #{'+'.green} " + (url.replace( @url, '' ) ).grey
+
+      @pages[url] = false
 
 
   save_page:( url, src )->
@@ -78,6 +146,33 @@ class theoricus.commands.Index
     fsu.mkdir_p folder unless fs.existsSync( folder )
 
     src = ((require 'pretty-data').pd.xml src) + "\n"
-    fs.writeFileSync (file = path.normalize "#{folder}/index.html"), src
+
+    file = path.normalize "#{folder}/index.html"
+    fs.writeFileSync file, src
     route = (route || "/").bold.yellow
-    console.log "\t#{route.bold.yellow} -> #{file}"
+
+    console.log " ! rendered - #{route.bold.yellow} -> #{folder}"
+
+  #
+  # Simply check if a file was already rendered for this address
+  # skip if so.
+  #
+  has_rendered:( url )->
+    route  = (/(http:\/\/)([\w]+)(:)?([0-9]+)?\/(.*)/g.exec url)[5]
+    folder = path.normalize "#{@the.pwd}/public/static/#{route}"
+
+    return fs.existsSync( folder )
+
+  done: ->
+
+      from = "#{@the.pwd}/public"
+      to   = "#{@the.pwd}/public/static"
+      
+      # src = fs.readFileSync "#{from}/app.js", "utf-8"
+      # fs.writeFileSync "#{to}/app.js", src
+      fs.writeFileSync "#{to}/app.js", ""
+
+      src = fs.readFileSync "#{from}/app.css", "utf-8"
+      fs.writeFileSync "#{to}/app.css", src
+
+      console.log " OK - indexed successfully.".bold.green
