@@ -287,6 +287,10 @@ make docs.cli
 * Source: https://github.com/giuliandrimba/codeman
 * Credits: [Giulian Drimba](https://github.com/giuliandrimba)
 
+## Dolce & Gabbana - Brand Site FW 13
+* URL: http://dolcegabbana.com/dg/
+* Credits: [hems](https://github.com/hems) / [grifo.tv](https://github.com/grifotv) / [Scott](https://github.com/ashmore11) / [Hi-ReS!](https://github.com/hi-res)
+
 <a name="installing" />
 # Changelog
  * [CHANGELOG.md](https://github.com/serpentem/theoricus/tree/master/build/CHANGELOG.md)
