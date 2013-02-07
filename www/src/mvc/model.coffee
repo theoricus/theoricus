@@ -116,13 +116,17 @@ class theoricus.mvc.Model extends theoricus.mvc.lib.Binder
 	@param [Object] data	Data to be parsed
 	###
 	@_instantiate=( data )->
-		Factory = theoricus.core.Factory
-		classname = ("#{@}".match /function\s(\w+)/)[1]
-		records = []
-		for record in [].concat data
-			model = (Factory.model classname, record)
-			records.push model
+        Factory = theoricus.core.Factory
+        classname = ("#{@}".match /function\s(\w+)/)[1]
+        records = []
+        obj = {}
 
-		_collection = _collection.concat records
+        $.map data, (value, key) ->
+          obj[key] = value
 
-		return if records.length is 1 then records[0] else records
+        model = (Factory.model classname, obj)
+        records.push model
+
+        _collection = records
+
+        return if records.length is 1 then records[0] else records
