@@ -92,7 +92,7 @@ class theoricus.mvc.Model extends theoricus.mvc.lib.Binder
 	@_request=( method, url, data='' )->
 		fetcher = new theoricus.mvc.lib.Fetcher
 
-		req = $.ajax url:url, type: method, data: data
+		req = $.ajax url:url, type: method, data: data, async: false
 
 		req.done ( data )=>
 			fetcher.loaded = true
