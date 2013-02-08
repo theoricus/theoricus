@@ -7,3 +7,6 @@
 [submodule "www/vendors/history.js"]
 	path = www/vendors/history.js
 	url = https://github.com/balupton/history.js.git
+[submodule "cli/src/generators/templates/app_skel"]
+	path = cli/src/generators/templates/app_skel
+	url = https://github.com/serpentem/theoricus-demo-app.git

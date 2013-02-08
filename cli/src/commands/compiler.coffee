@@ -20,22 +20,7 @@ class theoricus.commands.Compiler
     @BASE_DIR = @the.pwd
     @APP_FOLDER = "#{@BASE_DIR}/app"
 
-    config =
-      folders: {}
-      vendors:@_get_vendors()
-      minify: false
-      release: "public/app.js"
-      debug: "public/app-debug.js"
-
-    config.folders[@APP_FOLDER] = "app"
-
-    # start watching/compiling coffeescript
-    @toaster = new Toaster @BASE_DIR,
-      w: watch
-      c: !watch
-      d:1
-      config: config
-    , true
+    @toaster = new Toaster @BASE_DIR, if watch then w: on else c: on
 
     # The 'before_build' filter is called by Toaster everytime some file
     # changes. If this method returns TRUE, then toaster will build
@@ -212,6 +197,14 @@ class theoricus.commands.Compiler
 
     # formatted time to CLI notifications
     now = ("#{new Date}".match /[0-9]{2}\:[0-9]{2}\:[0-9]{2}/)[0]
+
+    ###
+    send message through socket.io asking browser to refresh
+    ###
+    # Server = theoricus.commands.Server
+    
+    # if Server.io?
+    #   Server.io.sockets.emit( 'refresh', null );
 
     return unless compile_stylus
 

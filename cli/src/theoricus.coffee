@@ -26,7 +26,7 @@ class theoricus.Theoricus
     @header += "  theoricus #{'add'.red}      #{cmds} \n" #[#{'name'.magenta}] [#{'field1'.yellow}] [#{'field2'.yellow}]\n"
     @header += "  theoricus #{'rm'.red}       #{cmds} \n" #[#{'name'.magenta}]\n"
     @header += "  theoricus #{'start'.red}    #{'port'.green} default is #{'11235'.yellow}\n" #"[#{'port'.magenta}] [#{'--no-indexing'.green}] [#{'--force-indexing'.green}] [#{'--debug'.green}] [#{'--env'.green} #{'production'.cyan}#{'|'.white}#{'test'.cyan}#{'|'.white}#{'development'.cyan}]\n"
-    @header += "  theoricus #{'compile'.red}  \n" #[#{'--no-indexing'.green}] [#{'--force-indexing'.green}]\n"
+    @header += "  theoricus #{'compile'.red}  #{'port'.green} default is #{'http://localhost:11235'.yellow}\n" #[#{'--no-indexing'.green}] [#{'--force-indexing'.green}]\n"
     @header += "  theoricus #{'index'.red}    \n\n" #[#{'--no-indexing'.green}] [#{'--force-indexing'.green}]\n\n"
     # @header += "  theoricus #{'release'.red}  \n" #[#{'--no-indexing'.green}] [#{'--force-indexing'.green}]\n\n"
 
@@ -68,7 +68,7 @@ class theoricus.Theoricus
       when "rm"      then new theoricus.commands.Rm @, options
       when "start"   then new theoricus.commands.Server @, options
       when "static"  then new theoricus.commands.StaticServer @, options
-      when "compile" then new theoricus.commands.Compiler @
+      when "compile" then new theoricus.commands.Compiler @, options
       when "index"   then new theoricus.commands.Index @, options
       when "version"
         console.log @version

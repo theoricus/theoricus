@@ -16,7 +16,16 @@ class theoricus.commands.Server
     @compiler = new theoricus.commands.Compiler @the, true
 
   start_server:()->
-    @server = http.createServer( @_handler ).listen @port
+    @server = http.createServer( @_handler )
+
+    Server.io = (require "socket.io").listen @server
+
+    @server.listen @port
+
+    Server.io.sockets.on "connection", (socket) ->
+
+      console.log 'client connected'
+
     console.log "#{'Server running at'.bold} http://localhost:#{@port}".grey
 
   close_server:()->

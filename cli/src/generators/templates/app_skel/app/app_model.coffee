@@ -1,1 +1,0 @@
-class app.AppModel extends theoricus.mvc.Model
