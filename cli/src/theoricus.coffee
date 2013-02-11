@@ -86,16 +86,16 @@ module.exports = class Theoricus
     current = path.resolve "."
 
     while true
-      app = path.normalize "#{current}/app/app_controller.coffee"
+      app = path.normalize "#{current}/src/app/app.coffee"
 
       if fs.existsSync app
         contents = fs.readFileSync app, "utf-8"
-        if contents.indexOf( "theoricus.mvc.Controller" ) > 0
+        if contents.indexOf( 'extends Theoricus' ) > 0
           return current
         else
           return null
       else
-        tmp = path.normalize path.resolve("#{current}/../")
+        tmp = path.normalize (path.join current, '..')
         if current == tmp
           return null
         else
