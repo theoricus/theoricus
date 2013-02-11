@@ -51,14 +51,14 @@ class Processes
     if @locked
       return @router.navigate @last_process.route.location, 0, 1 
 
-    process = new Process @the, route
-    @last_process = process
-    @locked = true
-    @the.crawler.is_rendered = false
+    new Process @the, route, ( process )=>
+      @last_process = process
+      @locked = true
+      @the.crawler.is_rendered = false
 
-    @_filter_pending_processes process
-    @_filter_dead_processes()
-    @_destroy_dead_processes()
+      @_filter_pending_processes process
+      @_filter_dead_processes()
+      @_destroy_dead_processes()
 
   ###
   2nd

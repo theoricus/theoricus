@@ -22,7 +22,8 @@ class Process
   ###
   constructor:( @the, @route, fn )->
     # instantiates controller
-    @the.factory.controller @route.api.controller_name, ( @controller )=> fn()
+    @the.factory.controller @route.api.controller_name, ( @controller )=>
+      fn @controller
 
   ###
   Executes controller's action, in case it isn't declared executes an 
