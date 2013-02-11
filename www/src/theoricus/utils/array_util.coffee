@@ -1,7 +1,6 @@
-#<< theoricus/utils/object_util
+ObjectUtil = require 'theoricus/utils/object_util'
 
-class theoricus.utils.ArrayUtil
-  {ObjectUtil} = theoricus.utils
+class ArrayUtil
   
   ###
   @param [] src

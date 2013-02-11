@@ -1,4 +1,4 @@
-class theoricus.config.Config
+class Config
 
   animate_at_startup: false
   enable_auto_transitions: true

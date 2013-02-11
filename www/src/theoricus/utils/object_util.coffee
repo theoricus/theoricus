@@ -1,4 +1,4 @@
-class theoricus.utils.ObjectUtil
+class ObjectUtil
 
   ###
   @param [] str

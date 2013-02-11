@@ -1,7 +1,7 @@
 ## Router & Route logic inspired by RouterJS:
 ## https://github.com/haithembelhaj/RouterJs
 
-class theoricus.core.Route
+class Route
 
   # static regex for reuse
   @named_param_reg: /:\w+/g

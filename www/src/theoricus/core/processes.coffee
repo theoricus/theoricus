@@ -1,11 +1,12 @@
-#<< theoricus/utils/array_util
-#<< theoricus/core/router
+ArrayUtil = require 'theoricus/utils/array_util'
+Router = require 'theoricus/core/router'
+Process = require 'theoricus/core/process'
 
-class theoricus.core.Processes
+Factory = null
+
+class Processes
 
   # utils
-  Factory = null
-  {ArrayUtil} = theoricus.utils
 
   # variables
   locked: false
@@ -37,7 +38,7 @@ class theoricus.core.Processes
       @the.config.disable_transitions = true
 
     $(document).ready =>
-      @router = new theoricus.core.Router @the, @_on_router_change
+      @router = new Router @the, @_on_router_change
 
   ###
   1st
@@ -50,7 +51,7 @@ class theoricus.core.Processes
     if @locked
       return @router.navigate @last_process.route.location, 0, 1 
 
-    process = new theoricus.core.Process @the, route
+    process = new Process @the, route
     @last_process = process
     @locked = true
     @the.crawler.is_rendered = false
@@ -75,7 +76,7 @@ class theoricus.core.Processes
       route = ArrayUtil.find( @router.routes, match: process.route.at )
 
       if route?
-        process = new theoricus.core.Process @the, route.item.clone()
+        process = new Process @the, route.item.clone()
         @pending_processes.push process
         break if route.target_route is null
       else

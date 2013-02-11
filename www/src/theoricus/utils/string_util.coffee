@@ -1,4 +1,4 @@
-class theoricus.utils.StringUtil
+class StringUtil
 
   ###
   @param [String] str

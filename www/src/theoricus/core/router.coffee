@@ -1,14 +1,16 @@
-#<< theoricus/utils/string_util
-#<< theoricus/core/route
-
 ## Router & Route logic inspired by RouterJS:
 ## https://github.com/haithembelhaj/RouterJs
+
+StringUril = require 'theoricus/utils/string_util'
+Route = require 'theoricus/core/route'
+History = require ':history'
+
+Factory = null
 
 ###
 Proxyes browser's History API, routing request to and from the aplication
 ###
-class theoricus.core.Router
-  Factory = null
+class Router
 
   routes: []
   listeners: []
@@ -43,7 +45,7 @@ class theoricus.core.Router
   @param [String] el
   ###
   map:( route, to, at, el )->
-    @routes.push new theoricus.core.Route route, to, at, el, @
+    @routes.push new Route route, to, at, el, @
 
   route:( state )->
 

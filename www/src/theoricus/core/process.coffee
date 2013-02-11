@@ -1,14 +1,12 @@
-#<< theoricus/utils/string_util
+StringUtil = require 'theoricus/utils/string_util'
+View = require 'theoricus/mvc/view'
 
 ###
 Responsible for "running" a [theoricus.core.Route] Route
 
  @author {https://github.com/arboleya arboleya}
 ###
-class theoricus.core.Process
-
-  # utils
-  {StringUtil} = theoricus.utils
+class Process
 
   # @property [theoricus.mvc.Controller] controller
   controller: null
@@ -22,9 +20,9 @@ class theoricus.core.Process
   @param [theoricus.Theoricus] @the   Shortcut for current app's instace
   @route [theoricus.core.Route] @route Route responsible for the process
   ###
-  constructor:( @the, @route )->
+  constructor:( @the, @route, fn )->
     # instantiates controller
-    @controller = @the.factory.controller @route.api.controller_name
+    @the.factory.controller @route.api.controller_name, ( @controller )=> fn()
 
   ###
   Executes controller's action, in case it isn't declared executes an 
@@ -61,7 +59,7 @@ class theoricus.core.Process
   ###
   destroy:( @after_destroy )->
     # call the OUT transition with the given callback
-    unless (@view instanceof theoricus.mvc.View)
+    unless (@view instanceof View)
       controller_name = @route.api.controller_name.camelize()
       action_name = @route.api.action_name
       msg = "Can't destroy View because it isn't a proper View instance. "

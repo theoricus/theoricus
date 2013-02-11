@@ -1,10 +1,8 @@
-#<< theoricus/mvc/model
-#<< theoricus/mvc/view
+Model = require 'theoricus/mvc/model'
+View = require 'theoricus/mvc/view'
+Fetcher = require 'theoricus/mvc/lib/fetcher'
 
-class theoricus.mvc.Controller
-
-  {Fetcher} = theoricus.mvc.lib
-  {Model,View} = theoricus.mvc
+class Controller
 
   ###
   @param [theoricus.Theoricus] @the   Shortcut for app's instance
@@ -40,8 +38,13 @@ class theoricus.mvc.Controller
   @param [Object] element element where it will be rendered, defaults to @process.route.el
   ###
   render: ( path, data, el = @process.route.el, view ) ->
-    view = view || @the.factory.view path, @process
+    if view?
+      @_render_view path, data, el, view
+    else
+      @the.factory.view path, @process, ( view )->
+        @_render_view path, data, el, view
 
+  _render_view:( path, data, el = @process.route.el )->
     view.after_in = view.process.after_run
 
     if data instanceof Fetcher
