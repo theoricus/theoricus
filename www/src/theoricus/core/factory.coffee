@@ -25,7 +25,9 @@ class Factory
 
     require ['app/app_model', classpath], ( AppModel, Model )->
       unless (model = new Model) instanceof Model
-        console.error "#{classpath} is not a Model instance - you probably forgot to extend thoricus/mvc/Model"
+        msg = "#{classpath} is not a Model instance - you probably forgot to "
+        msg += "extend thoricus/mvc/Model"
+        console.error msg
 
       # defaults to AppModel if given model is  is not found
       # (cant see any sense on this, will probably be removed later)
@@ -56,7 +58,9 @@ class Factory
     
     require ['app/app_view', classpath], ( AppView, View )->
       unless (view = new View) instanceof View
-        console.error "#{classpath} is not a View instance - you probably forgot to extend thoricus/mvc/View"
+        msg = "#{classpath} is not a View instance - you probably forgot to "
+        msg += "extend thoricus/mvc/View"
+        console.error msg
 
       # defaults to AppView if given view is not found
       # (cant see any sense on this, will probably be removed later)
@@ -92,7 +96,9 @@ class Factory
     else
       require [classpath], ( Controller )=>
         unless (controller = new Controller) instanceof Controller
-          console.error "#{classpath} is not a Controller instance - you probably forgot to extend thoricus/mvc/Controller"
+          msg = "#{classpath} is not a Controller instance - you probably "
+          msg += "forgot to extend thoricus/mvc/Controller"
+          console.error msg
 
         controller.classpath = classpath
         controller.classname = classname
