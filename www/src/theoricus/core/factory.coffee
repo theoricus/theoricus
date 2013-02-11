@@ -89,7 +89,7 @@ class Factory
     # console.log "Factory.controller( '#{name}' )"
 
     classname = name.camelize()
-    classpath = "app/controllers/#{classname}"
+    classpath = "app/controllers/#{name}"
 
     if @controllers[ classname ]?
       fn @controllers[ classname ]
