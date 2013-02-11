@@ -3,7 +3,9 @@
 
 StringUril = require 'theoricus/utils/string_util'
 Route = require 'theoricus/core/route'
-History = require ':history'
+Routes = require 'app/config/routes'
+
+require ':history'
 
 Factory = null
 
@@ -24,7 +26,7 @@ class Router
   constructor:( @the, @on_change )->
     Factory = @the.factory
 
-    for route, opts of app.routes
+    for route, opts of Routes.routes
       @map route, opts.to, opts.at, opts.el, @
 
     History.Adapter.bind window, 'statechange', =>
@@ -32,7 +34,7 @@ class Router
 
     setTimeout =>
       url = window.location.pathname
-      url = app.root if url == "/"
+      url = Routes.root if url == "/"
       @run url
     , 1
 
@@ -67,7 +69,7 @@ class Router
       url = "/#{url}" if (url.slice 0, 1) isnt '/'
 
       # fallback to root url in case user enter the '/'
-      url = app.root if url == "/"
+      url = Routes.root if url == "/"
 
       for route in @routes
         if route.matcher.test url
