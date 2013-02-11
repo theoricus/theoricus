@@ -1,8 +1,10 @@
-module.exports = class Rm
-  fs = require 'fs'
-  path = require 'path'
+fs = require 'fs'
+path = require 'path'
 
-  fsu = require "fs-util"
+fsu = require "fs-util"
+
+
+module.exports = class Rm
 
   constructor:( @the, opts )->
     type = opts[1]
