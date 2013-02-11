@@ -1,3 +1,5 @@
+Settings = require 'app/config/settings'
+
 class Config
 
   animate_at_startup: false
@@ -13,8 +15,8 @@ class Config
   constructor:( @the )->
     @app_name = "app"
 
-    @disable_transitions = app.config.disable_transitions ? false
-    @animate_at_startup = app.config.animate_at_startup ? true
-    @enable_auto_transitions = app.config.enable_auto_transitions ? true
-    @autobind = app.config.autobind ? false
-    @vendors = app.config.vendors
+    @disable_transitions = Settings.disable_transitions ? false
+    @animate_at_startup = Settings.animate_at_startup ? true
+    @enable_auto_transitions = Settings.enable_auto_transitions ? true
+    @autobind = Settings.autobind ? false
+    @vendors = Settings.vendors
