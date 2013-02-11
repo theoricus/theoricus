@@ -1,12 +1,11 @@
-class theoricus.generators.Question
+module.exports = class Question
 
   ask:(question, format, fn)->
       stdin = process.stdin
       stdout = process.stdout
-      
-      
+
       stdout.write "#{question} "
-      
+
       stdin.once( 'data', (data)=> 
         data = data.toString().trim()
         if format.test data

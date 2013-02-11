@@ -1,11 +1,14 @@
-class theoricus.commands.Server
-  http = require "http"
-  url  = require "url"
-  fs   = require "fs"
-  path = require "path"
-  pn   = path.normalize
+http = require "http"
+url  = require "url"
+fs   = require "fs"
+path = require "path"
+pn   = path.normalize
 
-  exec = require( "child_process" ).exec
+exec = require( "child_process" ).exec
+
+Compiler = require './compiler'
+
+module.exports = class Server
 
   constructor:( @the, options )->
     @port = options[1] or 11235
@@ -13,7 +16,7 @@ class theoricus.commands.Server
 
     # console.log  "Server is born()"
     @start_server()
-    @compiler = new theoricus.commands.Compiler @the, true
+    @compiler = new Compiler @the, true
 
   start_server:()->
     @server = http.createServer( @_handler )

@@ -1,7 +1,10 @@
-#<< theoricus/generators/*
+Model = require '../generators/model'
+Controller = require '../generators/controller'
+View = require '../generators/view'
 
-class theoricus.commands.Add extends theoricus.generators.Question
-  {Model,Controller,View,Questions} =  theoricus.generators
+Question = require '../generators/question'
+
+module.exports = class Add extends Question
 
   constructor:( @the, opts )-> @create opts
 
@@ -21,8 +24,10 @@ class theoricus.commands.Add extends theoricus.generators.Question
       q = "Please give it a name : "
       f = /([^\s]*)/ # not empty
 
-      return @ask q, f, (name) => opts[2] = name; @create opts
-      
+      return @ask q, f, (name) =>
+        opts[2] = name
+        @create opts
+
     args = opts.slice 3
 
     unless @[type]?
@@ -37,7 +42,7 @@ class theoricus.commands.Add extends theoricus.generators.Question
     @controller name
 
   model:( name, args )->
-    new (Model)( @the, name, args )
+    new Model @the, name, args
 
   view:( path )->
     folder = (parts = path.split '/')[0]
@@ -53,7 +58,7 @@ class theoricus.commands.Add extends theoricus.generators.Question
       throw new Error error_msg
       return
     
-    new (View)( @the, name, folder )
+    new View @the, name, folder
 
   controller:( name )->
     new Controller @the, name

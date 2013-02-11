@@ -1,4 +1,4 @@
-class theoricus.generators.Controller
+module.exports = class Controller
   fs = require 'fs'
 
   constructor:( @the, name )->

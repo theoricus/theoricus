@@ -1,5 +1,6 @@
-class theoricus.commands.StaticServer
-  HTTPServer = require "http-server"
+HTTPServer = require "http-server"
+
+module.exports = class StaticServer
 
   constructor:( @the, options )->
     @port = options[1] or 11235

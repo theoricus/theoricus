@@ -1,17 +1,24 @@
-#<< theoricus/commands/*
+fs = require "fs"
+path = require "path"
+colors = require 'colors'
+
+require '../vendors/inflection'
+
+Add = require './commands/add'
+AddProject = require './commands/add_project'
+Rm = require './commands/rm'
+Server = require './commands/server'
+StaticServer = require './commands/static_server'
+Compiler = require './commands/compiler'
+Index = require './commands/index'
 
 exports.run = ->
-  new theoricus.Theoricus
+  new Theoricus
 
-class theoricus.Theoricus
-
-  # requirements
-  fs = require "fs"
-  path = require "path"
-  colors = require 'colors'
+module.exports = class Theoricus
   
   constructor:->
-    @root = path.normalize __dirname + "/.."
+    @root = path.join __dirname, "../.."
     @app_root = @_get_app_root()
     @pwd = @app_root || path.resolve "."
 
@@ -63,13 +70,13 @@ class theoricus.Theoricus
     options.watch ?= false
 
     switch cmd
-      when "new"     then new theoricus.commands.AddProject @, options
-      when "add"     then new theoricus.commands.Add @, options
-      when "rm"      then new theoricus.commands.Rm @, options
-      when "start"   then new theoricus.commands.Server @, options
-      when "static"  then new theoricus.commands.StaticServer @, options
-      when "compile" then new theoricus.commands.Compiler @, options
-      when "index"   then new theoricus.commands.Index @, options
+      when "new"     then new AddProject @, options
+      when "add"     then new Add @, options
+      when "rm"      then new Rm @, options
+      when "start"   then new Server @, options
+      when "static"  then new StaticServer @, options
+      when "compile" then new Compiler @, options
+      when "index"   then new Index @, options
       when "version"
         console.log @version
       else

@@ -1,4 +1,4 @@
-class theoricus.commands.Rm
+module.exports = class Rm
   fs = require 'fs'
   path = require 'path'
 

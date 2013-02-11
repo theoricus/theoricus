@@ -1,7 +1,7 @@
-class theoricus.generators.View
+fs = require 'fs'
+fsu = require 'fs-util'
 
-  fs = require 'fs'
-  fsu = require 'fs-util'
+module.exports = class View
 
   constructor:( @the, name, controller_name_lc, mvc = false )->
     name_camel = name.camelize()

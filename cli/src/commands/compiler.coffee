@@ -1,15 +1,16 @@
-class theoricus.commands.Compiler
+# requirements
+path = require "path"
+fs = require "fs"
+cs = require "coffee-script"
+nib = require "nib"
+fsu = require 'fs-util'
 
-  # requirements
-  path = require "path"
-  fs = require "fs"
-  nib = require "nib"
-  fsu = require 'fs-util'
+jade = require "jade"
+stylus = require "stylus"
+Toaster = require( 'coffee-toaster' ).Toaster
 
-  jade = require "jade"
-  stylus = require "stylus"
+module.exports = class Compiler
 
-  Toaster = require( 'coffee-toaster' ).Toaster
   {FnUtil,ArrayUtil} = require( 'coffee-toaster' ).toaster.utils
 
   BASE_DIR: ""
@@ -216,7 +217,7 @@ class theoricus.commands.Compiler
     ###
     send message through socket.io asking browser to refresh
     ###
-    # Server = theoricus.commands.Server
+    # Server = Server
     
     # if Server.io?
     #   Server.io.sockets.emit( 'refresh', null );
@@ -237,20 +238,16 @@ class theoricus.commands.Compiler
     app    = fs.readFileSync app, "utf-8"
     routes = fs.readFileSync routes, "utf-8"
 
-    new theoricus.commands.Config app, routes
+    new Config app, routes
 
   to_single_line:( code )->
-    theoricus.commands.Compiler.to_single_line code
+    Compiler.to_single_line code
 
   @to_single_line = ( code, ugli )->
     return code.replace /(^\/\/.*)|([\t\n]+)/gm, ""
 
 
-class theoricus.commands.Config
-  Compiler = theoricus.commands.Compiler
-
-  fs = require "fs"
-  cs = require "coffee-script"
+class Config
 
   config: null
   routes: null

@@ -1,9 +1,9 @@
-class theoricus.commands.AddProject
-  
-  fs   = require 'fs'
-  path = require 'path'
-  pn   = path.normalize
-  exec = (require "child_process").exec
+fs   = require 'fs'
+path = require 'path'
+pn   = path.normalize
+exec = (require "child_process").exec
+
+module.exports = class AddProject
 
   constructor:( @the, @options )->
     if not options[1]?

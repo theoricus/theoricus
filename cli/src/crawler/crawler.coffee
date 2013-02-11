@@ -1,6 +1,6 @@
-class theoricus.crawler.Crawler
+phantom = require "node-phantom"
 
-  phantom = require "node-phantom"
+module.exports = class Crawler
 
   page: null
 

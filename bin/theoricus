@@ -1,7 +1,3 @@
-#!/usr/bin/env node
+#!/usr/bin/env _theoricus_coffee
 
-var path = require('path');
-var fs = require('fs');
-var lib = path.join(path.dirname(fs.realpathSync(__filename)), '../lib');
-
-require(lib + '/theoricus.cli').run()
+new (require '../cli/src/theoricus')

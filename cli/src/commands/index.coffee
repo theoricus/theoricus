@@ -1,11 +1,12 @@
-#<< theoricus/crawler/crawler
+fs = require "fs"
+exec = (require "child_process").exec
+path = require "path"
+fsu = require "fs-util"
 
-class theoricus.commands.Index
+Crawler = require '../crawler/crawler'
 
-  fs = require "fs"
-  exec = (require "child_process").exec
-  path = require "path"
-  fsu = require "fs-util"
+module.exports = class Index
+
 
   #
   # key -> value ( address -> is_crawled)
@@ -55,7 +56,7 @@ class theoricus.commands.Index
 
   get:( url )->
 
-    crawler = new theoricus.crawler.Crawler()
+    crawler = new Crawler()
 
     @connections++
 
