@@ -7,28 +7,37 @@ fsu = require 'fs-util'
 
 jade = require "jade"
 stylus = require "stylus"
-Toaster = require( 'coffee-toaster' ).Toaster
+
+Toaster = require 'coffee-toaster'
+FnUtil = require 'coffee-toaster/src/toaster/utils/fn-util'
+ArrayUtil = require 'coffee-toaster/src/toaster/utils/array-util'
 
 module.exports = class Compiler
 
-  {FnUtil,ArrayUtil} = require( 'coffee-toaster' ).toaster.utils
-
   BASE_DIR: ""
-  APP_FOLDER: ""
+  APP_SRC: ""
 
   constructor:( @the, watch = false )->
 
     @BASE_DIR = @the.pwd
-    @APP_FOLDER = "#{@BASE_DIR}/app"
+    @APP_SRC = "#{@BASE_DIR}/src/app"
 
-    config =
-      folders: {}
-      vendors:@_get_vendors()
-      minify: false
-      release: "public/app.js"
-      debug: "public/app-debug.js"
+    conf = @_read_build_conf()
 
-    config.folders[@APP_FOLDER] = "app"
+    config = 
+      dirs:[(path.join @BASE_DIR, 'src')]
+      main: 'app/app'
+      exclude: conf.exclude ? []
+      release_dir: (path.join @BASE_DIR, 'public/js')
+      bare: conf.bare ? true
+      minify: conf.minify ? false
+      optimize:
+        base_url: conf.optimize.base_url ? ''
+        vendors: conf.optimize.vendors ? {}
+
+    # console.log '-------'
+    # console.log conf
+    # console.log '-------'
 
     # start watching/compiling coffeescript
     @toaster = new Toaster @BASE_DIR,
@@ -53,7 +62,7 @@ module.exports = class Compiler
     # watching jade and stylus
     return unless watch
 
-    fsw_static = fsu.watch "#{@APP_FOLDER}/static", /(.jade|.styl)$/m
+    fsw_static = fsu.watch "#{@APP_SRC}/static", /(.jade|.styl)$/m
     fsw_static.on 'create', (FnUtil.proxy @_on_jade_stylus_change, 'create')
     fsw_static.on 'change', (FnUtil.proxy @_on_jade_stylus_change, 'change')
     fsw_static.on 'delete', (FnUtil.proxy @_on_jade_stylus_change, 'delete')
@@ -61,23 +70,6 @@ module.exports = class Compiler
     fsw_config = fsu.watch "#{@BASE_DIR}/config", /(.coffee)$/m
     fsw_config.on 'change', (FnUtil.proxy @_on_jade_stylus_change, 'change')
 
-  _get_vendors:=>
-
-    toaster_vendors = ["#{@the.root}/lib/theoricus.js"]
-
-    # Vendors setted in app/config of theoricus app
-    app_vendors = @_get_config().vendors
-
-    for vendor, i in app_vendors
-      # Get the absolute path of the vendor
-      app_vendors[i] = path.join @the.pwd, 'vendors', vendor
-
-    # Create new vendors array merging the toaster and theoricus vendors
-    vendors = []
-    vendors.push vendor for vendor in toaster_vendors
-    vendors.push vendor for vendor in app_vendors
-
-    vendors
 
   _on_jade_stylus_change:( ev, f )=>
     # skipe all folder creation
@@ -115,12 +107,14 @@ module.exports = class Compiler
       @compile_stylus ( css )=>
         target = "#{@the.pwd}/public/app.css"
         fs.writeFileSync target, css
+        target = target.replace @BASE_DIR, ''
+        target = target.substr 1 if target[0] is path.sep
         console.log "[#{now}] #{'Compiled'.bold} #{target}".green
 
 
 
   compile_jade:( after_compile )->
-    files = fsu.find "#{@APP_FOLDER}/static", /.jade$/
+    files = fsu.find "#{@APP_SRC}/static", /.jade$/
 
     output = """(function() {
       app.templates = { ~TEMPLATES };
@@ -130,7 +124,7 @@ module.exports = class Compiler
     for file in files
 
       # skip files that starts with "_"
-      continue if /^_/m.test file
+      continue if /^_/m.test (path.basename file)
 
       # compute template name and read file's source
       name = (file.match /static\/(.*).jade$/m)[1]
@@ -148,20 +142,28 @@ module.exports = class Compiler
         client: true
         compileDebug: false
 
-      # write template name and contents
       compiled = compiled.toString().replace "anonymous", ""
-      buffer.push "'#{name}': " + compiled
 
-    # format everything
-    output = output.replace( "~TEMPLATES", buffer.join "," )
-    output = @to_single_line output
+      definition = 'define( \'~name\', [], function(){return ~compiled});'
+      definition = definition.replace '~compiled', (@to_single_line compiled)
+      definition = definition.replace '~name', "app/templates/#{name}"
+      
+      release_file = "#{@the.pwd}/public/js/app/templates/#{name}.js"
+      release_dir = path.dirname release_file
 
-    # return all jade files compiled for use in client
-    return "// TEMPLATES\n#{output}"
+      fsu.mkdir_p release_dir unless (fs.existsSync release_dir)
+
+      fs.writeFileSync release_file, definition
+      
+      # formatted time to CLI notifications
+      now = ("#{new Date}".match /[0-9]{2}\:[0-9]{2}\:[0-9]{2}/)[0]
+      release_dir = release_dir.replace @BASE_DIR, ''
+      release_dir = release_dir.substr 1 if release_dir[0] is path.sep
+      console.log "[#{now}] #{'✓ Compiled'.bold} #{release_dir}".green
 
 
   compile_stylus:( after_compile )->
-    files = fsu.find "#{@APP_FOLDER}/static", /.styl$/
+    files = fsu.find "#{@APP_SRC}/static", /.styl$/
     
     buffer = []
     @pending_stylus = 0
@@ -176,7 +178,7 @@ module.exports = class Compiler
 
       source = fs.readFileSync file, "utf-8"
       paths = [
-        "#{@APP_FOLDER}/static/_mixins/stylus"
+        "#{@APP_SRC}/static/_mixins/stylus"
       ]
 
       # TODO: move compile options to config file
@@ -193,26 +195,15 @@ module.exports = class Compiler
 
   # updates the release files
   compile:( compile_stylus = true )->
-    # read conf
-    conf = @_get_config()
-
-    # getting JADE templates pre-compiled
-    templates = @compile_jade()
-      
-    # merge everything
-    header = """#{templates}\n
-          #{conf.config}\n
-          #{conf.routes}\n
-          #{conf.root}\n"""
-    
-    # formats footer
-    footer = ""
 
     # build everything
-    @toaster.build header, footer
+    @toaster.build()
 
     # formatted time to CLI notifications
     now = ("#{new Date}".match /[0-9]{2}\:[0-9]{2}\:[0-9]{2}/)[0]
+
+    # getting JADE templates pre-compiled
+    @compile_jade()
 
     ###
     send message through socket.io asking browser to refresh
@@ -228,85 +219,24 @@ module.exports = class Compiler
     @compile_stylus ( css )=>
       target = "#{@the.pwd}/public/app.css"
       fs.writeFileSync target, css
-      console.log "[#{now}] #{'Compiled'.bold} #{target}".green
+      target = target.replace @BASE_DIR, ''
+      target = target.substr 1 if target[0] is path.sep
+      console.log "[#{now}] #{'✓ Compiled'.bold} #{target}".green
 
 
-  _get_config:()->
-    app    = "#{@the.pwd}/config/app.coffee"
-    routes = "#{@the.pwd}/config/routes.coffee"
-
-    app    = fs.readFileSync app, "utf-8"
-    routes = fs.readFileSync routes, "utf-8"
-
-    new Config app, routes
-
-  to_single_line:( code )->
-    Compiler.to_single_line code
-
-  @to_single_line = ( code, ugli )->
-    return code.replace /(^\/\/.*)|([\t\n]+)/gm, ""
-
-
-class Config
-
-  config: null
-  routes: null
-  root: null
-  vendors:null
-
-  constructor:( app, routes )->
-    @_parse_app app
-    @_parse_routes routes
-
-  _parse_app:( app )->
+  _read_build_conf:()->
+    build = "#{@the.pwd}/config/build.coffee"
+    build = fs.readFileSync build, "utf-8"
+    
     try
       tmp = {}
-      app = cs.compile app.replace(/(^\w)/gm, "tmp.$1"), bare:1
-      eval app
+      build = cs.compile build.replace(/(^\w)/gm, "tmp.$1"), bare:1
+      eval build
     catch error
       return throw error
 
-    @vendors = tmp.vendors ? []
+    return tmp
 
-    # CONFIG
-    @config = "// CONFIG\n" + Compiler.to_single_line """(function() {
-      app.config = {
-        animate_at_startup: #{tmp.animate_at_startup},
-        enable_auto_transitions: #{tmp.enable_auto_transitions},
-        vendors: ["#{tmp.vendors}"],
-        autobind: #{tmp.autobind}
-      };
-    }).call( this );"""
 
-  _parse_routes:( routes )->
-    buffer = []
-    root = null
-
-    try
-      tmp = {
-        root:( route )-> root = route
-        match:( route, options )->
-          route = """'#{route}': {
-            to: '#{options.to}',
-            at: '#{options.at}',
-            el: '#{options.el}'
-          }"""
-          buffer.push route.replace "'null'", null
-      }
-      routes = cs.compile routes.replace(/(^\w)/gm, "tmp.$1"), bare:1
-      eval routes
-    catch error
-      return throw error
-
-    # ROOT
-    @root = "// ROOT\n" + Compiler.to_single_line """(function() {
-      app.root = '#{root}';
-
-    }).call( this );""", true
-
-    # ROUTES
-    @routes = "// ROUTES\n" + Compiler.to_single_line """(function() {
-      app.routes = {
-        #{buffer.join "," }
-      };
-    }).call( this );""", true
+  @to_single_line = @::to_single_line = ( code )->
+    return code.replace /(^\/\/.*)|([\t\n]+)/gm, ""
