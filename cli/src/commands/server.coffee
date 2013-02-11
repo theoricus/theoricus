@@ -23,7 +23,7 @@ module.exports = class Server
   start_server:()->
     @server = conn()
                 .use(conn.static @root )
-                .use( (req, res)->
+                .use( (req, res)=>
                   res.end (fs.readFileSync "#{@root}/index.html", 'utf-8')
                 ).listen @port
 

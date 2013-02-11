@@ -8,7 +8,7 @@ module.exports = class StaticServer
 
     server = conn()
               .use(conn.static @root )
-              .use( (req, res)->
+              .use( (req, res)=>
                 res.end (fs.readFileSync "#{@root}/index.html", 'utf-8')
               ).listen @port
 
