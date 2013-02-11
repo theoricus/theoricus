@@ -1,8 +1,8 @@
-#<< theoricus/mvc/*
+Model = require 'theoricus/mvc/model'
+View = require 'theoricus/mvc/view'
+Controller = require 'theoricus/mvc/controller'
 
-class theoricus.core.Factory
-
-  {Model,View,Controller} = theoricus.mvc
+class Factory
 
   controllers: {}
 
@@ -17,31 +17,30 @@ class theoricus.core.Factory
       src = src.__proto__
     return false
 
-  @model=@::model=( name, init = {} )->
+  @model=@::model=( name, init = {}, fn )->
     # console.log "Factory.model( '#{name}' )"
 
     classname = name.camelize()
-    classpath = "app.models.#{name}"
+    classpath = "app/models/#{name}"
 
-    unless (klass = app.models[ classname ])?
-      console.error Error 'Model not found: ' + classpath
-    else
-      unless (model = new (klass)) instanceof Model
-        console.error "#{classpath} is not a Model instance - you probably forgot to extend thoricus.mvc.Model"
-    
-    # defaults to AppModel if given model is  is not found
-    # (cant see any sense on this, will probably be removed later)
-    model = new app.AppModel unless model?
+    require ['app/app_model', classpath], ( AppModel, Model )->
+      unless (model = new Model) instanceof Model
+        console.error "#{classpath} is not a Model instance - you probably forgot to extend thoricus/mvc/Model"
 
-    model.classpath = classpath
-    model.classname = classname
-    model[prop] = value for prop, value of init
+      # defaults to AppModel if given model is  is not found
+      # (cant see any sense on this, will probably be removed later)
+      model = new AppModel unless model?
 
-    # console.log "----------------- MODEL"
-    # console.log model
-    # console.log "-----------------"
+      model.classpath = classpath
+      model.classname = classname
+      model[prop] = value for prop, value of init
 
-    model
+      fn model
+
+      # console.log "----------------- MODEL"
+      # console.log model
+      # console.log "-----------------"
+
 
   ###
   Returns an instantiated [theoricus.mvc.View] View
@@ -49,42 +48,27 @@ class theoricus.core.Factory
   @param [String] path  path to the view file
   @param [theoricus.core.Process] process process responsible for the view
   ###
-  view:( path, process = null )->
+  view:( path, process = null, fn )->
     # console.log "Factory.view( '#{path}' )"
 
-    klass = app.views
-    classpath = "app.views"
     classname = (parts = path.split '/').pop().camelize()
-      
-    len = parts.length - 1
-    namespace  = parts[ len ]
+    classpath = "app/views/#{path}"
+    
+    require ['app/app_view', classpath], ( AppView, View )->
+      unless (view = new View) instanceof View
+        console.error "#{classpath} is not a View instance - you probably forgot to extend thoricus/mvc/View"
 
-    while parts.length
-      classpath += "." + (p = parts.shift())
+      # defaults to AppView if given view is not found
+      # (cant see any sense on this, will probably be removed later)
+      view = new AppView unless view?
 
-      if klass[p]?
-        klass = klass[p]
-      else
-        console.error "Namespace '#{p} not found in app.views..."
+      view._boot @the
+      view.classpath = classpath
+      view.classname = classname
+      view.namespace = namespace
+      view.process  = process if process?
 
-
-    classpath += "." + classname
-
-    unless (klass = klass[ classname ])?
-      console.error 'View not found: ' + classpath
-    else 
-      unless (view = new (klass)) instanceof View
-        console.error "#{classpath} is not a View instance - you probably forgot to extend thoricus.mvc.View"
-
-    # defaults to AppView if given view is not found
-    # (cant see any sense on this, will probably be removed later)
-    view = new app.AppView unless view?
-
-    view._boot @the
-    view.classpath = classpath
-    view.classname = classname
-    view.namespace = namespace
-    view.process  = process if process?
+      fn view
 
     # console.log "----------------- VIEW"
     # console.log view
@@ -97,41 +81,34 @@ class theoricus.core.Factory
 
   @param [String] name  controller name
   ###
-  controller:( name )->
+  controller:( name, fn )->
     # console.log "Factory.controller( '#{name}' )"
 
     classname = name.camelize()
-    classpath = "app.controllers.#{classname}"
+    classpath = "app/controllers/#{classname}"
 
     if @controllers[ classname ]?
-      return @controllers[ classname ]
+      fn @controllers[ classname ]
     else
+      require [classpath], ( Controller )=>
+        unless (controller = new Controller) instanceof Controller
+          console.error "#{classpath} is not a Controller instance - you probably forgot to extend thoricus/mvc/Controller"
 
-      unless (klass = app.controllers[ classname ])?
-        console.error 'Controller not found: ' + classpath
+        controller.classpath = classpath
+        controller.classname = classname
+        controller._boot @the
 
-      unless (controller = new (klass)) instanceof Controller
-        console.error "#{classpath} is not a Controller instance - you probably forgot to extend thoricus.mvc.Controller"
+        # console.log "----------------- CONTROLLER"
+        # console.log controller
+        # console.log "-----------------"
 
-      controller.classpath = classpath
-      controller.classname = classname
-      controller._boot @the
-
-      # console.log "----------------- CONTROLLER"
-      # console.log controller
-      # console.log "-----------------"
-
-      @controllers[ classname ] = controller
+        @controllers[ classname ] = controller
 
   ###
   Returns a compiled jade template
 
   @param [String] path  path to the template
   ###
-  @template=@::template=( path )->
+  @template=@::template=( path, fn )->
     # console.log "Factory.template( #{path} )"
-    if app.templates[path]?
-      return app.templates[path]
-
-    console.error "Template ( " + path + " ) doesn't exit"
-    null
+    require ['app/templates/' + path], ( template )-> fn template

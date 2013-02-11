@@ -1,4 +1,4 @@
-class theoricus.mvc.lib.Binder
+class Binder
 
   # some regexes used to catch binds injected by theoricus's compiler
 

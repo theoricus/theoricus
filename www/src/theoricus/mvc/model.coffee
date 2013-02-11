@@ -1,128 +1,133 @@
-#<< theoricus/utils/array_util
-#<< theoricus/mvc/lib/binder
-#<< theoricus/mvc/lib/fetcher
+ArrayUtil = require 'theoricus/utils/array_util'
+Binder = require 'theoricus/mvc/lib/binder'
+Fetcher = require 'theoricus/mvc/lib/fetcher'
+# Factory = require 'theoricus/core/factory'
 
-class theoricus.mvc.Model extends theoricus.mvc.lib.Binder
-  {ArrayUtil} = theoricus.utils
+class Model extends Binder
 
-  _fields = []
-  _collection = []
+  # _fields = []
+  # _collection = []
 
-  # SETUP METHODS ############################################################
+  # # SETUP METHODS ############################################################
 
-  @rest=( host, resources )->
-    [resources, host] = [host, null] unless resources?
-    for k, v of resources
-      @[k] = @_build_rest.apply @, [k].concat(v.concat host)
+  # @rest=( host, resources )->
+  #   [resources, host] = [host, null] unless resources?
+  #   for k, v of resources
+  #     @[k] = @_build_rest.apply @, [k].concat(v.concat host)
 
-  @fields=( fields )->
-    @_build_gs key, type for key, type of fields
-
+  # @fields=( fields )->
+  #   @_build_gs key, type for key, type of fields
 
 
-  # SETUP HELPERS ############################################################
 
-  ###
-  Build a static rest call for the given params
+  # # SETUP HELPERS ############################################################
 
-  @param [String] key   
-  @param [String] method  
-  @param [String] url   
-  @param [String] domain  
-  ###
-  @_build_rest=( key, method, url, domain )->
-    ( args... )->
-      if key is "read" and _collection.length
-        found = ArrayUtil.find _collection, {id: args[0]}
-        return found.item if found?
+  # ###
+  # Build a static rest call for the given params
+
+  # @param [String] key   
+  # @param [String] method  
+  # @param [String] url   
+  # @param [String] domain  
+  # ###
+  # @_build_rest=( key, method, url, domain )->
+  #   ( args... )->
+  #     if key is "read" and _collection.length
+  #       found = ArrayUtil.find _collection, {id: args[0]}
+  #       return found.item if found?
       
-      if args.length
-        if (typeof args[args.length-1] is 'object')
-          data = args.pop()
-        else
-          data = ''
+  #     if args.length
+  #       if (typeof args[args.length-1] is 'object')
+  #         data = args.pop()
+  #       else
+  #         data = ''
 
-      while (/:\w+/.exec url)?
-        url = url.replace /:\w+/, args.shift() || null
+  #     while (/:\w+/.exec url)?
+  #       url = url.replace /:\w+/, args.shift() || null
 
-      url = "#{domain}/#{url}".replace /\/\//g, '/' if domain?
-      @_request method, url, data
+  #     url = "#{domain}/#{url}".replace /\/\//g, '/' if domain?
+  #     @_request method, url, data
 
-  ###
-  Builds local getters/setters for the given params
+  # ###
+  # Builds local getters/setters for the given params
 
-  @param [String] field
-  @param [String] type
-  ###
-  @_build_gs=( field, type )->
-    _val = null
+  # @param [String] field
+  # @param [String] type
+  # ###
+  # @_build_gs=( field, type )->
+  #   _val = null
 
-    classname = ("#{@}".match /function\s(\w+)/)[1]
-    stype = ("#{type}".match /function\s(\w+)/)[1]
-    ltype = stype.toLowerCase()
+  #   classname = ("#{@}".match /function\s(\w+)/)[1]
+  #   stype = ("#{type}".match /function\s(\w+)/)[1]
+  #   ltype = stype.toLowerCase()
 
-    getter=-> _val
-    setter=(value)->
+  #   getter=-> _val
+  #   setter=(value)->
 
-      switch ltype
-        when 'string' then f = (typeof value is 'string')
-        when 'number' then f = (typeof value is 'number')
-        else f = (value instanceof type)
+  #     switch ltype
+  #       when 'string' then f = (typeof value is 'string')
+  #       when 'number' then f = (typeof value is 'number')
+  #       else f = (value instanceof type)
 
-      if f
-        _val = value
-        @update field, _val
-      else
-        prop = "#{classname}.#{field}"
-        msg = "Property '#{prop}' must to be #{stype}."
-        throw new Error msg
+  #     if f
+  #       _val = value
+  #       @update field, _val
+  #     else
+  #       prop = "#{classname}.#{field}"
+  #       msg = "Property '#{prop}' must to be #{stype}."
+  #       throw new Error msg
 
-    @::.__defineGetter__ field, getter
-    @::.__defineSetter__ field, setter
-
-
-
-  ###
-  General request method
-
-  @param [String] method  URL request method
-  @param [String] url   URL to be requested
-  @param [Object] data  Data to be send
-  ###
-  @_request=( method, url, data='' )->
-    fetcher = new theoricus.mvc.lib.Fetcher
-
-    req = $.ajax url:url, type: method, data: data
-
-    req.done ( data )=>
-      fetcher.loaded = true
-      fetcher.records = @_instantiate data
-      fetcher.onload?( fetcher.records )
-
-    req.error ( error )=>
-      fetcher.error = true
-      if fetcher.onerror?
-        fetcher.onerror error
-      else
-        throw error
-
-    fetcher
+  #   @::.__defineGetter__ field, getter
+  #   @::.__defineSetter__ field, setter
 
 
 
-  ###
-  Instantiate new Model instances passing items as initial data
+  # ###
+  # General request method
 
-  @param [Object] data  Data to be parsed
-  ###
-  @_instantiate=( data )->
-    Factory = theoricus.core.Factory
-    classname = ("#{@}".match /function\s(\w+)/)[1]
-    records = []
-    for record in [].concat data
-      model = (Factory.model classname, record)
-      records.push model
+  # @param [String] method  URL request method
+  # @param [String] url   URL to be requested
+  # @param [Object] data  Data to be send
+  # ###
+  # @_request=( method, url, data='' )->
+  #   fetcher = new Fetcher
 
-    _collection = _collection.concat records
+  #   req = $.ajax url:url, type: method, data: data
 
-    return if records.length is 1 then records[0] else records
+  #   req.done ( data )=>
+  #     fetcher.loaded = true
+
+  #     @_instantiate data, ( records )->
+  #       fetcher.records = records
+  #       fetcher.onload?( fetcher.records )
+
+  #   req.error ( error )=>
+  #     fetcher.error = true
+  #     if fetcher.onerror?
+  #       fetcher.onerror error
+  #     else
+  #       throw error
+
+  #   fetcher
+
+
+
+  # ###
+  # Instantiate new Model instances passing items as initial data
+
+  # @param [Object] data  Data to be parsed
+  # ###
+  # @_instantiate=( data, fn )->
+  #   classname = ("#{@}".match /function\s(\w+)/)[1]
+  #   records = []
+  #   for record in (data = [].concat data)
+  #     Factory.model classname, record, ( model )->
+  #       records.push model
+
+  #       if records.length is data.length
+  #         _collection = _collection.concat records
+
+  #         if records.length is 1
+  #           fn records[0]
+  #         else
+  #           fn records

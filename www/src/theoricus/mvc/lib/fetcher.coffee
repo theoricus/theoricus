@@ -1,4 +1,4 @@
-class theoricus.mvc.lib.Fetcher
+class Fetcher
   loaded: null
 
   onload: null
