@@ -77,8 +77,7 @@ class theoricus.mvc.Model extends theoricus.mvc.lib.Binder
         msg = "Property '#{prop}' must to be #{stype}."
         throw new Error msg
 
-    @::.__defineGetter__ field, getter
-    @::.__defineSetter__ field, setter
+    Object.defineProperty @::, field, get:getter, set:setter
 
 
 
