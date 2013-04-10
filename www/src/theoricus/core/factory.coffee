@@ -23,7 +23,7 @@ class Factory
     classname = name.camelize()
     classpath = "app/models/#{name}"
 
-    require ['app/app_model', classpath], ( AppModel, Model )->
+    require ['app/models/app_model', classpath], ( AppModel, Model )->
       unless (model = new Model) instanceof Model
         msg = "#{classpath} is not a Model instance - you probably forgot to "
         msg += "extend thoricus/mvc/Model"
@@ -56,7 +56,7 @@ class Factory
     classname = (parts = path.split '/').pop().camelize()
     classpath = "app/views/#{path}"
     
-    require ['app/app_view', classpath], ( AppView, View )->
+    require ['app/views/app_view', classpath], ( AppView, View )->
       unless (view = new View) instanceof View
         msg = "#{classpath} is not a View instance - you probably forgot to "
         msg += "extend thoricus/mvc/View"
@@ -111,10 +111,20 @@ class Factory
         @controllers[ classname ] = controller
 
   ###
-  Returns a compiled jade template
+  Returns an AMD compiled template
 
   @param [String] path  path to the template
   ###
   @template=@::template=( path, fn )->
     # console.log "Factory.template( #{path} )"
-    require ['app/templates/' + path], ( template )-> fn template
+    require ['templates/' + path], ( template )-> fn template
+
+
+
+  ### Returns an AMD compiled style
+  
+  @param [String] path  path to the style
+  ###
+  @template=@::template=( path, fn )->
+    # console.log "Factory.template( #{path} )"
+    require ['templates/' + path], ( template )-> fn template
