@@ -2,7 +2,7 @@ Model = require 'theoricus/mvc/model'
 View = require 'theoricus/mvc/view'
 Fetcher = require 'theoricus/mvc/lib/fetcher'
 
-class Controller
+module.exports = class Controller
 
   ###
   @param [theoricus.Theoricus] @the   Shortcut for app's instance

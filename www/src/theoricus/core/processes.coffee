@@ -4,7 +4,7 @@ Process = require 'theoricus/core/process'
 
 Factory = null
 
-class Processes
+module.exports = class Processes
 
   # utils
 

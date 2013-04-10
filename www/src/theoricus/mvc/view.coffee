@@ -3,7 +3,7 @@ Factory = null
 
 require 'jade'
 
-class View
+module.exports = class View
 
   # $ reference to dom element
   el: null

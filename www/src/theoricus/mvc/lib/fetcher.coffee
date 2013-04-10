@@ -1,4 +1,4 @@
-class Fetcher
+module.exports = class Fetcher
   loaded: null
 
   onload: null

@@ -1,7 +1,7 @@
 ## Router & Route logic inspired by RouterJS:
 ## https://github.com/haithembelhaj/RouterJs
 
-class Route
+module.exports = class Route
 
   # static regex for reuse
   @named_param_reg: /:\w+/g

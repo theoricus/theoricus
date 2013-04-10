@@ -10,9 +10,9 @@ require 'history'
 Factory = null
 
 ###
-Proxyes browser's History API, routing request to and from the aplication
+Proxies browser's History API, routing request to and from the aplication
 ###
-class Router
+module.exports = class Router
 
   routes: []
   listeners: []

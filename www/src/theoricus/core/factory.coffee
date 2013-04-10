@@ -2,7 +2,7 @@ Model = require 'theoricus/mvc/model'
 View = require 'theoricus/mvc/view'
 Controller = require 'theoricus/mvc/controller'
 
-class Factory
+module.exports = class Factory
 
   controllers: {}
 

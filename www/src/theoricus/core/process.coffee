@@ -6,7 +6,7 @@ Responsible for "running" a [theoricus.core.Route] Route
 
  @author {https://github.com/arboleya arboleya}
 ###
-class Process
+module.exports = class Process
 
   # @property [theoricus.mvc.Controller] controller
   controller: null

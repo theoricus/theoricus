@@ -3,7 +3,7 @@ Binder = require 'theoricus/mvc/lib/binder'
 Fetcher = require 'theoricus/mvc/lib/fetcher'
 # Factory = require 'theoricus/core/factory'
 
-class Model extends Binder
+module.exports = class Model extends Binder
 
   # _fields = []
   # _collection = []
