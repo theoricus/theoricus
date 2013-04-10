@@ -1,7 +1,7 @@
 Model = require 'theoricus/mvc/model'
 Factory = null
 
-require ':jade'
+require 'jade'
 
 class View
 

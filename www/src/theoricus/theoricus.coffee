@@ -2,9 +2,9 @@ Config = require 'theoricus/config/config'
 Factory = require 'theoricus/core/factory'
 Processes = require 'theoricus/core/processes'
 
-require ':inflection'
-require ':jquery'
-require ':json'
+require 'inflection'
+require 'jquery'
+require 'json'
 
 class Theoricus
   app: null

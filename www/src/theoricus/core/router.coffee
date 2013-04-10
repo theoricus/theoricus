@@ -5,7 +5,7 @@ StringUril = require 'theoricus/utils/string_util'
 Route = require 'theoricus/core/route'
 Routes = require 'app/config/routes'
 
-require ':history'
+require 'history'
 
 Factory = null
 
