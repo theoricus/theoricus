@@ -6,7 +6,7 @@ require 'inflection'
 require 'jquery'
 require 'json'
 
-class Theoricus
+module.exports = class Theoricus
   app: null
 
   # base path for your application
@@ -21,9 +21,9 @@ class Theoricus
 
   crawler: (window.crawler = is_rendered: false)
 
-  constructor: ->
-    @config  = new Config @
+  constructor:( @Settings, @Routes )->
+    @config  = new Config @, @Settings
     @factory = new Factory @
 
   start: ->
-    @processes = new Processes @
+    @processes = new Processes @, @Routes

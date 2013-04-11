@@ -3,7 +3,6 @@
 
 StringUril = require 'theoricus/utils/string_util'
 Route = require 'theoricus/core/route'
-Routes = require 'app/config/routes'
 
 require 'history'
 
@@ -23,10 +22,10 @@ module.exports = class Router
   @param [theoricus.Theoricus] @the   Shortcut for app's instance
   @param [Function] @on_change  state/url change handler
   ###
-  constructor:( @the, @on_change )->
+  constructor:( @the, @Routes, @on_change )->
     Factory = @the.factory
 
-    for route, opts of Routes.routes
+    for route, opts of @Routes.routes
       @map route, opts.to, opts.at, opts.el, @
 
     History.Adapter.bind window, 'statechange', =>
@@ -34,7 +33,7 @@ module.exports = class Router
 
     setTimeout =>
       url = window.location.pathname
-      url = Routes.root if url == "/"
+      url = @Routes.root if url == "/"
       @run url
     , 1
 
@@ -69,7 +68,7 @@ module.exports = class Router
       url = "/#{url}" if (url.slice 0, 1) isnt '/'
 
       # fallback to root url in case user enter the '/'
-      url = Routes.root if url == "/"
+      url = @Routes.root if url == "/"
 
       for route in @routes
         if route.matcher.test url

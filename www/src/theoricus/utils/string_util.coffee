@@ -1,4 +1,4 @@
-class StringUtil
+module.exports = class StringUtil
 
   ###
   @param [String] str

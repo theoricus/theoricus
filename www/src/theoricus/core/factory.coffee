@@ -21,10 +21,10 @@ module.exports = class Factory
     # console.log "Factory.model( '#{name}' )"
 
     classname = name.camelize()
-    classpath = "app/models/#{name}"
+    classpath = "app/models/#{name}".toLowerCase()
 
-    require ['app/models/app_model', classpath], ( AppModel, Model )->
-      unless (model = new Model) instanceof Model
+    require ['app/models/app_model', classpath], ( AppModel, NewModel )=>
+      unless (model = new NewModel) instanceof Model
         msg = "#{classpath} is not a Model instance - you probably forgot to "
         msg += "extend thoricus/mvc/Model"
         console.error msg
@@ -39,11 +39,6 @@ module.exports = class Factory
 
       fn model
 
-      # console.log "----------------- MODEL"
-      # console.log model
-      # console.log "-----------------"
-
-
   ###
   Returns an instantiated [theoricus.mvc.View] View
 
@@ -54,9 +49,10 @@ module.exports = class Factory
     # console.log "Factory.view( '#{path}' )"
 
     classname = (parts = path.split '/').pop().camelize()
+    namespace = parts[parts.length - 1]
     classpath = "app/views/#{path}"
     
-    require ['app/views/app_view', classpath], ( AppView, View )->
+    require ['app/views/app_view', classpath], ( AppView, View )=>
       unless (view = new View) instanceof View
         msg = "#{classpath} is not a View instance - you probably forgot to "
         msg += "extend thoricus/mvc/View"
@@ -74,11 +70,6 @@ module.exports = class Factory
 
       fn view
 
-    # console.log "----------------- VIEW"
-    # console.log view
-    # console.log "-----------------"
-
-    view
 
   ###
   Returns an instantiated [theoricus.mvc.Controller] Controller
@@ -91,10 +82,11 @@ module.exports = class Factory
     classname = name.camelize()
     classpath = "app/controllers/#{name}"
 
-    if @controllers[ classname ]?
-      fn @controllers[ classname ]
+    if @controllers[ classpath ]?
+      fn @controllers[ classpath ]
     else
       require [classpath], ( Controller )=>
+
         unless (controller = new Controller) instanceof Controller
           msg = "#{classpath} is not a Controller instance - you probably "
           msg += "forgot to extend thoricus/mvc/Controller"
@@ -104,11 +96,8 @@ module.exports = class Factory
         controller.classname = classname
         controller._boot @the
 
-        # console.log "----------------- CONTROLLER"
-        # console.log controller
-        # console.log "-----------------"
-
-        @controllers[ classname ] = controller
+        @controllers[ classpath ] = controller
+        fn @controllers[ classpath ]
 
   ###
   Returns an AMD compiled template

@@ -39,10 +39,11 @@ module.exports = class View
         Factory.template "#{tmpl_folder}/#{tmpl_name}", ( template )=>
           @render_template template
 
-   render_template:( tempalte )->
-    dom = template(@data) if template?
+   render_template:( template )->
+    dom = template @data if template?
     dom = @el.append dom
-     # binds item if the data passed is a valid Model
+
+    # binds item if the data passed is a valid Model
     if (@data instanceof Model)
       @data.bind dom, !@the.config.autobind
     
@@ -58,6 +59,7 @@ module.exports = class View
       $( window ).unbind 'resize', @on_resize
       $( window ).bind   'resize', @on_resize
       @on_resize()
+
 
   ###
   TODO: Document method.

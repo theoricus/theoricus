@@ -1,6 +1,6 @@
 ObjectUtil = require 'theoricus/utils/object_util'
 
-class ArrayUtil
+module.exports = class ArrayUtil
   
   ###
   @param [] src

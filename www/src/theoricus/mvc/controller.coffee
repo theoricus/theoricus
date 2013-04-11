@@ -16,19 +16,20 @@ module.exports = class Controller
   @param [theoricus.core.Process] process path to view on the app tree
   ###
   _build_action: ( process ) ->
-    =>
+    ( fn )=>
       api = process.route.api
 
-      model_name = api.controller_name.singularize().camelize()
-      model      = app.models[model_name]
+      model_name = api.controller_name.singularize()
 
-      view_folder = api.controller_name.singularize()
-      view_name   = api.action_name
+      @the.factory.model model_name, null, (model)=>
 
-      if model.all?
-        @render "#{view_folder}/#{view_name}", model.all()
-      else
-        @render "#{view_folder}/#{view_name}", null
+        view_folder = api.controller_name.singularize()
+        view_name   = api.action_name
+
+        if model.all?
+          @render "#{view_folder}/#{view_name}", model.all(), null, null, fn
+        else
+          @render "#{view_folder}/#{view_name}", null, null, null, fn
 
   ###
   Renders view
@@ -37,14 +38,16 @@ module.exports = class Controller
   @param [String] data  data to be rendered on the template
   @param [Object] element element where it will be rendered, defaults to @process.route.el
   ###
-  render: ( path, data, el = @process.route.el, view ) ->
+  render: ( path, data, el = @process.route.el, view, fn ) ->
     if view?
       @_render_view path, data, el, view
+      fn view
     else
-      @the.factory.view path, @process, ( view )->
+      @the.factory.view path, @process, ( view )=>
         @_render_view path, data, el, view
+        fn view
 
-  _render_view:( path, data, el = @process.route.el )->
+  _render_view:( path, data, el = @process.route.el, view )->
     view.after_in = view.process.after_run
 
     if data instanceof Fetcher

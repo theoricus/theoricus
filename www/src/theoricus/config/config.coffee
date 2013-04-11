@@ -1,6 +1,4 @@
-Settings = require 'app/config/settings'
-
-class Config
+module.exports = class Config
 
   animate_at_startup: false
   enable_auto_transitions: true
@@ -12,11 +10,11 @@ class Config
   ###
   @param [theoricus.Theoricus] @the   Shortcut for app's instance
   ###
-  constructor:( @the )->
+  constructor:( @the, @Settings )->
     @app_name = "app"
 
-    @disable_transitions = Settings.disable_transitions ? false
-    @animate_at_startup = Settings.animate_at_startup ? true
-    @enable_auto_transitions = Settings.enable_auto_transitions ? true
-    @autobind = Settings.autobind ? false
-    @vendors = Settings.vendors
+    @disable_transitions = @Settings.disable_transitions ? false
+    @animate_at_startup = @Settings.animate_at_startup ? true
+    @enable_auto_transitions = @Settings.enable_auto_transitions ? true
+    @autobind = @Settings.autobind ? false
+    @vendors = @Settings.vendors

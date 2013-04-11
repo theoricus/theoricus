@@ -30,7 +30,7 @@ module.exports = class Processes
   ###
   @param [theoricus.Theoricus] @the   Shortcut for app's instance
   ###
-  constructor:( @the )->
+  constructor:( @the, @Routes )->
     Factory = @the.factory
 
     if @the.config.animate_at_startup is false
@@ -38,7 +38,7 @@ module.exports = class Processes
       @the.config.disable_transitions = true
 
     $(document).ready =>
-      @router = new Router @the, @_on_router_change
+      @router = new Router @the, @Routes, @_on_router_change
 
   ###
   1st
@@ -51,14 +51,15 @@ module.exports = class Processes
     if @locked
       return @router.navigate @last_process.route.location, 0, 1 
 
-    new Process @the, route, ( process )=>
+    new Process @the, route, ( process, controller )=>
       @last_process = process
       @locked = true
       @the.crawler.is_rendered = false
 
-      @_filter_pending_processes process
-      @_filter_dead_processes()
-      @_destroy_dead_processes()
+      @pending_processes = []
+      @_filter_pending_processes process, =>
+        @_filter_dead_processes()
+        @_destroy_dead_processes()
 
   ###
   2nd
@@ -69,20 +70,24 @@ module.exports = class Processes
 
   @param [theoricus.core.Process] process
   ###
-  _filter_pending_processes:( process )->
-    @pending_processes = [ process ]
+  _filter_pending_processes:( process, after_filter )->
+    @pending_processes.push process
 
-    while process && process.route.at
+    if process.route.at
       route = ArrayUtil.find( @router.routes, match: process.route.at )
 
       if route?
-        process = new Process @the, route.item.clone()
-        @pending_processes.push process
-        break if route.target_route is null
+        process = new Process @the, route.item.clone(), (process)=>
+          # @pending_processes.push process
+          unless route.target_route?
+            @_filter_pending_processes process, after_filter
+          else
+            after_filter()
       else
         console.log "ERROR: Dependency not found at=#{process.route.at}"
         console.log process.route
-        break
+    else
+      after_filter()
 
   ###
   3th
@@ -127,6 +132,7 @@ module.exports = class Processes
   ###
   _run_pending_processes:()=>
     if @pending_processes.length
+
       process = @pending_processes.pop()
       search  = route: match: process.route.match
       found = ArrayUtil.find( @active_processes, search )?

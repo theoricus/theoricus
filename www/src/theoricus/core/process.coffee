@@ -4,7 +4,7 @@ View = require 'theoricus/mvc/view'
 ###
 Responsible for "running" a [theoricus.core.Route] Route
 
- @author {https://github.com/arboleya arboleya}
+@author {https://github.com/arboleya arboleya}
 ###
 module.exports = class Process
 
@@ -23,7 +23,7 @@ module.exports = class Process
   constructor:( @the, @route, fn )->
     # instantiates controller
     @the.factory.controller @route.api.controller_name, ( @controller )=>
-      fn @controller
+      fn @, @controller
 
   ###
   Executes controller's action, in case it isn't declared executes an 
@@ -44,13 +44,17 @@ module.exports = class Process
       @controller.process = null
       after_run()
 
-    # executes the action and catches the resulting view
-    @view = @controller[ action ].apply @controller, @route.api.params
-    unless @view instanceof theoricus.mvc.View
-      controller_name = @route.api.controller_name.camelize()
-      msg = "Check your `#{controller_name}` controller, the action "
-      msg += "`#{action}` must return a View instance."
-      console.error msg
+    # mounts an array with action params followed by a callback
+    params = @route.api.params.concat (@view)=>
+      unless @view instanceof View
+        controller_name = @route.api.controller_name.camelize()
+        msg = "Check your `#{controller_name}` controller, the action "
+        msg += "`#{action}` must return a View instance."
+        console.error msg
+
+    # executes the action passing all arguments, the callback will be executed
+    # with the resulting view
+    @controller[ action ].apply @controller, params
 
   ###
   Executes view's transition "out" method, wait for its end
