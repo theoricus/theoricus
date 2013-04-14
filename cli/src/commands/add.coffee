@@ -7,18 +7,20 @@ class theoricus.commands.Add extends theoricus.generators.Question
 
   create: (opts)->
 
+    # if you don't specify type, ask type
     if opts[1]?
       type = opts[1]
     else
-      q = "Which you would like to create? [controller|model|view|mvc] : "
+      q = "Which you would like to create ? [controller|model|view|mvc] : "
       f = /(controller|model|view|mvc)/
 
       return @ask q, f, (type) => opts[1] = type; @create opts
 
+    # if you don't specify name, ask name
     if opts[2]?
       name = opts[2]
     else
-      q = "Please give it a name : "
+      q = "Please give it a name ( underscore_name ) : "
       f = /([^\s]*)/ # not empty
 
       return @ask q, f, (name) => opts[2] = name; @create opts
