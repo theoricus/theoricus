@@ -136,9 +136,9 @@ class theoricus.commands.Compiler
       source = fs.readFileSync file, "utf-8"
 
       # inject some virtual id's to be used by the model binding
-      search = /#{([\w]+)}/g
-      replace = '<!-- @$1 -->#{$1}<!-- /@$1 -->'
-      source = source.replace search, replace
+      # search = /#{([\w]+)}/g
+      # replace = '<!-- @$1 -->#{$1}<!-- /@$1 -->'
+      # source = source.replace search, replace
 
       # compile source
       # TODO: move compile options to config file
@@ -153,7 +153,7 @@ class theoricus.commands.Compiler
 
     # format everything
     output = output.replace( "~TEMPLATES", buffer.join "," )
-    output = @to_single_line output
+    # output = @to_single_line output
 
     # return all jade files compiled for use in client
     return "// TEMPLATES\n#{output}"
