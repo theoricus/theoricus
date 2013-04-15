@@ -190,6 +190,11 @@ class theoricus.commands.Compiler
           if --@pending_stylus is 0
             after_compile( buffer.join "\n" ) 
 
+    Server = theoricus.commands.Server
+
+    if Server.io?
+      Server.io.sockets.emit( 'refresh', style: true );
+
   # updates the release files
   compile:( compile_stylus = true )->
     # read conf
@@ -210,16 +215,17 @@ class theoricus.commands.Compiler
     # build everything
     @toaster.build header, footer
 
+    ###
+    send message through socket.io asking browser to refresh ( js = true )
+    ###
+
+    Server = theoricus.commands.Server
+
+    if Server.io?
+      Server.io.sockets.emit( 'refresh', js: true );
+
     # formatted time to CLI notifications
     now = ("#{new Date}".match /[0-9]{2}\:[0-9]{2}\:[0-9]{2}/)[0]
-
-    ###
-    send message through socket.io asking browser to refresh
-    ###
-    # Server = theoricus.commands.Server
-    
-    # if Server.io?
-    #   Server.io.sockets.emit( 'refresh', null );
 
     return unless compile_stylus
 
@@ -240,6 +246,9 @@ class theoricus.commands.Compiler
     new theoricus.commands.Config app, routes
 
   to_single_line:( code )->
+    return code;
+
+    # temporarily disabled for debugging purposes
     theoricus.commands.Compiler.to_single_line code
 
   @to_single_line = ( code, ugli )->

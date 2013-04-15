@@ -18,15 +18,16 @@ class theoricus.commands.Server
   start_server:()->
     @server = http.createServer( @_handler )
 
-    Server.io = (require "socket.io").listen @server
+    s = theoricus.commands.Server
+    s.io = (require "socket.io").listen @server
+
+    s.io.set 'log level', 1
 
     @server.listen @port
 
-    Server.io.sockets.on "connection", (socket) ->
+    console.log "#{'Socket.io at'.bold} http://localhost".grey
 
-      console.log 'client connected'
-
-    console.log "#{'Server running at'.bold} http://localhost:#{@port}".grey
+    console.log "#{'Simple Server running at'.bold} http://localhost:#{@port}".grey
 
   close_server:()->
     @server.close()
@@ -40,6 +41,15 @@ class theoricus.commands.Server
 
     uri = url.parse( request.url ).pathname
     filename = path.join( @root, uri )
+
+    if uri.indexOf( '.' ) isnt -1
+      if not fs.existsSync( filename )
+
+        response.writeHead(404, {"Content-Type": "text/plain"});
+        response.write( "File #{filename} doesn't exist" );
+        response.end();
+
+        return
 
     fs.exists filename, (exists)=>
 
@@ -63,7 +73,6 @@ class theoricus.commands.Server
           response.end()
         return
 
-
       fs.readFile filename, "binary", (err, file)->
         if err
           response.writeHead 500, {"Content-Type": "text/plain"}
@@ -77,6 +86,12 @@ class theoricus.commands.Server
           response.writeHead 200, {"Content-Type": "image/#{mime[1]}"}
         else if filename.match /.css$/m
           response.writeHead 200, {"Content-Type": "text/css"}
+        else if filename.match /.woff$/m
+          response.writeHead 200, {"Content-Type": "font/opentype"}
+        else if filename.match /.ttf$/m
+          response.writeHead 200, {"Content-Type": "font/opentype"}
+        else if filename.match /.json$/m
+          response.writeHead 200, {"Content-Type": "application/json"}
 
         response.write file, "binary"
         response.end()
