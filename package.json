@@ -1,7 +1,10 @@
 {
   "name": "theoricus",
-  "version": "0.1.8",
+  "version": "0.2.0",
   "author": "Anderson Arboleya <anderson@arboleya.me>",
+  "contributors": [
+    { "name": "Henrique Matias", "email": "hems.inlet+theoricus@gmail.com" }
+  ],
   "description" : "Minimalist MVC implementation for CoffeeScript.",
   "keywords": ["coffeescript", "mvc", "framework"],
 
@@ -19,7 +22,7 @@
   
   "dependencies"   : {
     "fs-util"          : "0.3.4",
-    "coffee-toaster"   : "0.6.11",
+    "coffee-toaster"   : "0.6.12",
     "coffee-script"    : "1.4.0",
     "jade"             : "0.27.7",
     "stylus"           : "0.31.0", 

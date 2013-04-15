@@ -1,11 +1,10 @@
 # Theoricus #
 
 Minimalist MVC implementation for CoffeeScript.
-> Version 0.1.8
+> Version 0.2
 
 # Features
  * Routes system
- * Server-side rendering
  * I/O transitions for all Views
  * Convention over configuration *([+](http://en.wikipedia.org/wiki/Convention_over_configuration))*
  * Automagic naviagation mechanism
@@ -25,26 +24,20 @@ sooner than later.
 
 # About
 
-CoffeeScript browser-based MV(C, or anything alike) implementation with a
-powerful'n'effortless navigation mechanism based on objective deep-linked target
-routes. Generators and destroyers for simple code scaffolding. Embedded build
-system, live compliler, web server and indexing system - this one can exports
-your application for static (javascriptless) use, aimed specially at web-bots
-looking forward to better SEO results. You can also make your serverside
-*middleware* that uses Theoricus to render valid markup also in the server.
+CoffeeScript browser-based MVC(or anything alike) implementation with a
+powerful'n'effortless navigation. 
 
-It uses simple naming conventions (as you see in rails and many others), with a
-powerful build system behind it. There's also a naviagation mechanism built to
-let your free to code your shit instead of handling url's manually.
+It comes with a fancy comand line tool to help you compiling and scaffolding
+code, programming for modern browsers was never so fun ( :
 
-Theoricus uses some lovely pre-processed languages to accomplish the goals:
+Very inspired by modern frameworks ( we don't mean only rails, but also others
+goodness you can find nowadays on web ) it does a lot of magic for you.
+
+Also worth saying we somehow "replaced" css / html / js by some sweeter sweeties
 
  - [Stylus](https://github.com/learnboost/stylus) (css)
  - [Jade](https://github.com/visionmedia/jade) (html)
  - [CoffeeScript](https://github.com/jashkenas/coffee-script) (js)
-
-## In short
-It's in a very alpha version, use at your own risk.
 
 Have fun. :)
 
