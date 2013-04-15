@@ -5,4 +5,4 @@ animate_at_startup = false
 enable_auto_transitions = true
 
 # vendors
-vendors = []
+vendors = ['socket.io.js','refresh.js']

@@ -5,7 +5,7 @@ class theoricus.utils.StringUtil
   ###
   @ucfirst=( str )->
     a = str.substr( 0, 1 ).toUpperCase()
-    b = str.substr( 1 ).toLowerCase()
+    b = str.substr( 1 )
     return a + b
 
   ###
@@ -15,6 +15,7 @@ class theoricus.utils.StringUtil
     parts = [].concat( str.split "_" )
     buffer = ""
     buffer += StringUtil.ucfirst part for part in parts
+    return buffer
 
   ###
   @param [String] str

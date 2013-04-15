@@ -83,8 +83,14 @@ class theoricus.core.Router
   run:( url, trigger = true )=>
     ( url = url.replace @the.base_path, '' ) if @the.base_path?
 
+    if url.substr( -1 ) is '/'
+      len = url.length;
+      len--
+      url = url.substr( 0, len )
+
     @trigger = trigger
-    @route { title: url }
+
+    @route { title:url }
 
   go:( index )->
     History.go index

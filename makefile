@@ -8,7 +8,13 @@ watch:
 	$(TOASTER) . -wd
 
 build:
+	git submodule update --init
+
+	npm install
+
 	$(TOASTER) . -c
+install: build
+	npm link
 
 test: build
 	# TODO: add testing routine

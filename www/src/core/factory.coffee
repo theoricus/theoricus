@@ -20,18 +20,20 @@ class theoricus.core.Factory
   @model=@::model=( name, init = {} )->
     # console.log "Factory.model( '#{name}' )"
 
-    classname = name.camelize()
+
+    classname = theoricus.utils.StringUtil.camelize name
     classpath = "app.models.#{name}"
 
     unless (klass = app.models[ classname ])?
-      console.error Error 'Model not found: ' + classpath
+      console.error 'Model not found: ' + classpath
+      console.error 'just tried classname: ' + classname
     else
-      unless (model = new (klass)) instanceof Model
+      unless ( model = new klass(init) ) instanceof Model
         console.error "#{classpath} is not a Model instance - you probably forgot to extend thoricus.mvc.Model"
     
     # defaults to AppModel if given model is  is not found
     # (cant see any sense on this, will probably be removed later)
-    model = new app.AppModel unless model?
+    model = new app.AppModel(init) unless model?
 
     model.classpath = classpath
     model.classname = classname
@@ -54,8 +56,9 @@ class theoricus.core.Factory
 
     klass = app.views
     classpath = "app.views"
-    classname = (parts = path.split '/').pop().camelize()
-      
+    classname = (parts = path.split '/').pop()
+    classname = theoricus.utils.StringUtil.camelize classname
+
     len = parts.length - 1
     namespace  = parts[ len ]
 
@@ -100,7 +103,7 @@ class theoricus.core.Factory
   controller:( name )->
     # console.log "Factory.controller( '#{name}' )"
 
-    classname = name.camelize()
+    classname = classname = theoricus.utils.StringUtil.camelize name
     classpath = "app.controllers.#{classname}"
 
     if @controllers[ classname ]?
