@@ -5,8 +5,15 @@
   "description" : "Minimalist MVC implementation for CoffeeScript.",
   "keywords": ["coffeescript", "mvc", "framework"],
 
-  "directories": {"lib": "./lib/"},
-  "scripts": {"test": "make test"},
+  "directories": {
+    "lib": "./lib/"
+  },
+
+  "scripts": {
+    "test": "make test",
+    "preinstall": "make preinstall",
+    "postinstall": "make postinstall"
+  },
 
   "repository": {
     "type": "git",
@@ -17,8 +24,11 @@
     "theoricus": "./bin/theoricus",
     "_theoricus_coffee": "./node_modules/coffee-script/bin/coffee"
   },
-  "engines": {"node" : "0.8.x"},
-  
+
+  "engines": {
+    "node" : "0.8.x"
+  },
+
   "dependencies"   : {
     "fs-util"          : "0.3.4",
     "coffee-toaster"   : "0.6.11",
