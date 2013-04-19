@@ -40,5 +40,5 @@
     "node-phantom"     : "0.2.0",
     "socket.io"        : "0.9.13",
     "connect"          : "2.7.2"
-  },
+  }
 }
