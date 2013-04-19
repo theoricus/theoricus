@@ -1,7 +1,3 @@
 .DS_Store
 node_modules
-lib
 docs-*
-lib/toaster
-lib/theoricus.debug.js
-lib/theoricus.cli.debug.js
