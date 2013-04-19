@@ -1,9 +1,6 @@
-[submodule "www/vendors/JSON-js"]
-	path = www/vendors/JSON-js
-	url = https://github.com/douglascrockford/JSON-js.git
-[submodule "www/vendors/jade"]
-	path = www/vendors/jade
-	url = https://github.com/visionmedia/jade.git
-[submodule "www/vendors/history.js"]
-	path = www/vendors/history.js
-	url = https://github.com/balupton/history.js.git
+[submodule "node_modules/history.js"]
+	path = node_modules/history.js
+	url = git://github.com/browserstate/history.js.git
+[submodule "node_modules/json-js"]
+	path = node_modules/json-js
+	url = git://github.com/douglascrockford/JSON-js.git
