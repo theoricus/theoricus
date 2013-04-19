@@ -41,13 +41,6 @@
     "codo"             : "1.5.4",
     "node-phantom"     : "0.2.0",
     "socket.io"        : "0.9.13",
-    "connect"          : "2.7.2",
-    "history.js"       : "*",
-    "json-js"          : "*"
+    "connect"          : "2.7.2"
   },
-
-  "bundledDependencies": [
-    "history.js",
-    "json-js"
-  ]
 }

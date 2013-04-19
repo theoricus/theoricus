@@ -1,6 +1,0 @@
-[submodule "node_modules/history.js"]
-	path = node_modules/history.js
-	url = git://github.com/browserstate/history.js.git
-[submodule "node_modules/json-js"]
-	path = node_modules/json-js
-	url = git://github.com/douglascrockford/JSON-js.git
