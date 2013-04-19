@@ -6,15 +6,6 @@ VERSION=`coffee build/bumper --version`
 
 
 
-# pre/post install scripts (called by npm on each install)
-preinstall:
-	# git submodule update --init --recursive
-
-postinstall:
-	# TODO
-
-
-
 # watch / release
 watch:
 	$(TOASTER) . -wd
@@ -24,6 +15,7 @@ release:
 
 
 
+# test
 test: build
 	# TODO: add testing routine
 
@@ -41,6 +33,7 @@ docs.www:
 	cd docs-www && python -m SimpleHTTPServer 8080
 
 
+
 # managing version
 bump.minor:
 	coffee build/bumper.coffee --minor
@@ -50,6 +43,7 @@ bump.major:
 
 bump.patch:
 	coffee build/bumper.coffee --patch
+
 
 
 # publishing / re-publishing

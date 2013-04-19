@@ -10,9 +10,7 @@
   },
 
   "scripts": {
-    "test": "make test",
-    "preinstall": "make preinstall",
-    "postinstall": "make postinstall"
+    "test": "make test"
   },
 
   "repository": {
