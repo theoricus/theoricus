@@ -8,7 +8,7 @@ VERSION=`coffee build/bumper --version`
 
 # pre/post install scripts (called by npm on each install)
 preinstall:
-	git submodule update --init --recursive
+	# git submodule update --init --recursive
 
 postinstall:
 	# TODO
