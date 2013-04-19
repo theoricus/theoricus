@@ -44,5 +44,10 @@
     "connect"          : "2.7.2",
     "history.js"       : "*",
     "json-js"          : "*"
-  }
+  },
+
+  "bundledDependencies": [
+    "history.js",
+    "json-js"
+  ]
 }
