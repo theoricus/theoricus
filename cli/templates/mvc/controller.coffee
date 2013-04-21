@@ -1,9 +1,7 @@
-#<< app/app_controller
-#<< app/models/~MODEL_LCASE
+AppController = require 'app/controllers/app_controller'
+{~MODEL_CAMEL} = require 'app/models/~MODEL_LCASE'
 
-class app.controllers.~NAME_CAMEL extends app.AppController
-
-  {~MODEL_CAMEL} = app.models
+module.exports = class ~NAME_CAMEL extends AppController
 
   ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     DEFAULT ACTION BEHAVIOR

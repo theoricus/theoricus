@@ -1,3 +1,3 @@
-#<< app/app_view
+AppView = require 'app/views/app_view'
 
-class app.views.~CONTROLLER_NAME_LC.~NAME_CAMEL extends app.AppView
+module.exports = class ~NAME_CAMEL extends AppView

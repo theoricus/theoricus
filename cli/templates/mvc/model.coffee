@@ -1,6 +1,6 @@
-#<< app/app_model
+AppModel = require 'app/models/app_model'
 
-class app.models.~NAME_CAMEL extends app.AppModel
+module.exports = class ~NAME_CAMEL extends AppModel
 
   ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     MODEL PROPERTIES
