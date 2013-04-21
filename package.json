@@ -35,7 +35,7 @@
 
   "devDependencies": {
     "chai": "1.5.x",
-    "codo": "1.5.4",
+    "codo": "1.6.x",
     "coffee-script": "1.6.x",
     "mocha": "1.9.x",
     "mocha-phantomjs": "2.0.x",
