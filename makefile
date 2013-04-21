@@ -1,17 +1,24 @@
 .PHONY: build docs
 
-TOASTER=node_modules/coffee-toaster/bin/toaster
+CS=node_modules/coffee-script/bin/coffee
 CODO=node_modules/codo/bin/codo
 VERSION=`coffee build/bumper --version`
 
+postinstall: build
 
 
-# watch / release
+
+
+setup: build
+	npm link
+
+
+# watch / build
 watch:
-	$(TOASTER) . -wd
+	$(CS) -wmco lib cli/src
 
-release:
-	$(TOASTER) . -c
+build:
+	$(CS) -mco lib cli/src
 
 
 
