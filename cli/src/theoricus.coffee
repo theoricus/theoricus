@@ -1,16 +1,18 @@
+require('source-map-support').install()
+
 fs = require "fs"
 path = require "path"
 colors = require 'colors'
 
-require '../vendors/inflection'
+require '../cli/vendors/inflection'
 
 Add = require './commands/add'
 AddProject = require './commands/add_project'
 Rm = require './commands/rm'
 Server = require './commands/server'
-StaticServer = require './commands/static_server'
+# StaticServer = require './commands/static_server'
 Compiler = require './commands/compiler'
-Index = require './commands/index'
+# Index = require './commands/index'
 
 exports.run = ->
   new Theoricus
@@ -18,11 +20,11 @@ exports.run = ->
 module.exports = class Theoricus
   
   constructor:->
-    @root = path.join __dirname, "../.."
+    @root = path.join __dirname, ".."
     @app_root = @_get_app_root()
     @pwd = @app_root || path.resolve "."
 
-    @version = (require "#{@root}/package.json" ).version
+    @version = (require "../package.json" ).version
     cmds =  "#{'model'.cyan}#{'|'.white}#{'view'.cyan}#{'|'.white}" +
         "#{'controller'.cyan}#{'|'.white}#{'mvc'.cyan}"
 
@@ -32,24 +34,28 @@ module.exports = class Theoricus
     @header += "  theoricus #{'new'.red}      #{'path'.green}\n"
     @header += "  theoricus #{'add'.red}      #{cmds} \n" #[#{'name'.magenta}] [#{'field1'.yellow}] [#{'field2'.yellow}]\n"
     @header += "  theoricus #{'rm'.red}       #{cmds} \n" #[#{'name'.magenta}]\n"
-    @header += "  theoricus #{'start'.red}    #{'port'.green} default is #{'11235'.yellow}\n"
-    @header += "  theoricus #{'compile'.red}  #{'port'.green} default is #{'http://localhost:11235'.yellow}\n"
-    @header += "  theoricus #{'index'.red}    \n\n"
-    
+    @header += "  theoricus #{'start'.red}    \n"
+    @header += "  theoricus #{'compile'.red}  \n"
+    @header += "  theoricus #{'release'.red}  \n"
+    @header += "  theoricus #{'preview'.red}  \n"
+    # @header += "  theoricus #{'index'.red}    \n\n"
+
     @header += "#{'Options:'.bold}\n"
     @header += "             #{'new'.red}   Creates a new working project in the file system.\n"
     @header += "             #{'add'.red}   Generates a new model|view|controller file.\n"
     @header += "              #{'rm'.red}   Destroy some model|view|controller file.\n"
-    @header += "           #{'start'.red}   Starts app in watch'n'compile mode at http://localhost:11235\n"
-    @header += "         #{'compile'.red}   Compile app to release destination.\n"
-    @header += "           #{'index'.red}   Index the whole application to a static non-js version.\n"
+    @header += "           #{'start'.red}   Starts app at http://localhost in watch'n'compile.\n"
+    @header += "         #{'compile'.red}   Build app in development mode.\n"
+    @header += "         #{'release'.red}   Build app in release mode.\n"
+    @header += "         #{'preview'.red}   Build app in release mode at http://localhost.\n"
+    # @header += "           #{'index'.red}   Index the whole application to a static non-js version.\n"
     @header += "         #{'version'.red}   Show theoricus version.\n"
     @header += "            #{'help'.red}   Show this help screen.\n"
 
     options = process.argv.slice 2
     cmd = options.join( " " ).match /([a-z]+)/
     cmd = if cmd? then cmd[1] else 'help'
-    
+
 
     if @app_root == null and cmd != "help" and cmd != "new"
       console.log "ERROR".bold.red + " Not a Theoricus app."
@@ -62,9 +68,13 @@ module.exports = class Theoricus
       when "add"     then new Add @, options
       when "rm"      then new Rm @, options
       when "start"   then new Server @, options
-      when "static"  then new StaticServer @, options
+      # when "static"  then new StaticServer @, options
+      # when "index"  then new Index @, options
       when "compile" then new Compiler @, options
-      when "index"   then new Index @, options
+      when "release" then new Compiler @, options, true
+      when "preview" then new Compiler @, options, true, true
+
+      # when "index"   then new Index @, options
       when "version"
         console.log @version
       else
