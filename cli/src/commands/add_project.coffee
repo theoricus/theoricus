@@ -7,11 +7,8 @@ module.exports = class AddProject
 
   constructor:( @the, @options )->
     if not options[1]?
-
       console.log "ERROR".bold.red + " You must specify a name for your project"
-            
       return
-
 
     @pwd = @the.pwd
     @root = @the.root
