@@ -1,7 +1,7 @@
 {
   "name": "theoricus-demo-app",
   "author": "Anderson Arboleya",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Simple demo application using Theoricus framework",
   "keywords": ["theoricus", "mvc", "framework", "demo", "app"],
 
@@ -14,7 +14,7 @@
     "url": "https://github.com/serpentem/theoricus-demo-app"
   },
 
-  "dependencies":{
+  "dependencies": {
     "theoricus": "git://github.com/serpentem/theoricus#polvo-integration",
     "polvo": "0.2.2"
   }
