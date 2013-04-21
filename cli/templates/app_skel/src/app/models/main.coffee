@@ -1,3 +1,3 @@
-#<< app/app_model
+AppModel = require 'app/models/app_model'
 
-class app.models.Main extends app.AppModel
+exports.module = class Main extends AppModel

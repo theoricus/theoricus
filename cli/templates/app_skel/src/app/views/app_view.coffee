@@ -1,1 +1,3 @@
-class app.AppView extends theoricus.mvc.View
+View = require 'theoricus/mvc/view'
+
+exports.module = class AppView extends View

@@ -1,3 +1,3 @@
-#<< app/app_view
+AppView = require 'app/views/app_view'
 
-class app.views.main.Index extends app.AppView
+exports.module = class Index extends AppView

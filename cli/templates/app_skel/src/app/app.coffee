@@ -1,13 +1,14 @@
-class app.App extends theoricus.Theoricus
+Theoricus = require 'theoricus/theoricus'
 
-  constructor: ->
+Settings = require 'app/config/settings'
+Routes = require 'app/config/routes'
+
+module.exports = class App extends Theoricus
+
+  constructor:( Settings, Routes )->
     # don't forget to extend Theoricus
-    super()
-
-    # ~> do your stuff 
-
-    # start dealing with page requests
+    super Settings, Routes
     @start()
 
 # initialize your app
-new app.App()
+new App Settings, Routes

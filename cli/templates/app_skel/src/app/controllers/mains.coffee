@@ -1,5 +1,4 @@
-#<< app/app_controller
-#<< app/models/main
+AppController = require 'app/controllers/app_controller'
+Main = require 'app/models/main'
 
-class app.controllers.Mains extends app.AppController
-  {Main} = app.models
+exports.module = class Mains extends AppController

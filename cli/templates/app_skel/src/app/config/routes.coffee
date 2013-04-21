@@ -1,8 +1,13 @@
-# MAIN
-match "/main"
-  to: "mains/index"
-  at: null
-  el: "body"
+module.exports = class Routes
 
-# DEFAULT ROUTE
-root "/main"
+  # all routes
+  @routes =
+
+    # main route
+    '/main':
+      to: "mains/index"
+      at: null
+      el: "body"
+
+  # default route
+  @root: '/main'
