@@ -1,3 +1,5 @@
+path = require 'path'
+
 module.exports = class Controller
   fs = require 'fs'
 
@@ -8,8 +10,11 @@ module.exports = class Controller
     model_name = name.singularize().camelize()
     model_name_lc = model_name.toLowerCase()
 
-    tmpl = "#{@the.root}/cli/src/generators/templates/mvc/controller.coffee"
-    filepath = "app/controllers/#{name.toLowerCase()}.coffee"
+    tmpl = path.join @the.root, 'cli', 'templates', 'mvc'
+    tmpl = path.join tmpl, 'controller.coffee'
+
+    controllers = path.join @the.app_root, 'src', 'app', 'controllers'
+    filepath = path.join controllers, "#{name.toLowerCase()}.coffee"
 
     contents = (fs.readFileSync tmpl).toString()
     contents = contents.replace /~NAME_CAMEL/g, name_camel

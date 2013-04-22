@@ -6,29 +6,32 @@ Question = require '../generators/question'
 
 module.exports = class Add extends Question
 
-  constructor:( @the, opts )-> @create opts
+  constructor:( @the, @opts )->
+    do @create
 
-  create: (opts)->
+  create: ()->
 
-    if opts[1]?
-      type = opts[1]
+    if @opts[1]?
+      type = @opts[1]
     else
       q = "Which you would like to create? [controller|model|view|mvc] : "
       f = /(controller|model|view|mvc)/
 
-      return @ask q, f, (type) => opts[1] = type; @create opts
+      return @ask q, f, (type) =>
+        @opts[1] = type
+        do @create
 
-    if opts[2]?
-      name = opts[2]
+    if @opts[2]?
+      name = @opts[2]
     else
       q = "Please give it a name : "
       f = /([^\s]*)/ # not empty
 
       return @ask q, f, (name) =>
-        opts[2] = name
-        @create opts
+        @opts[2] = name
+        do @create
 
-    args = opts.slice 3
+    args = @opts.slice 3
 
     unless @[type]?
       error_msg = "Valid options: controller, model, view, mvc."
@@ -42,7 +45,7 @@ module.exports = class Add extends Question
     @controller name
 
   model:( name, args )->
-    new Model @the, name, args
+    new Model @the, name, args, @opts
 
   view:( path )->
     folder = (parts = path.split '/')[0]
@@ -57,8 +60,8 @@ module.exports = class Add extends Question
       """
       throw new Error error_msg
       return
-    
-    new View @the, name, folder
+
+    new View @the, name, folder, false, @opts
 
   controller:( name )->
-    new Controller @the, name
+    new Controller @the, name, @opts

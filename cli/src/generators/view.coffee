@@ -1,34 +1,48 @@
 fs = require 'fs'
 fsu = require 'fs-util'
+path = require 'path'
 
 module.exports = class View
 
-  constructor:( @the, name, controller_name_lc, mvc = false )->
+  constructor:( @the, name, controller_name_lc, mvc = false, options )->
+    
+    shell = options.join ' '
+    
+    templates_ext = shell.match /--templates[\s]*([^\s]+)/
+    templates_ext = if templates_ext? then templates_ext[1] else 'jade'
+
+    styles_ext = shell.match /--styles[\s]*([^\s]+)/
+    styles_ext = if styles_ext? then styles_ext[1] else 'styl'
+
     name_camel = name.camelize()
     name_lc    = name.toLowerCase()
 
-    view_folder = "app/views/#{controller_name_lc}"
-    static_folder = "app/static/#{controller_name_lc}"
+    src = path.join @the.app_root, 'src'
+    view_folder = path.join src, "app/views/#{controller_name_lc}"
+    template_folder = path.join src, "templates/#{controller_name_lc}"
+    style_folder = path.join src, "styles/#{controller_name_lc}"
 
     if mvc
       view_path = "#{view_folder}/index.coffee"
     else
       view_path = "#{view_folder}/#{name_lc}.coffee"
 
-    jade_path = "#{static_folder}/index.jade"
-    styl_path = "#{static_folder}/index.styl"
+    template_path = "#{template_folder}/index.#{templates_ext}"
+    style_path = "#{style_folder}/index.#{styles_ext}"
 
     # prepare contents
-    tmpl_path = "#{@the.root}/cli/src/generators/templates/mvc"
-    tmpl_view = "#{tmpl_path}/view.coffee"
-    tmpl_jade = "#{tmpl_path}/view.jade"
-    tmpl_styl = "#{tmpl_path}/view.styl"
+    tmpl_mvc = "#{@the.root}/cli/templates/mvc"
+
+    tmpl_view = "#{tmpl_mvc}/view.coffee"
+    tmpl_template = "#{tmpl_mvc}/view.#{templates_ext}"
+    tmpl_style = "#{tmpl_mvc}/view.#{styles_ext}"
 
     # create static container
     try
       # create static container
       fsu.mkdir_p view_folder 
-      fsu.mkdir_p static_folder
+      fsu.mkdir_p template_folder
+      fsu.mkdir_p style_folder
     catch e
       # folder already exists
       # just add the files
@@ -43,15 +57,15 @@ module.exports = class View
     console.log "#{'Created'.bold} #{view_path}".green
 
     # write jade
-    unless fs.existsSync jade_path
-      fs.writeFileSync jade_path, (fs.readFileSync tmpl_jade)
-      console.log "#{'Created'.bold} #{jade_path}".green
+    unless fs.existsSync template_path
+      fs.writeFileSync template_path, (fs.readFileSync tmpl_template)
+      console.log "#{'Created'.bold} #{template_path}".green
     else
-      console.log "#{'Already exists'.bold} #{jade_path}".green
+      console.log "#{'Already exists'.bold} #{template_path}".green
 
     # write stylus
-    unless fs.existsSync styl_path
-      fs.writeFileSync styl_path, fs.readFileSync tmpl_styl
-      console.log "#{'Created'.bold} #{styl_path}".green
+    unless fs.existsSync style_path
+      fs.writeFileSync style_path, fs.readFileSync tmpl_style
+      console.log "#{'Created'.bold} #{style_path}".green
     else
-      console.log "#{'Already exists'.bold} #{styl_path}".green
+      console.log "#{'Already exists'.bold} #{style_path}".green

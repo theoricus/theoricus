@@ -1,5 +1,5 @@
 AppController = require 'app/controllers/app_controller'
-{~MODEL_CAMEL} = require 'app/models/~MODEL_LCASE'
+~MODEL_CAMEL = require 'app/models/~MODEL_LCASE'
 
 module.exports = class ~NAME_CAMEL extends AppController
 
