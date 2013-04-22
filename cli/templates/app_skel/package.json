@@ -15,7 +15,6 @@
   },
 
   "dependencies": {
-    "theoricus": "git://github.com/serpentem/theoricus#polvo-integration",
-    "polvo": "0.2.2"
+    "theoricus": "git://github.com/serpentem/theoricus#polvo-integration"
   }
 }

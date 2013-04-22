@@ -51,7 +51,6 @@ setup
       # theoricus
       'json': ".theoricus/www/vendors/json2.js"
       'history': ".theoricus/www/vendors/history.js"
-      # 'jade': ".theoricus/node_modules/jade/runtime.js"
       'inflection': ".theoricus/www/vendors/inflection.js"
       'jquery': ".theoricus/www/vendors/jquery.js"
 
