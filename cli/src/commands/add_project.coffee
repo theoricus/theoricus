@@ -2,6 +2,7 @@ fs   = require 'fs'
 path = require 'path'
 pn   = path.normalize
 exec = (require "child_process").exec
+spawn = (require "child_process").spawn
 
 module.exports = class AddProject
 
@@ -33,3 +34,7 @@ module.exports = class AddProject
           files = stdout.split("\n").slice 0, -1
           for file in files
             console.log "#{'Created'.bold} #{file}".green
+
+          # install dependencies through a spawned `make setup` call
+          console.log '\nApplication created, setting up...\n\n'
+          spawn 'make', ['setup'], {cwd: @target, stdio: 'inherit'}
