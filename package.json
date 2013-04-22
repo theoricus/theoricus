@@ -31,7 +31,7 @@
     "coffee-script": "1.6.x",
     "colors": "0.6.x",
     "fs-util": "0.3.x",
-    "polvo": "git://github.com/serpentem/polvo#dev",
+    "polvo": "git://github.com/serpentem/polvo#hotfix/postinstall",
     "source-map-support": "0.1.x"
   },
 
