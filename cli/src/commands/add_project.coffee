@@ -13,8 +13,8 @@ module.exports = class AddProject
     @pwd = @the.pwd
     @root = @the.root
 
-    @app_skel = pn "#{@root}/cli/src/generators/templates/app_skel"
-    @target   = pn "#{@pwd}/#{@options[1]}"
+    @app_skel = path.join @the.root, 'cli', 'templates', 'app_skel'
+    @target   = path.join @pwd, @options[1]
 
     if fs.existsSync @target
 
