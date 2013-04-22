@@ -27,6 +27,7 @@
   },
 
   "dependencies"   : {
+    "coffee-script": "1.6.x",
     "colors": "0.6.x",
     "fs-util": "0.3.x",
     "polvo": "git://github.com/serpentem/polvo#dev",
@@ -36,7 +37,6 @@
   "devDependencies": {
     "chai": "1.5.x",
     "codo": "1.6.x",
-    "coffee-script": "1.6.x",
     "mocha": "1.9.x",
     "mocha-phantomjs": "2.0.x",
     "should": "1.2.x"
