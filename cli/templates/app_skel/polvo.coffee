@@ -1,3 +1,5 @@
+theoricus = 'node_modules/theoricus'
+
 setup
   
   # ----------------------------------------------------------------------------
@@ -49,10 +51,10 @@ setup
     javascript:
 
       # theoricus
-      'json': ".theoricus/www/vendors/json2.js"
-      'history': ".theoricus/www/vendors/history.js"
-      'inflection': ".theoricus/www/vendors/inflection.js"
-      'jquery': ".theoricus/www/vendors/jquery.js"
+      'json': "#{theoricus}/www/vendors/json2.js"
+      'history': "#{theoricus}/www/vendors/history.js"
+      'inflection': "#{theoricus}/www/vendors/inflection.js"
+      'jquery': "#{theoricus}/www/vendors/jquery.js"
 
       # app
       # 'app_vendor_name': 'vendors/app_vendor_name.js'
