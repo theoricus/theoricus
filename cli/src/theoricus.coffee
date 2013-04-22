@@ -61,8 +61,6 @@ module.exports = class Theoricus
       console.log "ERROR".bold.red + " Not a Theoricus app."
       return
 
-    options.watch ?= false
-
     switch cmd
       when "new"     then new AddProject @, options
       when "add"     then new Add @, options
