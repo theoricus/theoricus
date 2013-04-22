@@ -1,8 +1,6 @@
 Model = require 'theoricus/mvc/model'
 Factory = null
 
-require 'jade'
-
 module.exports = class View
 
   # $ reference to dom element
