@@ -4,13 +4,10 @@ CS=node_modules/coffee-script/bin/coffee
 CODO=node_modules/codo/bin/codo
 VERSION=`coffee build/bumper --version`
 
-postinstall: build
 
-
-
-
-setup: build
+setup:
 	npm link
+	make build
 
 
 # watch / build
