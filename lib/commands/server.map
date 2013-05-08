@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "server.js",
+  "sourceRoot": "../..",
+  "sources": [
+    "cli/src/commands/server.coffee"
+  ],
+  "names": [],
+  "mappings": ";AAAA;CAAA,KAAA,YAAA;;CAAA,CAAA,CAAO,CAAP,EAAO,CAAA;;CAAP,CACA,CAAO,CAAP,GAAO,QAAA;;CADP,CAGA,CAAuB,GAAjB,CAAN;CACE,EAAS,CAAT,CAAA,CAAC;;CAEW,CAAQ,CAAR,CAAA,GAAA,SAAG;CAEb,EAFa,CAAA,EAAD;CAEZ,CAAmC,CAArB,CAAb,CAAa,CAAd,CAAc,GAAd,IAAc;CAAd,CACkB,EAAlB,CAAkB,CAAlB,IAAA;CAA2B,CAAK,CAAL,CAAM,IAAN;CAD3B,OACA;CALF,IAEY;;CAFZ;;CAJF;CAAA"
+}

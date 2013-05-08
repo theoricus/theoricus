@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "app.js",
+  "sourceRoot": "../../../../../../..",
+  "sources": [
+    "cli/src/generators/templates/app_skel/src/app/config/app.coffee"
+  ],
+  "names": [],
+  "mappings": ";AACA;CAAA,KAAA,8CAAA;;CAAA,CAAA,CAAqB,EAArB,aAAA;;CAAA,CAGA,CAA0B,CAH1B,mBAGA;;CAHA,CAMA,CAAU,IAAV;CANA"
+}

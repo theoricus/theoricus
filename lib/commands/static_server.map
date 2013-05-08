@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "static_server.js",
+  "sourceRoot": "../..",
+  "sources": [
+    "cli/src/commands/static_server.coffee"
+  ],
+  "names": [],
+  "mappings": ";AASiD;CAAA;CAAA"
+}

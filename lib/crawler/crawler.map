@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "crawler.js",
+  "sourceRoot": "../..",
+  "sources": [
+    "cli/src/crawler/crawler.coffee"
+  ],
+  "names": [],
+  "mappings": ";AASiD;CAAA;CAAA"
+}

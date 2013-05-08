@@ -1,7 +1,6 @@
 .DS_Store
 node_modules
 docs-*
-lib
 
 cli/templates/app_skel/.theoricus
 cli/templates/app_skel/node_modules
