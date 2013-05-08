@@ -7,7 +7,6 @@ VERSION=`coffee build/bumper --version`
 
 setup:
 	npm link
-	make build
 
 
 # watch / build
