@@ -1,4 +1,4 @@
-theoricus = 'node_modules/theoricus'
+theoricus = 'node_modules/theoricus/www'
 
 setup
   
@@ -15,7 +15,7 @@ setup
   # source folders
   sources: [
     'src'
-    '.theoricus/www/src'
+    "#{theoricus}/src"
   ]
 
   # excluded folders (if informed, all others will be included)
@@ -51,10 +51,10 @@ setup
     javascript:
 
       # theoricus
-      'json': "#{theoricus}/www/vendors/json2.js"
-      'history': "#{theoricus}/www/vendors/history.js"
-      'inflection': "#{theoricus}/www/vendors/inflection.js"
-      'jquery': "#{theoricus}/www/vendors/jquery.js"
+      'json': "#{theoricus}/vendors/json2.js"
+      'history': "#{theoricus}/vendors/history.js"
+      'inflection': "#{theoricus}/vendors/inflection.js"
+      'jquery': "#{theoricus}/vendors/jquery.js"
 
       # app
       # 'app_vendor_name': 'vendors/app_vendor_name.js'

@@ -1,11 +1,10 @@
-polvo=node_modules/polvo/bin/polvoth
+theoricus=node_modules/theoricus/bin/theoricus
+
 setup:
 	npm install
-	npm install -g theoricus
-	ln -s node_modules/theoricus .theoricus
 
 start:
-	$(polvo) -ws
+	$(theoricus) start
 
 release:
-	$(polvo) -r
+	$(theoricus) release
