@@ -3,11 +3,10 @@ View = require 'theoricus/mvc/view'
 exports.module = class AppView extends View
 
   set_triggers: ->
-		super()
+    super()
 
-		# automagically route links starting with "/"
-		@el.find( 'a[href*="/"]' ).each ( index, item ) =>
-			$( item ).click ( event ) =>
-				@navigate $( event.target ).attr 'href'
-
-				return off
+    # automagically route links starting with "/"
+    @el.find( 'a[href*="/"]' ).each ( index, item ) =>
+      $( item ).click ( event ) =>
+        @navigate $( event.target ).attr 'href'
+        return off
