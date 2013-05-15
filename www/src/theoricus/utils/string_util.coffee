@@ -5,7 +5,7 @@ module.exports = class StringUtil
   ###
   @ucfirst=( str )->
     a = str.substr( 0, 1 ).toUpperCase()
-    b = str.substr( 1 ).toLowerCase()
+    b = str.substr( 1 )
     return a + b
 
   ###
@@ -15,6 +15,8 @@ module.exports = class StringUtil
     parts = [].concat( str.split "_" )
     buffer = ""
     buffer += StringUtil.ucfirst part for part in parts
+    # some weirdness happening if we don't return the buffer
+    return buffer
 
   ###
   @param [String] str
