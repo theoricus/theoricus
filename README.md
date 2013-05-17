@@ -53,7 +53,7 @@ sooner than later.
 
   - [Demo Application](#demo-app)
   - [Contributing](#contributing)
-  - [Showcase](#https://github.com/serpentem/wiki/showcase)
+  - [Showcase](https://github.com/serpentem/wiki/showcase)
   - [CHANGELOG.md](https://github.com/serpentem/theoricus/tree/master/build/CHANGELOG.md)
 
 <a name="installing" />
