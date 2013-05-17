@@ -6,7 +6,7 @@ Routes = require 'app/config/routes'
 module.exports = class App extends Theoricus
 
   constructor:( Settings, Routes )->
-    # don't forget to extend Theoricus
+    # don't forget to extend Theoricus and pass Settings and Routes !
     super Settings, Routes
     @start()
 

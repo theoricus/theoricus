@@ -5,14 +5,19 @@ module.exports = class View
 
   # $ reference to dom element
   el: null
-   # @property [String] class path
+
+  # @property [String] class path
   classpath : null
+
   # @property [String] class name
   classname : null
+
   # @property [String] namespace
   namespace : null
+  
   # @property [theoricus.core.Process] process
   process   : null
+
    ###
   @param [theoricus.Theoricus] @the   Shortcut for app's instance
   ###
@@ -32,9 +37,10 @@ module.exports = class View
       @el = $ el
 
       if template == null
-        tmpl_folder = @namespace.singularize()
+        tmpl_folder = @namespace.replace(/\./g, '/')
         tmpl_name   = @classname.underscore()
-        Factory.template "#{tmpl_folder}/#{tmpl_name}", ( template )=>
+
+        @template "#{tmpl_folder}/#{tmpl_name}", ( template ) =>
           @render_template template
 
    render_template:( template )->
@@ -49,10 +55,6 @@ module.exports = class View
     @set_triggers?()
     @after_render?(@data)
     
-    ###
-    In case you define an "on_resize" handler it will be
-    # automatically binded and triggered
-    ###
     if @on_resize?
       $( window ).unbind 'resize', @on_resize
       $( window ).bind   'resize', @on_resize
@@ -115,29 +117,73 @@ module.exports = class View
   ###
   Destroy the view after the 'out' animation, the default behavior is to just
   empty it's container element.
+
+  before_destroy will be called just before emptying it.
   ###
-  destroy:->
+  destroy: () ->
+    if @on_resize?
+      $( window ).unbind 'resize', @on_resize
+
+    @before_destroy?()
     @el.empty()
 
-   # ~> Shortcuts
+  # ~> Shortcuts
 
   ###
   Shortcut for application navigate
-   @param [String] url URL to navigate
+
+  @param [String] url URL to navigate
   ###
   navigate:( url )->
     @the.processes.router.navigate url
 
   ###
   Shortcut for Factory.view method
-   @param [String] path    Path to view file
+
+  @param [String] path    Path to view file
   ###
   view:( path, fn )->
     Factory.view path, @process, fn
 
   ###
   Shortcut for Factory.template method
-   @param [String] url Path to template file
+
+  @param [String] url Path to template file
   ###
   template:( path, fn )->
     Factory.template path, fn
+
+  ###
+  instantiates a view, render on container passing current data
+  ###
+  require: ( view, container, data = @data, template ) ->
+    view = @view view, ( view ) =>
+
+      if container
+
+        # if user passes a selector instead of a object
+        if container instanceof String
+          container = @el.find container
+
+        # if user passes an object ref, jQuerify it 
+        unless container instanceof jQuery
+          container = $ container
+
+        view.render data, @el.find container, template
+
+      view
+
+  find: ( selector ) => @el.find selector
+
+  ###
+  Takes a selector or array of selectors
+  Adds click event handler to each of them
+  ###
+  link: ( a_selector ) ->
+
+    $( a_selector ).each ( index, selector ) =>
+      @find( selector ).click ( event ) =>
+
+        @navigate $( event.delegateTarget ).attr( 'href' )
+
+        return off

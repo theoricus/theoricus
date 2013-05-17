@@ -86,6 +86,8 @@ module.exports = class Router
   run:( url, trigger = true )=>
     ( url = url.replace @the.base_path, '' ) if @the.base_path?
 
+    url = url.replace /\/$/g, ''
+
     @trigger = trigger
     @route { title: url }
 

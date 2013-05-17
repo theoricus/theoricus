@@ -4,10 +4,15 @@ module.exports = class Routes
   @routes =
 
     # main route
-    '/main':
-      to: "mains/index"
+    '/pages':
+      to: "pages/container"
       at: null
       el: "body"
 
+    '/pages/index':
+      to: "pages/index"
+      at: "/pages"
+      el: "#container"
+
   # default route
-  @root: '/main'
+  @root: '/pages/index'

@@ -24,10 +24,15 @@ module.exports = class Factory
     classpath = "app/models/#{name}".toLowerCase()
 
     require ['app/models/app_model', classpath], ( AppModel, NewModel )=>
-      unless (model = new NewModel) instanceof Model
-        msg = "#{classpath} is not a Model instance - you probably forgot to "
-        msg += "extend thoricus/mvc/Model"
-        console.error msg
+
+      model = new NewModel
+
+      # FIXME: This will throw an error on browser: "Uncaught TypeError: Expecting a function in instanceof check, but got #<Main>"
+      # 
+      # unless (model = new NewModel) instanceof Model
+      #   msg = "#{classpath} is not a Model instance - you probably forgot to "
+      #   msg += "extend thoricus/mvc/Model"
+      #   console.error msg
 
       # defaults to AppModel if given model is  is not found
       # (cant see any sense on this, will probably be removed later)
