@@ -1,4 +1,4 @@
-theoricus = 'node_modules/theoricus/www'
+theoricus = '~theoricus-www'
 
 setup
   

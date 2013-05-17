@@ -1,4 +1,4 @@
-theoricus=node_modules/theoricus/bin/theoricus
+theoricus=~theoricus-bin
 
 setup:
 	npm install
