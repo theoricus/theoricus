@@ -53,7 +53,7 @@ sooner than later.
 
   - [Demo Application](https://github.com/serpentem/theoricus-demo-app)
   - [Contributing](https://github.com/serpentem/theoricus/blob/master/CONTRIBUTING.md)
-  - [Showcase](https://github.com/serpentem/wiki/showcase)
+  - [Showcase](https://github.com/serpentem/theoricus/wiki/showcase)
   - [CHANGELOG.md](https://github.com/serpentem/theoricus/tree/master/build/CHANGELOG.md)
 
 <a name="installing" />
