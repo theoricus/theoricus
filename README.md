@@ -51,8 +51,8 @@ sooner than later.
 
 ## More
 
-  - [Demo Application](#demo-app)
-  - [Contributing](#contributing)
+  - [Demo Application](https://github.com/serpentem/theoricus-demo-app)
+  - [Contributing](https://github.com/serpentem/theoricus/blob/master/CONTRIBUTING.md)
   - [Showcase](https://github.com/serpentem/wiki/showcase)
   - [CHANGELOG.md](https://github.com/serpentem/theoricus/tree/master/build/CHANGELOG.md)
 
@@ -143,9 +143,3 @@ the -s
 
 Visit the url [http://localhost:11235](http://localhost:11235) and you should
 see a success status.
-
-<a name="demo-app" />
-# Demo Application
-
-There's a basic demo application here: <BR>
-https://github.com/serpentem/theoricus-demo-app
