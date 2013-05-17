@@ -32,10 +32,6 @@ module.exports = class Theoricus
     return new AddProject @, @cli if @cli.argv.new
     return console.log @version if @cli.argv.version
 
-    if @app_root == null and not @cli.argv.help
-      console.log "ERROR".bold.red + " Not a Theoricus app."
-      return
-
     return new Add @, @cli if @cli.argv.generate
     return new Rm @, @cli if @cli.argv.destroy
     return new Server @, @cli if @cli.argv.start
@@ -45,6 +41,11 @@ module.exports = class Theoricus
 
     console.log @cli.opts.help() + @cli.examples
 
+  is_theoricus_app:->
+    if @app_root == null
+      console.log "ERROR".bold.red + " Not a Theoricus app."
+      return false
+    return true
 
   _get_app_root:()->
     current = path.resolve "."

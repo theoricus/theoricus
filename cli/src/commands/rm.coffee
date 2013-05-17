@@ -7,6 +7,8 @@ fsu = require "fs-util"
 module.exports = class Rm
 
   constructor:( @the, @cli )->
+    return unless do @the.is_theoricus_app
+
     type = @cli.argv.destroy
     name = @cli.argv._[0]
 

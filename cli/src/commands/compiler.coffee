@@ -4,6 +4,7 @@ fork = require( "child_process" ).fork
 module.exports = class Compiler
 
   constructor:( @the, @cli, release, webserver )->
+    return unless do @the.is_theoricus_app
 
     opts = ''
     opts += if release? then '-r' else '-c'

@@ -8,6 +8,7 @@ fork = require( "child_process" ).fork
 module.exports = class AddProject
 
   constructor:( @the, @cli )->
+    return unless do @the.is_theoricus_app
 
     if @cli.argv.new is true
       console.log "ERROR".bold.red + " You must specify a name for your project"

@@ -7,6 +7,7 @@ Question = require '../generators/question'
 module.exports = class Add extends Question
 
   constructor:( @the, @cli )->
+    return unless do @the.is_theoricus_app
     do @create
 
   create: ()->
