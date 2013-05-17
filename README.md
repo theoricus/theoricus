@@ -45,7 +45,7 @@ sooner than later.
 
 # Docs
   - [Installing](#installing)
-  - [Usage](#usage)
+  - [Help](#help)
     - [Scaffolding new app](#scaffolding)
     - [Starting up](#starting-up)
 
@@ -63,8 +63,8 @@ sooner than later.
 npm install -g theoricus
 ````
 
-<a name="usage" />
-# Usage
+<a name="help" />
+# Help
 
 Theoricus help screen.
 
@@ -84,6 +84,28 @@ Options:
   -h, --help      Shows this help screen                          
   --rf            Use with -g for deleting the whole folder       
   --src           Use with -n for use a specific theoricus version
+
+
+Examples:
+
+  • Creating new app
+    the -n <app-name>
+    the -n <app-name> --src <gh-user>/<gh-repo>#<repo-branch>
+
+  • Generating models, views and controllers
+    the -g model <model-name>
+    the -g view <controller-name>/<view-name>
+    the -g controller <controller-name>
+    the -g mvc <controller-name>
+       * Models and views names are singular, controllers are plural
+
+  • Destroying models, views and controllers
+    the -d model <model-name>
+    the -d view <controller-name>/<view-name>
+    the -d controller <controller-name>
+    the -d mvc <controller-name>
+    the -d mvc <controller-name> --rf
+       * Models and views names are singular, controllers are plural
 ````
 
 <a name="getting-started" />
