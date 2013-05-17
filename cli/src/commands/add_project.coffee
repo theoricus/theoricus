@@ -6,8 +6,9 @@ spawn = (require "child_process").spawn
 
 module.exports = class AddProject
 
-  constructor:( @the, @options )->
-    if not options[1]?
+  constructor:( @the, @cli )->
+
+    if @cli.argv.new is true
       console.log "ERROR".bold.red + " You must specify a name for your project"
       return
 
@@ -15,7 +16,7 @@ module.exports = class AddProject
     @root = @the.root
 
     @app_skel = path.join @the.root, 'cli', 'templates', 'app_skel'
-    @target   = path.join @pwd, @options[1]
+    @target   = path.join @pwd, @cli.argv.new
 
     if fs.existsSync @target
 

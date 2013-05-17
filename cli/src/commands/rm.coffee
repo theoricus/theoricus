@@ -6,12 +6,16 @@ fsu = require "fs-util"
 
 module.exports = class Rm
 
-  constructor:( @the, opts )->
-    type = opts[1]
-    name = opts[2]
-    @recursive = opts[3]? and /\-\-rf/.test opts[3]
+  constructor:( @the, @cli )->
+    type = @cli.argv.destroy
+    name = @cli.argv._[0]
 
-    @APP_FOLDER = "#{@the.pwd}/app"
+    @recursive = @cli.argv.recursive
+
+    @SRC = "#{@the.pwd}/src"
+    @APP_FOLDER = "#{@SRC}/app"
+    @TEMPLATES_FOLDER = "#{@SRC}/templates"
+    @STYLES_FOLDER = "#{@SRC}/styles"
 
     unless @[type]?
       error_msg = "Valid options: controller, model, view, mvc."
@@ -26,7 +30,6 @@ module.exports = class Rm
 
   model:( name )->
     @rm "#{@APP_FOLDER}/models/#{name}.coffee"
-    
 
   view:( path)->
     folder = (parts = path.split '/')[0]
@@ -47,15 +50,14 @@ module.exports = class Rm
       @rm "#{@APP_FOLDER}/static/#{folder}"
     else
       @rm "#{@APP_FOLDER}/views/#{folder}/#{name}.coffee"
-      @rm "#{@APP_FOLDER}/static/#{folder}/#{name}.jade"
-      @rm "#{@APP_FOLDER}/static/#{folder}/#{name}.styl"
+      @rm "#{@TEMPLATES_FOLDER}/#{folder}/#{name}.jade"
+      @rm "#{@STYLES_FOLDER}/#{folder}/#{name}.styl"
 
   controller:( name, args, mvc = false )->
     @rm "#{@APP_FOLDER}/controllers/#{name}.coffee"
 
 
   rm:( filepath )->
-    rpath = filepath.match /app\/.*/
     if fs.existsSync filepath
       try
         if fs.lstatSync( filepath ).isDirectory()
@@ -67,6 +69,6 @@ module.exports = class Rm
           fs.unlinkSync filepath
       catch err
         throw new Error err
-      console.log "#{'Removed'.bold} #{rpath}".red
+      console.log "#{'Removed'.bold} #{filepath}".red
     else
-      console.log "#{'Not found'.bold} #{rpath}".yellow
+      console.log "#{'Not found'.bold} #{filepath}".yellow

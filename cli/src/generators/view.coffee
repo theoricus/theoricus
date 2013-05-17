@@ -4,15 +4,18 @@ path = require 'path'
 
 module.exports = class View
 
-  constructor:( @the, name, controller_name_lc, mvc = false, options )->
-    
-    shell = options.join ' '
-    
-    templates_ext = shell.match /--templates[\s]*([^\s]+)/
-    templates_ext = if templates_ext? then templates_ext[1] else 'jade'
+  constructor:( @the, name, controller_name_lc, mvc = false, @cli )->
+  
+    # TODO add option to pass the engine for javascript, styles and jade
+    # by now it's hardcoded for coffeescript, stylus and jade
 
-    styles_ext = shell.match /--styles[\s]*([^\s]+)/
-    styles_ext = if styles_ext? then styles_ext[1] else 'styl'
+    # shell = @cli.join ' '
+    
+    # templates_ext = shell.match /--templates[\s]*([^\s]+)/
+    # templates_ext = if templates_ext? then templates_ext[1] else 'jade'
+
+    # styles_ext = shell.match /--styles[\s]*([^\s]+)/
+    # styles_ext = if styles_ext? then styles_ext[1] else 'styl'
 
     name_camel = name.camelize()
     name_lc    = name.toLowerCase()
@@ -27,19 +30,18 @@ module.exports = class View
     else
       view_path = "#{view_folder}/#{name_lc}.coffee"
 
-    template_path = "#{template_folder}/index.#{templates_ext}"
-    style_path = "#{style_folder}/index.#{styles_ext}"
+    template_path = "#{template_folder}/index.jade"
+    style_path = "#{style_folder}/index.styl"
 
     # prepare contents
     tmpl_mvc = "#{@the.root}/cli/templates/mvc"
 
     tmpl_view = "#{tmpl_mvc}/view.coffee"
-    tmpl_template = "#{tmpl_mvc}/view.#{templates_ext}"
-    tmpl_style = "#{tmpl_mvc}/view.#{styles_ext}"
+    tmpl_template = "#{tmpl_mvc}/view.jade"
+    tmpl_style = "#{tmpl_mvc}/view.styl"
 
-    # create static container
+    # create folder containers
     try
-      # create static container
       fsu.mkdir_p view_folder 
       fsu.mkdir_p template_folder
       fsu.mkdir_p style_folder

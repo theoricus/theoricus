@@ -6,46 +6,42 @@ Question = require '../generators/question'
 
 module.exports = class Add extends Question
 
-  constructor:( @the, @opts )->
+  constructor:( @the, @cli )->
     do @create
 
   create: ()->
 
-    if @opts[1]?
-      type = @opts[1]
-    else
-      q = "Which you would like to create? [controller|model|view|mvc] : "
-      f = /(controller|model|view|mvc)/
+    if @cli.argv.generate is true
+      q = "Which you would like to create? [model|view|controller|mvc] : "
+      f = /(model|view|controller|mvc)/
 
       return @ask q, f, (type) =>
-        @opts[1] = type
+        @cli.argv.generate = type
         do @create
 
-    if @opts[2]?
-      name = @opts[2]
-    else
-      q = "Please give it a name : "
-      f = /([^\s]*)/ # not empty
-
-      return @ask q, f, (name) =>
-        @opts[2] = name
-        do @create
-
-    args = @opts.slice 3
-
+    type = @cli.argv.generate
     unless @[type]?
       error_msg = "Valid options: controller, model, view, mvc."
       throw new Error error_msg
 
-    @[type]( name, args )
+    name = @cli.argv._[0]
+    unless name?
+      q = "Please give it a name : "
+      f = /([^\s]*)/ # not empty
 
-  mvc:( name, args )->
-    @model name.singularize(), args
+      return @ask q, f, (name) =>
+        @cli.argv._ = [name]
+        do @create
+
+    @[type]( name )
+
+  mvc:( name )->
+    @model name.singularize()
     @view "#{name.singularize()}/index"
     @controller name
 
-  model:( name, args )->
-    new Model @the, name, args, @opts
+  model:( name )->
+    new Model @the, name, @cli
 
   view:( path )->
     folder = (parts = path.split '/')[0]
@@ -61,7 +57,7 @@ module.exports = class Add extends Question
       throw new Error error_msg
       return
 
-    new View @the, name, folder, false, @opts
+    new View @the, name, folder, false, @cli
 
   controller:( name )->
-    new Controller @the, name, @opts
+    new Controller @the, name, @cli
