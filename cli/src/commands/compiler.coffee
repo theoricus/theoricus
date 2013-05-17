@@ -3,7 +3,7 @@ fork = require( "child_process" ).fork
 
 module.exports = class Compiler
 
-  constructor:( @the, options, release, webserver )->
+  constructor:( @the, @cli, release, webserver )->
 
     opts = ''
     opts += if release? then '-r' else '-c'
