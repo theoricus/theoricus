@@ -19,8 +19,8 @@
   },
 
   "bin": {
-    "the": "./bin/theoricus",
-    "theoricus": "./bin/theoricus"
+    "the": "./bin/the",
+    "theoricus": "./bin/the"
   },
 
   "engines": {
