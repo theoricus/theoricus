@@ -11,7 +11,7 @@ make setup
 # Starting app
 
 ````
-theoricus start
+the -s
 ````
 
 Then visit [http://localhost:11235](http://localhost:11235)
@@ -19,12 +19,12 @@ Then visit [http://localhost:11235](http://localhost:11235)
 # Releasing app
 
 ````
-theoricus release
+the -r
 ````
 
 # Previewing release
 
 ````
-theoricus preview
+the -p
 ````
 
