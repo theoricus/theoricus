@@ -19,6 +19,7 @@
   },
 
   "bin": {
+    "the": "./bin/theoricus",
     "theoricus": "./bin/theoricus"
   },
 
@@ -29,8 +30,9 @@
   "dependencies"   : {
     "coffee-script": "1.6.x",
     "colors": "0.6.x",
-    "polvo": "0.3.x",
+    "optimist": "0.4.x",
     "fs-util": "0.3.x",
+    "polvo": "0.3.x",
     "source-map-support": "0.1.x"
   },
 
