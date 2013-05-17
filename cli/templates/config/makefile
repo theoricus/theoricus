@@ -1,10 +1,13 @@
-theoricus=~theoricus-bin
+the=~theoricus-bin
 
 setup:
 	npm install
 
 start:
-	$(theoricus) start
+	$(the) -s
 
 release:
-	$(theoricus) release
+	$(the) -r
+
+preview:
+	$(the) -p
