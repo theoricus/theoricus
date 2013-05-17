@@ -1,7 +1,7 @@
 # Theoricus #
 
-Minimalist MVC implementation for CoffeeScript.
 > Version 0.1.8
+Tiny MV(C) implementation for client side projects.
 
 # Features
  * Routes system

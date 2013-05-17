@@ -4,7 +4,7 @@ module.exports = class Cli
 
   constructor:( @version )->
     @usage = "#{'Theoricus'} " + "v#{@version}\n".grey
-    @usage += "Tiny MV(C) framework with powerful navigation mechanism.\n\n".grey
+    @usage += "Tiny MV(C) implementation for client side projects.\n\n".grey
 
     @usage += "#{'Usage:'}\n"
     @usage += "  the [#{'options'.green}] [#{'params'.green}]"
