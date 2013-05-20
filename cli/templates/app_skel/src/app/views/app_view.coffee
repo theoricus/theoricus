@@ -8,5 +8,5 @@ exports.module = class AppView extends View
     # automagically route links starting with "/"
     @el.find( 'a[href*="/"]' ).each ( index, item ) =>
       $( item ).click ( event ) =>
-        @navigate $( event.target ).attr 'href'
+        @navigate $( event.delegateTarget ).attr 'href'
         return off
