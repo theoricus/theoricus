@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.2.0 - 05/XX/2013 (yet-to-be-released)
+## 0.2.0 - 05/22/2013
  * Integrating project with [Polvo](https://github.com/serpentem/polvo)
  * Adding LiveReload capabilities for everything
  * Improving code style to CJS signature (on top of Polvo)
@@ -10,6 +10,7 @@
  * Improving the whole new project's creation routine
  * Re-modeling app skel to contain README, makefile and package.json files
  * Externalizing all build options into the `polvo.coffee` file (on top of Polvo)
+ * A bunch of things I can't remember
 
 ## 0.1.8 - 12/23/2012
  * Implementing vendors management (fix [#4](https://github.com/serpentem/theoricus/issues/4)).
