@@ -46,6 +46,13 @@ sooner than later.
 
 > https://groups.google.com/group/theoricus
 
+## Dev Mailing List
+
+Got your hands into the source? We're here to help you.
+
+> https://groups.google.com/group/theoricus-dev
+
+
 # Docs
   - [Installing](#installing)
   - [Help](#help)
