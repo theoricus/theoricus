@@ -63,5 +63,6 @@ module.exports = class Cli
 
       .describe('rf', 'Use with -d [view|mvc] for deleting the whole view folder')
       .describe('src', 'Use with -n for use a specific theoricus version')
+      # .describe('gitsub', 'Use with --src for automatic git submodule setup')
 
     ).argv
