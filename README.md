@@ -76,17 +76,17 @@ Usage:
   the [options] [params]
 
 Options:
-  -n, --new       Creates a new app                               
-  -g, --generate  Generates a new model, view or controller       
-  -d, --destroy   Destroys a new model, view, or controller       
-  -s, --start     Starts app in dev mode at localhost             
-  -c, --compile   Compiles app in dev mode                        
-  -r, --release   Releases app for production                     
-  -p, --preview   Releases app for production at localhost        
-  -v, --version   Shows theoricus version                         
-  -h, --help      Shows this help screen                          
-  --rf            Use with -g for deleting the whole folder       
-  --src           Use with -n for use a specific theoricus version
+  -n, --new       Creates a new app                                        
+  -g, --generate  Generates a new model, view or controller                
+  -d, --destroy   Destroys a new model, view, or controller                
+  -s, --start     Starts app in dev mode at localhost                      
+  -c, --compile   Compiles app in dev mode                                 
+  -r, --release   Releases app for production                              
+  -p, --preview   Releases app for production at localhost                 
+  -v, --version   Shows theoricus version                                  
+  -h, --help      Shows this help screen                                   
+  --rf            Use with -d [view|mvc] for deleting the whole view folder
+  --src           Use with -n for use a specific theoricus version         
 
 
 Examples:
