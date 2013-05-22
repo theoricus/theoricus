@@ -1,43 +1,64 @@
-#<< theoricus/generators/*
+Model = require '../generators/model'
+Controller = require '../generators/controller'
+View = require '../generators/view'
 
-class theoricus.commands.Add
-	{Model,Controller,View} =  theoricus.generators
+Question = require '../generators/question'
 
-	constructor:( @the, opts )->
+module.exports = class Add extends Question
 
-		type = opts[1]
-		name = opts[2]
-		args = opts.slice 3
+  constructor:( @the, @cli )->
+    return unless do @the.is_theoricus_app
+    do @create
 
-		unless @[type]?
-			error_msg = "Valid options: controller, model, view, mvc."
-			throw new Error error_msg
+  create: ()->
 
-		@[type]( name, args )
+    if @cli.argv.generate is true
+      q = "Which you would like to create? [model|view|controller|mvc] : "
+      f = /(model|view|controller|mvc)/
 
-	mvc:( name, args )->
-		@model name.singularize(), args
-		@view "#{name.singularize()}/index"
-		@controller name
+      return @ask q, f, (type) =>
+        @cli.argv.generate = type
+        do @create
 
-	model:( name, args )->
-		new (Model)( @the, name, args )
+    type = @cli.argv.generate
+    unless @[type]?
+      error_msg = "Valid options: controller, model, view, mvc."
+      throw new Error error_msg
 
-	view:( path )->
-		folder = (parts = path.split '/')[0]
-		name   =  parts[1]
+    name = @cli.argv._[0]
+    unless name?
+      q = "Please give it a name : "
+      f = /([^\s]*)/ # not empty
 
-		unless name?
-			error_msg = """
-				Views should be added with path-style notation.\n
-				\ti.e.:
-				\t\t theoricus add view person/index
-				\t\t theoricus add view user/list\n
-			"""
-			throw new Error error_msg
-			return
-		
-		new (View)( @the, name, folder )
+      return @ask q, f, (name) =>
+        @cli.argv._ = [name]
+        do @create
 
-	controller:( name )->
-		new Controller @the, name
+    @[type]( name )
+
+  mvc:( name )->
+    @model name.singularize()
+    @view "#{name.singularize()}/index"
+    @controller name
+
+  model:( name )->
+    new Model @the, name, @cli
+
+  view:( path )->
+    folder = (parts = path.split '/')[0]
+    name   =  parts[1]
+
+    unless name?
+      error_msg = """
+        Views should be added with path-style notation.\n
+        \ti.e.:
+        \t\t theoricus add view person/index
+        \t\t theoricus add view user/list\n
+      """
+      throw new Error error_msg
+      return
+
+    new View @the, name, folder, false, @cli
+
+  controller:( name )->
+    new Controller @the, name, @cli

@@ -1,6 +1,7 @@
 .DS_Store
 node_modules
 docs-*
-lib/toaster
-lib/theoricus.debug.js
-lib/theoricus.cli.debug.js
+
+cli/templates/app_skel/.theoricus
+cli/templates/app_skel/node_modules
+cli/templates/app_skel/public/js

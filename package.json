@@ -2,32 +2,46 @@
   "name": "theoricus",
   "version": "0.1.8",
   "author": "Anderson Arboleya <anderson@arboleya.me>",
-  "description" : "Minimalist MVC implementation for CoffeeScript.",
+  "contributors": ["Henrique Matias <hems.inlet@gmail.com>"],
+  "description" : "Tiny MV(C) implementation for client side projects.",
   "keywords": ["coffeescript", "mvc", "framework"],
 
-  "main": "./lib/theoricus",
-  "directories": {"lib": "./lib/"},
-  "scripts": {"test": "make test"},
+  "directories": {
+    "lib": "./lib/"
+  },
+
+  "scripts": {
+    "test": "make test"
+  },
 
   "repository": {
     "type": "git",
     "url": "http://github.com/serpentem/theoricus"
   },
 
-  "bin": {"theoricus": "./bin/theoricus"},
-  "engines": {"node" : "0.8.x"},
-  
+  "bin": {
+    "the": "./bin/the",
+    "theoricus": "./bin/the"
+  },
+
+  "engines": {
+    "node": ">= 0.10"
+  },
+
   "dependencies"   : {
-    "fs-util"          : "0.3.4",
-    "coffee-toaster"   : "0.6.11",
-    "coffee-script"    : "1.4.0",
-    "jade"             : "0.27.7",
-    "stylus"           : "0.31.0", 
-    "colors"           : "0.6.x",
-    "http-server"      : "0.5.x",
-    "phantom"          : "0.3.5",
-    "pretty-data"      : "0.40.0",
-    "nib"              : "0.9.0",
-    "codo"             : "1.5.4"
+    "coffee-script": "1.6.x",
+    "colors": "0.6.x",
+    "optimist": "0.4.x",
+    "fs-util": "0.3.x",
+    "polvo": "0.3.x",
+    "source-map-support": "0.1.x"
+  },
+
+  "devDependencies": {
+    "chai": "1.5.x",
+    "codo": "1.6.x",
+    "mocha": "1.9.x",
+    "mocha-phantomjs": "2.0.x",
+    "should": "1.2.x"
   }
 }

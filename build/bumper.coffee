@@ -8,21 +8,21 @@ version = json.version
 [major,minor,patch] = version.split '.'
 
 switch process.argv[2]
-	when '--major'
-		major++
-		minor = 0
-		patch = 0
-		break
-	when '--minor'
-		minor++
-		patch = 0
-		break
-	when '--patch'
-		patch++
-		break
-	when '--version'
-		console.log version
-		process.exit()
+  when '--major'
+    major++
+    minor = 0
+    patch = 0
+    break
+  when '--minor'
+    minor++
+    patch = 0
+    break
+  when '--patch'
+    patch++
+    break
+  when '--version'
+    console.log version
+    process.exit()
 
 new_version = "#{major}.#{minor}.#{patch}"
 console.log "Updating version to #{new_version} in files:"

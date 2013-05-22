@@ -1,18 +1,30 @@
 .PHONY: build docs
 
-TOASTER=node_modules/coffee-toaster/bin/toaster
+CS=node_modules/coffee-script/bin/coffee
 CODO=node_modules/codo/bin/codo
 VERSION=`coffee build/bumper --version`
 
+
+setup:
+	npm link
+
+
+# watch / build
 watch:
-	$(TOASTER) . -wd
+	$(CS) -wmco lib cli/src
 
 build:
-	$(TOASTER) . -c
+	$(CS) -mco lib cli/src
 
+
+
+# test
 test: build
 	# TODO: add testing routine
 
+
+
+# docs generation
 docs.cli:
 	rm -rf docs-cli
 	$(CODO) cli/src -o docs-cli --title Theoricus CLI Documentation
@@ -23,6 +35,9 @@ docs.www:
 	$(CODO) www/src -o docs-www --title Theoricus Documentation
 	cd docs-www && python -m SimpleHTTPServer 8080
 
+
+
+# managing version
 bump.minor:
 	coffee build/bumper.coffee --minor
 
@@ -32,6 +47,9 @@ bump.major:
 bump.patch:
 	coffee build/bumper.coffee --patch
 
+
+
+# publishing / re-publishing
 publish:
 	git tag $(VERSION)
 	git push origin $(VERSION)

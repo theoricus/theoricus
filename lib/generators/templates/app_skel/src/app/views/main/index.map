@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "index.js",
+  "sourceRoot": "../../../../../../../..",
+  "sources": [
+    "cli/src/generators/templates/app_skel/src/app/views/main/index.coffee"
+  ],
+  "names": [],
+  "mappings": ";AAEA;CAAA,GAAA,EAAA;KAAA;oSAAA;;CAAA,CAAM,CAAG,CAAW,CAAL;CAAf;;;;;CAAA;;CAAA;;CAAmC,EAAG;CAAtC"
+}

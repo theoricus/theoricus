@@ -1,57 +1,73 @@
-class theoricus.generators.View
+fs = require 'fs'
+fsu = require 'fs-util'
+path = require 'path'
 
-	fs = require 'fs'
-	fsu = require 'fs-util'
+module.exports = class View
 
-	constructor:( @the, name, controller_name_lc, mvc = false )->
-		name_camel = name.camelize()
-		name_lc    = name.toLowerCase()
+  constructor:( @the, name, controller_name_lc, mvc = false, @cli )->
+  
+    # TODO add option to pass the engine for javascript, styles and jade
+    # by now it's hardcoded for coffeescript, stylus and jade
 
-		view_folder = "app/views/#{controller_name_lc}"
-		static_folder = "app/static/#{controller_name_lc}"
+    # shell = @cli.join ' '
+    
+    # templates_ext = shell.match /--templates[\s]*([^\s]+)/
+    # templates_ext = if templates_ext? then templates_ext[1] else 'jade'
 
-		if mvc
-			view_path = "#{view_folder}/index.coffee"
-		else
-			view_path = "#{view_folder}/#{name_lc}.coffee"
+    # styles_ext = shell.match /--styles[\s]*([^\s]+)/
+    # styles_ext = if styles_ext? then styles_ext[1] else 'styl'
 
-		jade_path = "#{static_folder}/index.jade"
-		styl_path = "#{static_folder}/index.styl"
+    name_camel = name.camelize()
+    name_lc    = name.toLowerCase()
 
-		# prepare contents
-		tmpl_path = "#{@the.root}/cli/src/generators/templates/mvc"
-		tmpl_view = "#{tmpl_path}/view.coffee"
-		tmpl_jade = "#{tmpl_path}/view.jade"
-		tmpl_styl = "#{tmpl_path}/view.styl"
+    src = path.join @the.app_root, 'src'
+    view_folder = path.join src, "app/views/#{controller_name_lc}"
+    template_folder = path.join src, "templates/#{controller_name_lc}"
+    style_folder = path.join src, "styles/#{controller_name_lc}"
 
-		# create static container
-		try
-			# create static container
-			fsu.mkdir_p view_folder	
-			fsu.mkdir_p static_folder
-		catch e
-			# folder already exists
-			# just add the files
+    if mvc
+      view_path = "#{view_folder}/index.coffee"
+    else
+      view_path = "#{view_folder}/#{name_lc}.coffee"
 
-		# prepare view contents
-		contents = (fs.readFileSync tmpl_view).toString()
-		contents = contents.replace /~NAME_CAMEL/g, name_camel
-		contents = contents.replace /~CONTROLLER_NAME_LC/g, controller_name_lc
+    template_path = "#{template_folder}/index.jade"
+    style_path = "#{style_folder}/index.styl"
 
-		# write view
-		fs.writeFileSync view_path, contents
-		console.log "#{'Created'.bold} #{view_path}".green
+    # prepare contents
+    tmpl_mvc = "#{@the.root}/cli/templates/mvc"
 
-		# write jade
-		unless fs.existsSync jade_path
-			fs.writeFileSync jade_path, (fs.readFileSync tmpl_jade)
-			console.log "#{'Created'.bold} #{jade_path}".green
-		else
-			console.log "#{'Already exists'.bold} #{jade_path}".green
+    tmpl_view = "#{tmpl_mvc}/view.coffee"
+    tmpl_template = "#{tmpl_mvc}/view.jade"
+    tmpl_style = "#{tmpl_mvc}/view.styl"
 
-		# write stylus
-		unless fs.existsSync styl_path
-			fs.writeFileSync styl_path, fs.readFileSync tmpl_styl
-			console.log "#{'Created'.bold} #{styl_path}".green
-		else
-			console.log "#{'Already exists'.bold} #{styl_path}".green
+    # create folder containers
+    try
+      fsu.mkdir_p view_folder 
+      fsu.mkdir_p template_folder
+      fsu.mkdir_p style_folder
+    catch e
+      # folder already exists
+      # just add the files
+
+    # prepare view contents
+    contents = (fs.readFileSync tmpl_view).toString()
+    contents = contents.replace /~NAME_CAMEL/g, name_camel
+    contents = contents.replace /~CONTROLLER_NAME_LC/g, controller_name_lc
+
+    # write view
+    fs.writeFileSync view_path, contents
+    console.log "#{'Created'.bold} #{view_path}".green
+
+    # write jade
+    unless fs.existsSync template_path
+      fs.writeFileSync template_path, (fs.readFileSync tmpl_template)
+      console.log "#{'Created'.bold} #{template_path}".green
+    else
+      console.log "#{'Already exists'.bold} #{template_path}".green
+
+    # write stylus
+    unless fs.existsSync style_path
+      fs.writeFileSync style_path, fs.readFileSync tmpl_style
+      console.log "#{'Created'.bold} #{style_path}".green
+    else
+      console.log "#{'Already exists'.bold} #{style_path}".green
