@@ -61,9 +61,7 @@ module.exports = class Cli
       .alias('h', 'help')
       .describe('h', 'Shows this help screen')
 
-      .describe('rf', 'Use with -g for deleting the whole folder')
+      .describe('rf', 'Use with -d [view|mvc] for deleting the whole view folder')
       .describe('src', 'Use with -n for use a specific theoricus version')
-
-
 
     ).argv
