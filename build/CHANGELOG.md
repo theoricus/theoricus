@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.2.1 - 05/23/2013
+ * Quick fix in makefile regarding version evaluation
+
 ## 0.2.0 - 05/22/2013
  * Integrating project with [Polvo](https://github.com/serpentem/polvo)
  * Adding LiveReload capabilities for everything
