@@ -2,8 +2,7 @@
 
 CS=node_modules/coffee-script/bin/coffee
 CODO=node_modules/codo/bin/codo
-VERSION=`coffee build/bumper --version`
-
+VERSION=`$(CS) build/bumper.coffee --version`
 
 setup:
 	npm link
