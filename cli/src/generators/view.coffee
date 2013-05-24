@@ -27,11 +27,12 @@ module.exports = class View
 
     if mvc
       view_path = "#{view_folder}/index.coffee"
+      template_path = "#{template_folder}/index.jade"
+      style_path = "#{style_folder}/index.styl"
     else
       view_path = "#{view_folder}/#{name_lc}.coffee"
-
-    template_path = "#{template_folder}/index.jade"
-    style_path = "#{style_folder}/index.styl"
+      template_path = "#{template_folder}/#{name_lc}.jade"
+      style_path = "#{style_folder}/#{name_lc}.styl"
 
     # prepare contents
     tmpl_mvc = "#{@the.root}/cli/templates/mvc"
