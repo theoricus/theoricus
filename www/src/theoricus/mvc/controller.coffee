@@ -23,7 +23,7 @@ module.exports = class Controller
 
       @the.factory.model model_name, null, (model)=>
 
-        view_folder = api.controller_name.singularize()
+        view_folder = api.controller_name
         view_name   = api.action_name
 
         if model.all?
