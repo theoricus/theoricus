@@ -3,6 +3,9 @@ Factory = null
 
 module.exports = class View
 
+  # @property page title
+  title: null
+
   # $ reference to dom element
   el: null
 
@@ -31,6 +34,9 @@ module.exports = class View
   ###
   render:( @data = {}, el = @process.route.el, template = null )=>
     @before_render?(@data)
+
+    if @title?
+      document.title = @title
 
     if not @el
       api = @process.route.api
