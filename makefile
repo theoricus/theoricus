@@ -38,13 +38,13 @@ docs.www:
 
 # managing version
 bump.minor:
-	coffee build/bumper.coffee --minor
+	$(CS) build/bumper.coffee --minor
 
 bump.major:
-	coffee build/bumper.coffee --major
+	$(CS) build/bumper.coffee --major
 
 bump.patch:
-	coffee build/bumper.coffee --patch
+	$(CS) build/bumper.coffee --patch
 
 
 
