@@ -38,7 +38,7 @@ module.exports = class Add extends Question
 
   mvc:( name )->
     @model name.singularize()
-    @view "#{name.singularize()}/index"
+    @view "#{name}/index"
     @controller name
 
   model:( name )->

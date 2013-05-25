@@ -12,8 +12,6 @@ module.exports = class Rm
     type = @cli.argv.destroy
     name = @cli.argv._[0]
 
-    @recursive = @cli.argv.recursive
-
     @SRC = "#{@the.pwd}/src"
     @APP_FOLDER = "#{@SRC}/app"
     @TEMPLATES_FOLDER = "#{@SRC}/templates"
@@ -27,7 +25,7 @@ module.exports = class Rm
 
   mvc:( name )->
     @model name.singularize()
-    @view "#{name.singularize()}/index"
+    @view "#{name}/index"
     @controller name
 
   model:( name )->
@@ -37,7 +35,7 @@ module.exports = class Rm
     folder = (parts = path.split '/')[0]
     name = parts[1]
 
-    unless (name? or @recursive)
+    unless (name? or @cli.argv.rf)
       error_msg = """
         Views should be removed with path-style notation.\n
         \ti.e.:
@@ -47,9 +45,10 @@ module.exports = class Rm
       throw new Error error_msg
       return
 
-    if @recursive
+    if @cli.argv.rf
       @rm "#{@APP_FOLDER}/views/#{folder}"
-      @rm "#{@APP_FOLDER}/static/#{folder}"
+      @rm "#{@STYLES_FOLDER}/#{folder}"
+      @rm "#{@TEMPLATES_FOLDER}/#{folder}"
     else
       @rm "#{@APP_FOLDER}/views/#{folder}/#{name}.coffee"
       @rm "#{@TEMPLATES_FOLDER}/#{folder}/#{name}.jade"
@@ -63,8 +62,8 @@ module.exports = class Rm
     if fs.existsSync filepath
       try
         if fs.lstatSync( filepath ).isDirectory()
-          if @recursive
-            fsu.rmdir_rf filepath
+          if @cli.argv.rf
+            fsu.rm_rf filepath
           else
             fs.rmDirSync filepath
         else
