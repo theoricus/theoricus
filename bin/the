@@ -1,3 +1,60 @@
 #!/usr/bin/env node
 
-new (require(require('path').join(__dirname, '..', 'lib', 'theoricus')));
+/*
+Theoricus is built to be used always locally, minimizing any problems you may
+have using a global version which isn't compatible with all the apps you may
+have.
+
+Say you have a global 0.2 version, but you also have apps using a others
+versions, 0.1.5, 0.1.8 etc. In order to improve compatibility, when you run
+`the [option] [params]` inside a project folder, it'll try to find a local
+version of theoricus whithin the this project folder, and if it's found,
+it'll use it.
+
+The priority of this resolution is as follows:
+
+  1) First it tries to get a local submodule version inside the vendors folder.
+  2) If it's not found, it'll try to locate the local version inside the
+    node_modules folder.
+  3) If it's not found, then if falls back to the global installed version. It
+    will probably occur only when you're generating new apps.
+
+So if you have a global version that is 0.2.0 and run `the -v` inside a project
+that has a local 0.1.5 version, it'll output 0.1.5. Pay no mind, it's not a
+issue. It's meant to work this way.
+*/
+
+// requirements
+path = require( 'path' );
+fs = require( 'fs' );
+
+// current folder
+pwd = path.resolve( '.' );
+
+// vendors folder
+vendors_path = path.join( pwd, 'vendors', 'theoricus', 'lib', 'theoricus.js' );
+
+// node_modules folder
+npm_path = path.join( pwd, 'node_modules', 'theoricus', 'lib', 'theoricus.js' );
+
+// global folder
+default_path = path.join( __dirname, '..', 'lib', 'theoricus.js' );
+
+
+// first tries to locate theoricus inside vendor's folder
+if( fs.existsSync( vendors_path ) )
+  bin_path = vendors_path;
+
+// if it's not found, tries to locate it inside node_module's folder
+else if( fs.existsSync( npm_path ) )
+  bin_path = npm_path;
+
+// finally, if none is found, uses the default one (ie. when creating a new app)
+else
+  bin_path = default_path;
+
+// require class
+Theoricus = require( bin_path );
+
+// initializes it
+new Theoricus;
