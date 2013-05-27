@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.3 - 05/27/2013
+  * Implementing Theoricus bridge, favoring local verions over the global one
+  * Removing makefile routines, favoring win users as well with simplicity
+  * Improving `--src` usage, implementing some hotfixes and setting default
+  behavior to `git submodules`
+  * Adding the `--nogitsub` option to avoid git sub modules
+
 ## 0.2.2 - 05/24/2013
   * Fixing pluralizations/singularizations everywhere it applies (closes #27)
   * Adding a title property for view in order to improving SEO (closes #26)
