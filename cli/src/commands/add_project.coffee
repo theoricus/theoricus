@@ -34,23 +34,92 @@ module.exports = class AddProject
 
   configure:->
     name = @cli.argv.new
+    src = @cli.argv.src
 
     # configurations when creating app from source
-    if @cli.argv.src
+    if src
 
-      # will clone and initialize repo
-      console.log '• Cloning theoricus source'.grey
+      # repo and branch infos
+      repo = null
+      branch = null
 
-      # config variables
-      deps = ''
-      the_www = 'vendors/theoricus/www'
+      # default repo name = theoricus
+      repo = (src.match /[^#]+/)[0]
 
-      # repo and branch
-      repo = (@cli.argv.src.match /[^#]+/)[0]
-      branch = (@cli.argv.src.match /#(.+)/)[1] or 'master'
+      unless ~src.indexOf '/'
+        repo += '/theoricus'
 
-      # cloning
-      params = ['clone', "git@github.com:#{repo}", "vendors/theoricus"]
+      repo = "git@github.com:#{repo}"
+
+      # default branch = master
+      if ~src.indexOf '#'
+        branch = (@cli.argv.src.match /#(.+)/)[1]
+      else
+        branch = 'master'
+
+      # if git submodule is avoided, clone as a clean repo
+      if @cli.argv.nogitsub
+        @clone name, repo, branch
+
+      # otherwise add it as submodule
+      else
+        @add_as_submodule name, repo, branch
+
+    # otherwise if new app isn't being created from source
+    else
+      # default configuration
+      deps = "\"theoricus\": \"#{@the.version}\""
+      the_www = 'node_modules/theoricus/www'
+
+      @write_config name, deps, the_www
+
+  clone:( name, repo, branch )->
+    # will clone and initialize repo
+    console.log '• Cloning theoricus source'.grey
+
+    # config variables
+    deps = ''
+    the_www = 'vendors/theoricus/www'
+
+    # cloning
+    params = ['clone', repo, 'vendors/theoricus']
+    options = cwd: @target, stdio: 'inherit'
+
+    clone = spawn 'git', params, options
+    clone.on 'close', ( code )=>
+      return if code > 0
+
+      # checking out proper branch
+      params = ['checkout', repo]
+      cwd = path.join @target, 'vendors', 'theoricus'
+      options = cwd: cwd, stdio: 'inherit'
+
+      checkout = spawn 'git', ['checkout', branch], options
+      checkout.on 'close', ( code )=>
+        return if code > 0
+        
+        # installing source dependencies
+        install = spawn 'npm', ['install'], options
+        install.on 'close', ( code )=>
+
+          # proceed with creation of config files
+          @write_config name, deps, the_www
+
+  add_as_submodule:( name, repo, branch )->
+    # will clone and initialize repo
+    console.log '• Cloning theoricus source as submodule'.grey
+
+    # config variables
+    deps = ''
+    the_www = 'vendors/theoricus/www'
+
+    # git init
+    init = spawn 'git', ['init'], {cwd: @target, stdio: 'inherit'}
+    init.on 'close', ( code )=>
+      return if code > 0
+
+      # adding as submodule
+      params = ['submodule', 'add', repo, 'vendors/theoricus']
       options = cwd: @target, stdio: 'inherit'
 
       clone = spawn 'git', params, options
@@ -58,11 +127,11 @@ module.exports = class AddProject
         return if code > 0
 
         # checking out proper branch
-        params = ['checkout', repo]
+        params = ['checkout', branch]
         cwd = path.join @target, 'vendors', 'theoricus'
         options = cwd: cwd, stdio: 'inherit'
 
-        checkout = spawn 'git', ['checkout', branch], options
+        checkout = spawn 'git', params, options
         checkout.on 'close', ( code )=>
           return if code > 0
           
@@ -73,21 +142,12 @@ module.exports = class AddProject
             # proceed with creation of config files
             @write_config name, deps, the_www
 
-      return
-
-    # default configuration
-    deps = "\"theoricus\": \"#{@the.version}\""
-    the_www = 'node_modules/theoricus/www'
-
-    @write_config name, deps, the_www
-
-  
   write_config:( name, deps, the_www )->
-
+    console.log 'write ' + [name, deps, the_www]
     # configures package.json
     pack = path.join @the.root, 'cli', 'templates', 'config', 'package.json'
     pack = fs.readFileSync pack, 'utf-8'
-    pack = pack.replace '~name', @cli.argv.new
+    pack = pack.replace '~name', name
     pack = pack.replace '~deps', deps
 
     # configures polvo.coffee
