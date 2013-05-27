@@ -94,9 +94,9 @@ module.exports = class Model extends Binder
   @param [Object] data  Data to be send
   ###
   @_request = ( method, url, data='' ) ->
-    console.log "[Model] request", method, url, data
+    # console.log "[Model] request", method, url, data
 
-    fetcher = new theoricus.mvc.lib.Fetcher
+    fetcher = new Fetcher
 
     req = 
       url  : url
@@ -120,7 +120,7 @@ module.exports = class Model extends Binder
       if fetcher.onerror?
         fetcher.onerror error
       else
-          console.log error
+          console.error error
           
 
     fetcher
@@ -169,7 +169,6 @@ module.exports = class Model extends Binder
   @param [Object] data  Data to be parsed
   ###
   @_instantiate = ( data ) ->
-    Factory = theoricus.core.Factory
     classname = ("#{@}".match /function\s(\w+)/)[1]
     records = []
     for record in [].concat data
