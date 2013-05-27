@@ -44,7 +44,6 @@ module.exports = class AddProject
       # config variables
       deps = ''
       the_www = 'vendors/theoricus/www'
-      the_bin = 'vendors/theoricus/bin/the'
 
       # repo and branch
       repo = (@cli.argv.src.match /[^#]+/)[0]
@@ -72,19 +71,18 @@ module.exports = class AddProject
           install.on 'close', ( code )=>
 
             # proceed with creation of config files
-            @write_config name, deps, the_www, the_bin
+            @write_config name, deps, the_www
 
       return
 
     # default configuration
     deps = "\"theoricus\": \"#{@the.version}\""
     the_www = 'node_modules/theoricus/www'
-    the_bin = 'node_modules/theoricus/bin/the'
 
-    @write_config name, deps, the_www, the_bin
+    @write_config name, deps, the_www
 
   
-  write_config:( name, deps, the_www, the_bin )->
+  write_config:( name, deps, the_www )->
 
     # configures package.json
     pack = path.join @the.root, 'cli', 'templates', 'config', 'package.json'
@@ -97,22 +95,16 @@ module.exports = class AddProject
     polvo = fs.readFileSync polvo, 'utf-8'
     polvo = polvo.replace '~theoricus-www', the_www
 
-    # configures makefile
-    make = path.join @the.root, 'cli', 'templates', 'config', 'makefile'
-    make = fs.readFileSync make, 'utf-8'
-    make = make.replace '~theoricus-bin', the_bin
-
     # write everything to disk
     fs.writeFileSync (path.join @target, 'package.json'), pack
     fs.writeFileSync (path.join @target, 'polvo.coffee'), polvo
-    fs.writeFileSync (path.join @target, 'makefile'), make
 
     do @finish
 
   finish:->
-    # install dependencies through a spawned `make setup` call
+    # install dependencies through a spawned `npm install` call
     console.log '• App created, setting up'.grey
-    make = spawn 'make', ['setup'], {cwd: @target, stdio: 'inherit'}
+    make = spawn 'npm', ['install'], {cwd: @target, stdio: 'inherit'}
     make.on 'close', (code)->
       return if code > 0
 
