@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.5 - 05/28/2013
+ * Fixing model rest calls (closes [#29](https://github.com/serpentem/theoricus/pull/29))
+ * Adding navigate's shortcut to controller  (closes [#30](https://github.com/serpentem/theoricus/pull/30))
+
 ## 0.2.4 - 05/28/2013
  * Removing stupid `console.log` call
 
@@ -11,8 +15,8 @@
   * Adding the `--nogitsub` option to avoid git sub modules
 
 ## 0.2.2 - 05/24/2013
-  * Fixing pluralizations/singularizations everywhere it applies (closes #27)
-  * Adding a title property for view in order to improving SEO (closes #26)
+  * Fixing pluralizations/singularizations everywhere it applies (closes [#27](https://github.com/serpentem/theoricus/pull/27))
+  * Adding a title property for view in order to improving SEO (closes [#26](https://github.com/serpentem/theoricus/pull/26))
 
 ## 0.2.1 - 05/23/2013
  * Quick fix in makefile regarding version evaluation
