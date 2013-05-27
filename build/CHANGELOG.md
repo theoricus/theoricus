@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.2 - 05/24/2013
+  * Fixing pluralizations/singularizations everywhere it applies (closes #27)
+  * Adding a title property for view in order to improving SEO (closes #26)
+
 ## 0.2.1 - 05/23/2013
  * Quick fix in makefile regarding version evaluation
 
