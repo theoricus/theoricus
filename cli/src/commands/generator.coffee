@@ -4,7 +4,7 @@ View = require '../generators/view'
 
 Question = require '../generators/question'
 
-module.exports = class Add extends Question
+module.exports = class Generator extends Question
 
   constructor:( @the, @cli )->
     return unless do @the.is_theoricus_app

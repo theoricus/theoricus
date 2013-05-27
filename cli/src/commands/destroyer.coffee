@@ -4,7 +4,7 @@ path = require 'path'
 fsu = require "fs-util"
 
 
-module.exports = class Rm
+module.exports = class Destroyer
 
   constructor:( @the, @cli )->
     return unless do @the.is_theoricus_app

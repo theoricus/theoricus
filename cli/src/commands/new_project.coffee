@@ -5,7 +5,7 @@ exec = (require "child_process").exec
 spawn = (require "child_process").spawn
 fork = require( "child_process" ).fork
 
-module.exports = class AddProject
+module.exports = class NewProject
 
   constructor:( @the, @cli )->
     if @cli.argv.new is true

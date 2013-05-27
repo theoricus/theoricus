@@ -6,13 +6,11 @@ colors = require 'colors'
 
 require '../cli/vendors/inflection'
 
-Add = require './commands/add'
-AddProject = require './commands/add_project'
-Rm = require './commands/rm'
+Generator = require './commands/generator'
+NewProject = require './commands/new_project'
+Detroyer = require './commands/destroyer'
 Server = require './commands/server'
-# StaticServer = require './commands/static_server'
 Compiler = require './commands/compiler'
-# Index = require './commands/index'
 
 Cli = require './cli'
 
@@ -29,11 +27,11 @@ module.exports = class Theoricus
     @version = (require "./../package.json" ).version
     @cli = new Cli @version
 
-    return new AddProject @, @cli if @cli.argv.new
+    return new NewProject @, @cli if @cli.argv.new
     return console.log @version if @cli.argv.version
 
-    return new Add @, @cli if @cli.argv.generate
-    return new Rm @, @cli if @cli.argv.destroy
+    return new Generator @, @cli if @cli.argv.generate
+    return new Detroyer @, @cli if @cli.argv.destroy
     return new Server @, @cli if @cli.argv.start
     return new Compiler @, @cli if @cli.argv.compile
     return new Compiler @, @cli, true if @cli.argv.release
@@ -51,7 +49,7 @@ module.exports = class Theoricus
     current = path.resolve "."
 
     while true
-      app = path.normalize "#{current}/src/app/app.coffee"
+      app = path.join current, 'src', 'app', 'app.coffee'
 
       if fs.existsSync app
         contents = fs.readFileSync app, "utf-8"
