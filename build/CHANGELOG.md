@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.6 - 05/28/2013
+ * Fixing app_skel according last fixes related inflections singularization and
+ pluralization
+
 ## 0.2.5 - 05/28/2013
  * Fixing model rest calls (closes [#29](https://github.com/serpentem/theoricus/pull/29))
  * Adding navigate's shortcut to controller  (closes [#30](https://github.com/serpentem/theoricus/pull/30))
