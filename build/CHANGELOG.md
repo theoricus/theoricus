@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.2.4 - 05/28/2013
+ * Removing stupid `console.log` call
+
 ## 0.2.3 - 05/27/2013
   * Implementing Theoricus bridge, favoring local verions over the global one
   * Removing makefile routines, favoring win users as well with simplicity

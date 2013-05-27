@@ -143,7 +143,7 @@ module.exports = class NewProject
             @write_config name, deps, the_www
 
   write_config:( name, deps, the_www )->
-    console.log 'write ' + [name, deps, the_www]
+
     # configures package.json
     pack = path.join @the.root, 'cli', 'templates', 'config', 'package.json'
     pack = fs.readFileSync pack, 'utf-8'
