@@ -60,3 +60,13 @@ module.exports = class Controller
       view.render data, el
 
     view
+
+  # ~> Shortcuts
+
+  ###
+  Shortcut for application navigate
+
+  @param [String] url URL to navigate
+  ###
+  navigate:( url )->
+    @the.processes.router.navigate url
