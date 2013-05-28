@@ -35,9 +35,6 @@ module.exports = class Route
 
     # filters route's param values
     param_values = (@matcher.exec( @location ).slice 1 if @location?) or []
-    # console.log '-----'
-    # console.log @location
-    # console.log 'VALUES ' + param_values
 
     # merges both into a key/val dictionary for all route's params
     if param_values.length
@@ -47,9 +44,6 @@ module.exports = class Route
 
     # injects it into the api
     @api.params = params or {}
-
-    # console.log 'PARAMS '
-    # console.log @api.params
 
   # inject params directly into the route
   # inject_params:( params )->
