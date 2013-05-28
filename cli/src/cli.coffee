@@ -64,5 +64,21 @@ module.exports = class Cli
       .describe('rf', 'Use with -d [view|mvc] for deleting the whole view folder')
       .describe('src', 'Use with -n for use a specific theoricus version as a git submodule')
       .describe('nogitsub', 'Use with --src for avoiding automatic git submodule setup')
+      
+      ###
+        NOTE FOR HACKERS:
+
+        Use  the --dev  with -n option, for dev purposes:
+
+          the -n test --dev
+
+        With this option, the newly crated project will be linked to the global
+        version of Theoricus. It is, you must to first link your theoricus
+        source previously, with `npm link`.
+
+        This is just a practical flag to test things easily in dev mode. Do not
+        use this for real projects, it's not intended to be used as such. If so,
+        the option will be documented in the common usage.
+      ###
 
     ).argv

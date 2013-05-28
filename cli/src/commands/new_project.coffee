@@ -67,9 +67,16 @@ module.exports = class NewProject
 
     # otherwise if new app isn't being created from source
     else
+
       # default configuration
-      deps = "\"theoricus\": \"#{@the.version}\""
-      the_www = 'node_modules/theoricus/www'
+      unless @cli.argv.dev
+        deps = "\"theoricus\": \"#{@the.version}\""
+        the_www = 'node_modules/theoricus/www'
+
+      # hack mode
+      else
+        the_www = path.relative @target, (path.join @the.root, 'www')
+        deps = ''
 
       @write_config name, deps, the_www
 
