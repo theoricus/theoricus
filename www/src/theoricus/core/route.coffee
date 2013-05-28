@@ -12,18 +12,50 @@ module.exports = class Route
   location: null
 
   constructor:( @match, @to, @at, @el, @router, @location = null )->
+
+    # prepare regex matcher
     @matcher = @match.replace Route.named_param_reg, '([^\/]+)'
     @matcher = @matcher.replace Route.splat_param_reg, '(.*?)'
     @matcher = new RegExp "^#{@matcher}$"
 
-    @api = {}
+   # init api object
+    @api = params: null
+
+    # fitlers controller and action name
     try
       @api.controller_name = to.split( "/" )[0]
       @api.action_name = to.split( "/" )[1]
     catch error
       console.log "TODO: handle error"
 
-    @api.params = (@matcher.exec( location ).slice 1 if location?) or []
+     # filters route's params names
+    if (param_names = @match.match /(:|\*)\w+/g)?
+      for value, index in param_names
+        param_names[index] = value.substr 1 
+
+    # filters route's param values
+    param_values = (@matcher.exec( @location ).slice 1 if @location?) or []
+    # console.log '-----'
+    # console.log @location
+    # console.log 'VALUES ' + param_values
+
+    # merges both into a key/val dictionary for all route's params
+    if param_values.length
+      params = {}
+      for value, index in param_values
+        params[param_names[index]] = value
+
+    # injects it into the api
+    @api.params = params or {}
+
+    # console.log 'PARAMS '
+    # console.log @api.params
+
+  # inject params directly into the route
+  # inject_params:( params )->
+  #   for key, val of params
+  #     unless @api.params[key]?
+  #       @api.params[key] = val
 
   ###
   @param [String] location
