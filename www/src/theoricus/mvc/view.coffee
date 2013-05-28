@@ -56,10 +56,22 @@ module.exports = class View
 
         @template "#{tmpl_folder}/#{tmpl_name}", ( template ) =>
           @render_template template
+          
 
-   render_template:( template )->
-    dom = template @data if template?
-    dom = @el.append dom
+  render_template:( template )->
+
+    if template?
+      try
+        dom = template @data
+      catch xihh
+        msg = 'Something REALLY UNNEXPECTED has occurred. While the reason '
+        msg += 'isn\'t clear even for us, you can check if you template isn\'t '
+        msg += 'trying to access a variable that isn\'t being passed to it! '
+        msg += 'This is a common reason that results in this bizarre behavior.'
+        console.error msg
+        console.error xihh
+
+      dom = @el.append dom
 
     # binds item if the data passed is a valid Model
     if (@data instanceof Model)
