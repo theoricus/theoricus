@@ -49,14 +49,21 @@ module.exports = class Generator extends Question
     name   =  parts[1]
 
     unless name?
-      error_msg = """
-        Views should be added with path-style notation.\n
-        \ti.e.:
-        \t\t theoricus add view person/index
-        \t\t theoricus add view user/list\n
+      error_msg = 'ERROR '.bold.red + """
+        Views should be added with path-style notation.
+        
+        Usage:
+          the -g view <controller-name>/<view-name>
+
+        Examples:
+          the -g view users/index
+          the -g view users/list
+
+        (*)
+          Remember that controller names are plural.
+          View names are singular.
       """
-      throw new Error error_msg
-      return
+      return console.log error_msg
 
     new View @the, name, folder, false, @cli
 
