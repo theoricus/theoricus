@@ -46,10 +46,10 @@ module.exports = class Route
     @api.params = params or {}
 
   # inject params directly into the route
-  # inject_params:( params )->
-  #   for key, val of params
-  #     unless @api.params[key]?
-  #       @api.params[key] = val
+  inject_params:( params )->
+    for key, val of params
+      unless @api.params[key]?
+        @api.params[key] = val
 
   ###
   @param [String] location
