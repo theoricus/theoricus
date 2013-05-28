@@ -45,7 +45,7 @@ module.exports = class Process
       after_run()
 
     # mounts an array with action params followed by a callback
-    params = @route.api.params.concat (@view)=>
+    callback = (@view)=>
       unless @view instanceof View
         controller_name = @route.api.controller_name.camelize()
         msg = "Check your `#{controller_name}` controller, the action "
@@ -54,7 +54,7 @@ module.exports = class Process
 
     # executes the action passing all arguments, the callback will be executed
     # with the resulting view
-    @controller[ action ].apply @controller, params
+    @controller[ action ] @route.api.params, callback
 
   ###
   Executes view's transition "out" method, wait for its end

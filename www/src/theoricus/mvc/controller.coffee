@@ -16,7 +16,7 @@ module.exports = class Controller
   @param [theoricus.core.Process] process path to view on the app tree
   ###
   _build_action: ( process ) ->
-    ( fn )=>
+    ( params, fn )=>
       api = process.route.api
 
       model_name = api.controller_name.singularize()
