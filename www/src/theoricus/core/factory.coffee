@@ -11,12 +11,6 @@ module.exports = class Factory
   ###
   constructor:( @the )->
 
-  _is =( src, comparison )->
-    while src = src.__proto__
-      return true if src instanceof comparison
-      src = src.__proto__
-    return false
-
   @model=@::model=( name, init = {}, fn )->
     # console.log "Factory.model( '#{name}' )"
 
