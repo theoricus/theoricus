@@ -45,9 +45,8 @@ module.exports = class Factory
   Returns an instantiated [theoricus.mvc.View] View
 
   @param [String] path  path to the view file
-  @param [theoricus.core.Process] process process responsible for the view
   ###
-  view:( path, process = null, fn )->
+  view:( path, fn )->
     # console.log "Factory.view( '#{path}' )"
 
     classname = (parts = path.split '/').pop().camelize()
@@ -68,7 +67,6 @@ module.exports = class Factory
       view.classpath = classpath
       view.classname = classname
       view.namespace = namespace
-      view.process  = process if process?
 
       fn view
 
