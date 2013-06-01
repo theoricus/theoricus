@@ -15,4 +15,4 @@ module.exports = class Routes
       el: "#container"
 
   # default route
-  @root: '/pages/index'
+  @root = '/pages/index'
