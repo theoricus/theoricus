@@ -71,10 +71,9 @@ module.exports = class Router
       url = @Routes.root if url == "/"
 
       for route in @routes
-        if route.matcher.test url
-          @on_change?( route.clone url )
-          return
-    
+        if route.test url
+          return @on_change route, url
+
     @trigger = true
 
   navigate:( url, trigger = true, replace = false )->

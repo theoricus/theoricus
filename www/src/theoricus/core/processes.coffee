@@ -47,19 +47,21 @@ module.exports = class Processes
 
   @param [theoricus.core.Router] route
   ###
-  _on_router_change:( route )=>
+  _on_router_change:( route, url )=>
     if @locked
-      return @router.navigate @last_process.route.location, 0, 1 
+      return @router.navigate @last_process.url, 0, 1 
 
-    new Process @the, route, ( process, controller )=>
+    @locked = true
+    @the.crawler.is_rendered = false
+
+    new Process @the, route, url, null, ( process, controller )=>
+
       @last_process = process
-      @locked = true
-      @the.crawler.is_rendered = false
 
       @pending_processes = []
       @_filter_pending_processes process, =>
-        @_filter_dead_processes()
-        @_destroy_dead_processes()
+        do @_filter_dead_processes
+        do @_destroy_dead_processes
 
   ###
   2nd
@@ -71,23 +73,51 @@ module.exports = class Processes
   @param [theoricus.core.Process] process
   ###
   _filter_pending_processes:( process, after_filter )->
+
     @pending_processes.push process
 
-    if process.route.at
-      route = ArrayUtil.find( @router.routes, match: process.route.at )
+    # if process has a dependency
+    if process.dependency?
 
-      if route?
-        process = new Process @the, route.item.clone(), (process)=>
-          # @pending_processes.push process
-          unless route.target_route?
-            @_filter_pending_processes process, after_filter
-          else
-            after_filter()
-      else
-        console.log "ERROR: Dependency not found at=#{process.route.at}"
-        console.log process.route
+      # search for it
+      @_find_dependency process, (dependency) =>
+
+        # if dependency is found
+        if dependency?
+
+          # searchs for its dependencies recursively
+          @_filter_pending_processes dependency, after_filter
+
+        # otherwise rises an error of dependency not found
+        else
+          a = process.dependecy
+          b = process.route.at
+
+          console.error "Dependency not found for #{a} and/or #{b}"
+          console.log process
+
+    # otherwise fires callback
     else
-      after_filter()
+      do after_filter
+
+
+  _find_dependency:( process, after_find )->
+
+    # checks if dependency is already running and fires callback if it is
+    active = ArrayUtil.find @active_processes, url: process.dependency
+    return after_find active.item if active?
+
+    # otherwise searches a suitable route for it
+    route = ArrayUtil.find @router.routes, match: process.route.at
+
+    # if it's found
+    if (route = route?.item)?
+
+      # creates a new process derived from this one
+      process = new Process @the, route, null, process, (process)=>
+        after_find process
+    else
+      after_find null
 
   ###
   3th
@@ -99,14 +129,15 @@ module.exports = class Processes
   _filter_dead_processes:()->
     @dead_processes = []
 
+    # loops through all active process
     for active in @active_processes
 
-      search = route: match: active.route.match
-      found  = ArrayUtil.find( @pending_processes, search )
+      # and checks if it's present in the pending processes as well
+      found = ArrayUtil.find @pending_processes, url: active.url
 
-      if found?
-        location = found.item.route.location
-        if location? && location != active.route.location
+      if (process = found?.item)?
+        url = process.url
+        if url? && url != active.url
           @dead_processes.push active
       else
         @dead_processes.push active

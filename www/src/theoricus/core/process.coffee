@@ -14,16 +14,39 @@ module.exports = class Process
   # @property [theoricus.core.Route] route
   route: null
 
+  # parent process (in which this one depends)
+  dependency: null
+
+  # process params
+  params: null
+
   ###
   Instantiate controller responsible for the route
   
   @param [theoricus.Theoricus] @the   Shortcut for current app's instace
   @route [theoricus.core.Route] @route Route responsible for the process
   ###
-  constructor:( @the, @route, fn )->
-    # instantiates controller
-    @the.factory.controller @route.api.controller_name, ( @controller )=>
+  constructor:( @the, @route, @url, @parent_process, fn )->
+
+    # initialize process logic
+    do @initialize
+
+    # instantiates controller and fires the constructor callback
+    @the.factory.controller @route.controller_name, ( @controller )=>
       fn @, @controller
+
+
+  initialize:->
+    if @url is null and @parent_process?
+      @url = @route.rewrite_url_with_parms @route.match, @parent_process.params
+
+    # initializes params object
+    @params = @route.extract_params @url
+
+    # evaluates dependency route
+    if @route.at
+      @dependency = @route.rewrite_url_with_parms @route.at, @params
+
 
   ###
   Executes controller's action, in case it isn't declared executes an 
@@ -33,7 +56,7 @@ module.exports = class Process
   ###
   run:( after_run )->
     # if action is not defined, defines the default action behaviour for it
-    unless @controller[ action = @route.api.action_name ]
+    unless @controller[ action = @route.action_name ]
       @controller[ action ] = @controller._build_action @
 
     # inject the current process into controller
@@ -47,14 +70,14 @@ module.exports = class Process
     # mounts an array with action params followed by a callback
     callback = (@view)=>
       unless @view instanceof View
-        controller_name = @route.api.controller_name.camelize()
+        controller_name = @route.controller_name.camelize()
         msg = "Check your `#{controller_name}` controller, the action "
         msg += "`#{action}` must return a View instance."
         console.error msg
 
     # executes the action passing all arguments, the callback will be executed
     # with the resulting view
-    @controller[ action ] @route.api.params, callback
+    @controller[ action ] @params, callback
 
   ###
   Executes view's transition "out" method, wait for its end

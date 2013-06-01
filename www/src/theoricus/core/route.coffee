@@ -1,58 +1,62 @@
-## Router & Route logic inspired by RouterJS:
-## https://github.com/haithembelhaj/RouterJs
-
 module.exports = class Route
 
   # static regex for reuse
   @named_param_reg: /:\w+/g
   @splat_param_reg: /\*\w+/g
 
-  # variables
-  api: null
-  location: null
+  # regex matcher
+  matcher: null
 
-  constructor:( @match, @to, @at, @el, @router, @location = null )->
+  # construct variables
+  match: null
+  to: null
+  at: null
+  el: null
 
-    # prepare regex matcher
+  # api info
+  controller_name: null
+  action_name: null
+  param_names: null
+
+  constructor:( @match, @to, @at, @el )->
+
+    # prepare regex matcher str for reuse
     @matcher = @match.replace Route.named_param_reg, '([^\/]+)'
     @matcher = @matcher.replace Route.splat_param_reg, '(.*?)'
-    @matcher = new RegExp "^#{@matcher}$"
-
-   # init api object
-    @api = params: null
+    @matcher = new RegExp "^#{@matcher}$", 'm'
 
     # fitlers controller and action name
-    try
-      @api.controller_name = to.split( "/" )[0]
-      @api.action_name = to.split( "/" )[1]
-    catch error
-      console.log "TODO: handle error"
+    [@controller_name, @action_name] = to.split '/'
 
-     # filters route's params names
+
+  extract_params:( url )->
+    # initialize empty params object
+    params = {}
+
+    # filters route's params names
     if (param_names = @match.match /(:|\*)\w+/g)?
       for value, index in param_names
-        param_names[index] = value.substr 1 
+        param_names[index] = value.substr 1
+    else
+      param_names = []
 
-    # filters route's param values
-    param_values = (@matcher.exec( @location ).slice 1 if @location?) or []
+    # extract url params based on route
+    params_values = (url.match @matcher)?.slice 1 or []
 
-    # merges both into a key/val dictionary for all route's params
-    if param_values.length
-      params = {}
-      for value, index in param_values
-        params[param_names[index]] = value
+    # mounts params object with key->values pairs
+    if params_values?
+      for val, index in params_values
+        key = param_names[ index ]
+        params[key] = val
 
-    # injects it into the api
-    @api.params = params or {}
+    return params
 
-  # inject params directly into the route
-  inject_params:( params )->
-    for key, val of params
-      unless @api.params[key]?
-        @api.params[key] = val
+  rewrite_url_with_parms:( url, params )->
+    for key, value of params
+      reg = new RegExp "[:\\*]+#{key}", 'g'
+      url = url.replace reg, value
+    return url
 
-  ###
-  @param [String] location
-  ###
-  clone:( location )->
-    new Route @match, @to, @at, @el, @router, location
+  # test given url against the route
+  test:( url )->
+    @matcher.test url

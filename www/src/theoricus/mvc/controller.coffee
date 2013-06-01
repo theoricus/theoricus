@@ -17,14 +17,14 @@ module.exports = class Controller
   ###
   _build_action: ( process ) ->
     ( params, fn )=>
-      api = process.route.api
+      controller_name = process.route.controller_name
+      action_name = process.route.action_name
 
-      model_name = api.controller_name.singularize()
-
+      model_name = controller_name.singularize()
       @the.factory.model model_name, null, (model)=>
 
-        view_folder = api.controller_name
-        view_name   = api.action_name
+        view_folder = controller_name
+        view_name   = action_name
 
         if model.all?
           @render "#{view_folder}/#{view_name}", model.all(), null, null, fn

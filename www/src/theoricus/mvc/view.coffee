@@ -39,7 +39,7 @@ module.exports = class View
       msg += ' semantics in your code.'
       console.warn msg
     else
-      @data.params = @process.route.api.params
+      @data.params = @process.params
 
     @before_render?(@data)
 
