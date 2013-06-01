@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.2.7 - 06/01/2013
+ * Fixing routes with dynamic parameters
+ * Switching to named-params instead of ordered-params
+ * Fixing model instantiation
+ * Adding flag to enable/disable model's automatic validation
+ * Providing route params for all templates by default
+ * Adding hidden option `--dev` when creating new projects
+
 ## 0.2.6 - 05/28/2013
  * Fixing app_skel according last fixes related inflections singularization and
  pluralization
