@@ -17,8 +17,8 @@ module.exports = class Model extends Binder
     for k, v of resources
       @[k] = @_build_rest.apply @, [k].concat(v.concat host)
 
-  @fields = ( fields ) ->
-    @_build_gs key, type for key, type of fields
+  @fields = ( fields, opts = validate: true ) ->
+    @_build_gs key, type, opts for key, type of fields
 
 
 
@@ -121,7 +121,6 @@ module.exports = class Model extends Binder
         fetcher.onerror error
       else
           console.error error
-          
 
     fetcher
 
@@ -133,7 +132,7 @@ module.exports = class Model extends Binder
   @param [String] field
   @param [String] type
   ###
-  @_build_gs = ( field, type ) ->
+  @_build_gs = ( field, type, opts ) ->
     _val = null
 
     classname = ("#{@}".match /function\s(\w+)/)[1]
@@ -142,13 +141,12 @@ module.exports = class Model extends Binder
 
     getter = -> _val
     setter = (value) ->
-
       switch ltype
-        when 'string' then f = (typeof value is 'string')
-        when 'number' then f = (typeof value is 'number')
-        else f = (value instanceof type)
+        when 'string' then is_valid = (typeof value is 'string')
+        when 'number' then is_valid = (typeof value is 'number')
+        else is_valid = (value instanceof type)
 
-      if f
+      if is_valid or opts.validate is false
         _val = value
         @update field, _val
       else
