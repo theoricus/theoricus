@@ -78,7 +78,9 @@ module.exports = class Router
 
       # if none is found, tries to render based on default
       # controller/action settings
-      [controller_name, action_name] = (url.replace /^\//m, '').split '/'
+      url_parts = (url.replace /^\//m, '').split '/'
+      controller_name = url_parts[0]
+      action_name = url_parts[1] or 'index'
 
       @the.factory.controller controller_name, (controller)=>
 
