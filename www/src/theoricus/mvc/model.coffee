@@ -172,8 +172,8 @@ module.exports = class Model extends Binder
     classname = ("#{@}".match /function\s(\w+)/)[1]
     records = []
     for record in [].concat data
-      model = (Factory.model classname, record)
-      records.push model
+      Factory.model classname, record, (model)->
+        records.push model
 
     ###
     When calling the rest service multiple times, the collection variable keeps 
