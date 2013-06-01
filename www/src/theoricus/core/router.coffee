@@ -46,7 +46,8 @@ module.exports = class Router
   @param [String] el
   ###
   map:( route, to, at, el )->
-    @routes.push new Route route, to, at, el, @
+    @routes.push route = new Route route, to, at, el, @
+    return route
 
   route:( state )->
 
@@ -70,9 +71,21 @@ module.exports = class Router
       # fallback to root url in case user enter the '/'
       url = @Routes.root if url == "/"
 
+      # search in all defined routes
       for route in @routes
         if route.test url
           return @on_change route, url
+
+      # if none is found, tries to render based on default
+      # controller/action settings
+      [controller_name, action_name] = (url.replace /^\//m, '').split '/'
+
+      @the.factory.controller controller_name, (controller)=>
+        if controller?
+          route = @map url, "#{controller_name}/#{action_name}", null, 'body'
+          return @on_change route, url
+        else
+          console.error 'Route not found for ' + url
 
     @trigger = true
 
