@@ -43,6 +43,9 @@ module.exports = class Factory
       model[prop] = value for prop, value of init
 
       fn model
+    , (err)->
+      console.error 'Model not found: ' + classpath
+      fn null
 
   ###
   Returns an instantiated [theoricus.mvc.View] View
@@ -75,6 +78,10 @@ module.exports = class Factory
 
       fn view
 
+    , (err)->
+      console.error 'View not found: ' + classpath
+      fn null
+
 
   ###
   Returns an instantiated [theoricus.mvc.Controller] Controller
@@ -90,6 +97,7 @@ module.exports = class Factory
     if @controllers[ classpath ]?
       fn @controllers[ classpath ]
     else
+
       require [classpath], ( Controller )=>
 
         unless (controller = new Controller) instanceof Controller
@@ -104,6 +112,10 @@ module.exports = class Factory
         @controllers[ classpath ] = controller
         fn @controllers[ classpath ]
 
+      , (err)->
+        console.error 'Controller not found: ' + classpath
+        fn null
+
   ###
   Returns an AMD compiled template
 
@@ -111,7 +123,11 @@ module.exports = class Factory
   ###
   @template=@::template=( path, fn )->
     # console.log "Factory.template( #{path} )"
-    require ['templates/' + path], ( template )-> fn template
+    require ['templates/' + path], ( template )->
+      fn template
+    , (err)->
+      console.error 'Template not found: ' + classpath
+      fn null
 
 
 
