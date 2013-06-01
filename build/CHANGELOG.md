@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.2.8 - 06/01/2013
+  * Properly handling broken requests / scripts not found with RequireJS
+  * Implementing default routing based on 'controller/action' behavior when
+  there's not route defined (Controller must to exist)
+  * Implementing 404 route on Router
+  * Simplyfing core flow process -> controller -> view and cleaning methods
+  signatures
+
 ## 0.2.7 - 06/01/2013
  * Fixing routes with dynamic parameters
  * Switching to named-params instead of ordered-params
