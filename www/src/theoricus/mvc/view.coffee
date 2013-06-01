@@ -104,7 +104,7 @@ module.exports = class View
       @after_in?()
     else
       @el.css "opacity", 0
-      @el.animate {opacity: 1}, 600, => @after_in?()
+      @el.animate {opacity: 1}, 300, => @after_in?()
 
   ###
   Triggers view "animation out", "after_out" must be called in the end
