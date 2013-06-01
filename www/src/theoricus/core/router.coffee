@@ -81,11 +81,18 @@ module.exports = class Router
       [controller_name, action_name] = (url.replace /^\//m, '').split '/'
 
       @the.factory.controller controller_name, (controller)=>
+
+        # if controller is found, route call to it
         if controller?
           route = @map url, "#{controller_name}/#{action_name}", null, 'body'
           return @on_change route, url
+
+        # otherwise renders the not found route
         else
-          console.error 'Route not found for ' + url
+
+          for route in @routes
+            if route.test @Routes.notfound
+              return @on_change route, url
 
     @trigger = true
 

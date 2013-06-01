@@ -9,6 +9,11 @@ module.exports = class Routes
       at: null
       el: "body"
 
+    '/404':
+      to: "pages/notfound"
+      at: "/pages"
+      el: "#container"
+
     '/pages/index':
       to: "pages/index"
       at: "/pages"
@@ -16,3 +21,6 @@ module.exports = class Routes
 
   # default route
   @root = '/pages/index'
+
+  # not found route
+  @notfound = '/404'
