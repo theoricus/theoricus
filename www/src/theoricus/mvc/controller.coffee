@@ -22,6 +22,7 @@ module.exports = class Controller
 
       model_name = controller_name.singularize()
       @the.factory.model model_name, null, (model)=>
+        return unless model?
 
         view_folder = controller_name
         view_name   = action_name
@@ -44,6 +45,7 @@ module.exports = class Controller
       fn view
     else
       @the.factory.view path, @process, ( view )=>
+        return unless view?
         @_render_view path, data, el, view
         fn view
 
