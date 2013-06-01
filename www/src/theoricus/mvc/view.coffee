@@ -87,16 +87,7 @@ module.exports = class View
       @on_resize()
 
 
-  ###
-  TODO: Document method.
-  ###
-  require: ( view, container, data = @data, template, fn ) ->
-    @view view, ( view )=>
-      if container
-        view.render data, @el.find container, template
 
-      fn view
-  
   ###
   In case you defined @events in your view they will be automatically binded
   ###
@@ -162,54 +153,3 @@ module.exports = class View
   ###
   navigate:( url )->
     @the.processes.router.navigate url
-
-  ###
-  Shortcut for Factory.view method
-
-  @param [String] path    Path to view file
-  ###
-  view:( path, fn )->
-    Factory.view path, @process, fn
-
-  ###
-  Shortcut for Factory.template method
-
-  @param [String] url Path to template file
-  ###
-  template:( path, fn )->
-    Factory.template path, fn
-
-  ###
-  instantiates a view, render on container passing current data
-  ###
-  require: ( view, container, data = @data, template ) ->
-    view = @view view, ( view ) =>
-
-      if container
-
-        # if user passes a selector instead of a object
-        if container instanceof String
-          container = @el.find container
-
-        # if user passes an object ref, jQuerify it 
-        unless container instanceof jQuery
-          container = $ container
-
-        view.render data, @el.find container, template
-
-      view
-
-  find: ( selector ) => @el.find selector
-
-  ###
-  Takes a selector or array of selectors
-  Adds click event handler to each of them
-  ###
-  link: ( a_selector ) ->
-
-    $( a_selector ).each ( index, selector ) =>
-      @find( selector ).click ( event ) =>
-
-        @navigate $( event.delegateTarget ).attr( 'href' )
-
-        return off
