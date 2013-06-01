@@ -126,7 +126,7 @@ module.exports = class Factory
     require ['templates/' + path], ( template )->
       fn template
     , (err)->
-      console.error 'Template not found: ' + classpath
+      console.error 'Template not found: ' + path
       fn null
 
 
@@ -140,5 +140,5 @@ module.exports = class Factory
     require ['styles/' + path], ( style )->
       fn style
     , (err)->
-      console.error 'Style not found: ' + classpath
+      console.error 'Style not found: ' + path
       fn null
