@@ -28,40 +28,33 @@ module.exports = class Controller
         view_name   = action_name
 
         if model.all?
-          @render "#{view_folder}/#{view_name}", model.all(), null, null, fn
+          @render "#{view_folder}/#{view_name}", model.all()
         else
-          @render "#{view_folder}/#{view_name}", null, null, null, fn
+          @render "#{view_folder}/#{view_name}"
 
   ###
-  Renders view
+  Renders to some view
 
-  @param [String] path  path to view on the app tree
+  @param [String] path  Path to view on the app tree
   @param [String] data  data to be rendered on the template
-  @param [Object] element element where it will be rendered, defaults to @process.route.el
   ###
-  render: ( path, data, el = @process.route.el, view, fn ) ->
-    if view?
-      @_render_view path, data, el, view
-      fn view
-    else
-      @the.factory.view path, @process, ( view )=>
-        return unless view?
-        @_render_view path, data, el, view
-        fn view
+  render:( path, data )->
+    @the.factory.view path, (view)=>
+      
+      @process.view = view
 
-  _render_view:( path, data, el = @process.route.el, view )->
-    view.after_in = view.process.after_run
+      view.process = @process
+      view.after_in = @after_render
 
-    if data instanceof Fetcher
-      if data.loaded
-        view.render data.records, el
+      if data instanceof Fetcher
+        if data.loaded
+          view._render data.records
+        else
+          data.onload = ( records ) =>
+            view._render records
       else
-        data.onload = ( records ) =>
-          @render path, records, el, view
-    else
-      view.render data, el
+        view._render data
 
-    view
 
   # ~> Shortcuts
 

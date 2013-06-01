@@ -32,7 +32,7 @@ module.exports = class View
   @param [Object] @data   Data to be passed to the template
   @param [Object] @el     Element where the view will be "attached/appended"
   ###
-  render:( @data = {}, el = @process.route.el, template = null )=>
+  _render:( @data = {}, template )=>
     if @data? and @data.params?
       msg = 'You have overwritten the `params` variable passed to you template.'
       msg += ' You\'ll probably want to undo this, to improve compatibility and'
@@ -46,46 +46,34 @@ module.exports = class View
     if @title?
       document.title = @title
 
-    if not @el
-      api = @process.route.api
-      @el = $ el
+    @el = $ @process.route.el
 
-      if template == null
-        tmpl_folder = @namespace.replace(/\./g, '/')
-        tmpl_name   = @classname.underscore()
+    unless template?
+      tmpl_folder = @namespace.replace(/\./g, '/')
+      tmpl_name   = @classname.underscore()
+      template = "#{tmpl_folder}/#{tmpl_name}"
 
-        @template "#{tmpl_folder}/#{tmpl_name}", ( template ) =>
-          @render_template template
-          
+    @render_template template
 
   render_template:( template )->
+    @the.factory.template template, ( template ) =>
 
-    if template?
-      try
-        dom = template @data
-      catch xihh
-        msg = 'Something REALLY UNNEXPECTED has occurred. While the reason '
-        msg += 'isn\'t clear even for us, you can check if you template isn\'t '
-        msg += 'trying to access a variable that isn\'t being passed to it! '
-        msg += 'This is a common reason that results in this bizarre behavior.'
-        console.error msg
-        console.error xihh
-
+      dom = template @data
       dom = @el.append dom
 
-    # binds item if the data passed is a valid Model
-    if (@data instanceof Model)
-      @data.bind dom, !@the.config.autobind
-    
-    @in()
-    @set_triggers?()
-    @after_render?(@data)
-    
-    if @on_resize?
-      $( window ).unbind 'resize', @on_resize
-      $( window ).bind   'resize', @on_resize
-      @on_resize()
+      # binds item if the data passed is a valid Model
+      if (@data instanceof Model)
+        @data.bind dom, !@the.config.autobind
+      
+      @set_triggers?()
+      @after_render?(@data)
 
+      @in()
+
+      if @on_resize?
+        $( window ).unbind 'resize', @on_resize
+        $( window ).bind   'resize', @on_resize
+        @on_resize()
 
 
   ###

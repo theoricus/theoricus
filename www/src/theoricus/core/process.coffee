@@ -75,9 +75,12 @@ module.exports = class Process
         msg += "`#{action}` must return a View instance."
         console.error msg
 
+    @controller.after_render = @after_run
     # executes the action passing all arguments, the callback will be executed
     # with the resulting view
-    @controller[ action ] @params, callback
+    @controller[ action ] @params
+
+
 
   ###
   Executes view's transition "out" method, wait for its end
@@ -88,8 +91,8 @@ module.exports = class Process
   destroy:( @after_destroy )->
     # call the OUT transition with the given callback
     unless (@view instanceof View)
-      controller_name = @route.api.controller_name.camelize()
-      action_name = @route.api.action_name
+      controller_name = @route.controller_name.camelize()
+      action_name = @route.action_name
       msg = "Can't destroy View because it isn't a proper View instance. "
       msg += "Check your `#{controller_name}` controller, the action "
       msg += "`#{action_name}` must return a View instance."
