@@ -135,6 +135,10 @@ module.exports = class Factory
   
   @param [String] path  path to the style
   ###
-  @template=@::template=( path, fn )->
+  @style=@::style=( path, fn )->
     # console.log "Factory.template( #{path} )"
-    require ['templates/' + path], ( template )-> fn template
+    require ['styles/' + path], ( style )->
+      fn style
+    , (err)->
+      console.error 'Style not found: ' + classpath
+      fn null
