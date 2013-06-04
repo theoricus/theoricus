@@ -54,7 +54,7 @@ module.exports = class Processes
     @locked = true
     @the.crawler.is_rendered = false
 
-    new Process @the, route, url, null, ( process, controller )=>
+    new Process @the, @, route, url, null, ( process, controller )=>
 
       @last_process = process
 
@@ -114,7 +114,7 @@ module.exports = class Processes
     if (route = route?.item)?
 
       # creates a new process derived from this one
-      process = new Process @the, route, null, process, (process)=>
+      process = new Process @the, @, route, null, process, (process)=>
         after_find process
     else
       after_find null

@@ -26,7 +26,7 @@ module.exports = class Process
   @param [theoricus.Theoricus] @the   Shortcut for current app's instace
   @route [theoricus.core.Route] @route Route responsible for the process
   ###
-  constructor:( @the, @route, @url, @parent_process, fn )->
+  constructor:( @the, @processes, @route, @url, @parent_process, fn )->
 
     # initialize process logic
     do @initialize
