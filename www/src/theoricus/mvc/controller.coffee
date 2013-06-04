@@ -64,4 +64,25 @@ module.exports = class Controller
   @param [String] url URL to navigate
   ###
   navigate:( url )->
+
+    # if redirect is called whithin an action, some operations must to be
+    # performed in order to effectively kill the running process prematurely
+    # before the router's navigation gets called
+    # 
+    # for this to work, your @render method must not be called, ie:
+    # 
+    # action:->
+    #   if user_is_logged
+    #     return @redirect '/signin'
+    #   @render '/signedin'
+    # 
+    if @process.is_in_the_middle_of_running_an_action
+
+      # kill current running process
+      do @process.processes.active_processes.pop
+
+      # fires after_render prematurely to wipe the fresh glue
+      @after_render()
+
+    # and redirects user
     @the.processes.router.navigate url

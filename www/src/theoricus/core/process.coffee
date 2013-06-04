@@ -17,6 +17,11 @@ module.exports = class Process
   # parent process (in which this one depends)
   dependency: null
 
+  # will be true when the run method begings, before the controller/action
+  # is executed. after the action is executed, will be false again
+  # se `controller.navigate` method for understaindg why this is necessary
+  is_in_the_middle_of_running_an_action: false
+
   # process params
   params: null
 
@@ -55,6 +60,10 @@ module.exports = class Process
   @return [theoricus.mvc.View] view
   ###
   run:( after_run )->
+
+    # sets is_running_action=true
+    @is_in_the_middle_of_running_an_action = true
+
     # if action is not defined, defines the default action behaviour for it
     unless @controller[ action = @route.action_name ]
       @controller[ action ] = @controller._build_action @
@@ -80,6 +89,9 @@ module.exports = class Process
 
     # executes action
     @controller[ action ] @params
+
+    # sets is_running_action=false
+    @is_in_the_middle_of_running_an_action = false
 
 
 
