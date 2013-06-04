@@ -71,8 +71,8 @@ module.exports = class View
       @in()
 
       if @on_resize?
-        $( window ).unbind 'resize', @on_resize
-        $( window ).bind   'resize', @on_resize
+        $( window ).unbind 'resize', => do @on_resize
+        $( window ).bind   'resize', => do @on_resize
         @on_resize()
 
 
