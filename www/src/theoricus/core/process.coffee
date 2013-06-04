@@ -75,9 +75,10 @@ module.exports = class Process
         msg += "`#{action}` must return a View instance."
         console.error msg
 
+    # sets the callback
     @controller.after_render = @after_run
-    # executes the action passing all arguments, the callback will be executed
-    # with the resulting view
+
+    # executes action
     @controller[ action ] @params
 
 
