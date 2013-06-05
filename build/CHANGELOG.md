@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.9 - 06/04/2013
+ * Adding possibility to call 'navigate' in the middle of a Controller action
+ * Automatically choosing action 'index' in Router, when no action is provided
+ * Binding View `on_resize` scope the View to be practical
+
 ## 0.2.8 - 06/01/2013
   * Properly handling broken requests / scripts not found with RequireJS
   * Implementing default routing based on 'controller/action' behavior when
