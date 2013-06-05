@@ -65,8 +65,8 @@ module.exports = class Controller
   ###
   navigate:( url )->
 
-    # if redirect is called whithin an action, some operations must to be
-    # performed in order to effectively kill the running process prematurely
+    # if redirect is called during the action execution, some operations must to
+    # be performed in order to effectively kill the running process prematurely
     # before the router's navigation gets called
     # 
     # for this to work, your @render method must not be called, ie:

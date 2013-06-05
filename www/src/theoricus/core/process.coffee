@@ -17,9 +17,9 @@ module.exports = class Process
   # parent process (in which this one depends)
   dependency: null
 
-  # will be true when the run method begings, before the controller/action
-  # is executed. after the action is executed, will be false again
-  # se `controller.navigate` method for understaindg why this is necessary
+  # will set be true in the run method, right before the action execution, and
+  # set to false right after the action is executed. this way the navigate
+  # method on controller can abort the process prematurely as needed.
   is_in_the_middle_of_running_an_action: false
 
   # process params
@@ -61,7 +61,7 @@ module.exports = class Process
   ###
   run:( after_run )->
 
-    # sets is_running_action=true
+    # sets is_in_the_middle_of_running_an_action=true
     @is_in_the_middle_of_running_an_action = true
 
     # if action is not defined, defines the default action behaviour for it
@@ -90,7 +90,7 @@ module.exports = class Process
     # executes action
     @controller[ action ] @params
 
-    # sets is_running_action=false
+    # sets is_in_the_middle_of_running_an_action=false
     @is_in_the_middle_of_running_an_action = false
 
 
