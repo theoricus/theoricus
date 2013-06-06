@@ -21,7 +21,7 @@ module.exports = class View
   # @property [theoricus.core.Process] process
   process   : null
 
-   ###
+  ###
   @param [theoricus.Theoricus] @the   Shortcut for app's instance
   ###
   _boot:( @the )->
@@ -85,13 +85,6 @@ module.exports = class View
       [all, sel, ev] = sel.match /(.*)[\s|\t]+([\S]+)$/m
       ( @el.find sel ).unbind ev, null, @[funk]
       ( @el.find sel ).bind   ev, null, @[funk]
-
-  ###
-  Called before completely erasing the view
-  ###
-  destroy: () ->
-    @before_destroy?()
-    @el.empty()
 
   ###
   Triggers view "animation in", "@after_in" must be called in the end
