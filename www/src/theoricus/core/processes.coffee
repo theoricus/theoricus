@@ -1,6 +1,7 @@
 ArrayUtil = require 'theoricus/utils/array_util'
 Router = require 'theoricus/core/router'
 Process = require 'theoricus/core/process'
+_ = require 'lodash'
 
 Factory = null
 
@@ -100,24 +101,28 @@ module.exports = class Processes
     else
       do after_filter
 
-
+  # try to finds the dependency in many ways
   _find_dependency:( process, after_find )->
 
-    # checks if dependency is already running and fires callback if it is
-    active = ArrayUtil.find @active_processes, url: process.dependency
-    return after_find active.item if active?
+    # 1 - tries to find dependency within the ACTIVE PROCESSES
+    dep = _.filter @active_processes, (item)->
+      return item.url is process.dependency
+    return after_find dep[0] if dep.length
 
-    # otherwise searches a suitable route for it
-    route = ArrayUtil.find @router.routes, match: process.route.at
+    # 2 - tries to find dependency within the ROUTES (using strict route name)
+    dep = _.filter @router.routes, (item)->
+      return item.test process.dependency
 
-    # if it's found
-    if (route = route?.item)?
+    if dep.length
+      # rewriting route dependency based on parent url params
+      params = dep[0].extract_params process.dependency
+      dep[0].at = dep[0].rewrite_url_with_parms dep[0].at, params
 
-      # creates a new process derived from this one
-      process = new Process @the, @, route, null, process, (process)=>
+      return new Process @the, @, dep[0], process.dependency, process, (process)=>
         after_find process
-    else
-      after_find null
+
+    after_find null
+
 
   ###
   3th
