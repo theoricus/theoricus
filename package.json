@@ -31,10 +31,11 @@
   "dependencies"   : {
     "coffee-script": "1.6.x",
     "colors": "0.6.x",
-    "optimist": "0.5.x",
     "fs-util": "0.3.x",
     "polvo": "0.3.x",
-    "source-map-support": "0.1.x"
+    "source-map-support": "0.1.x",
+    "optimist": "0.5.x",
+    "lodash": "1.2.x"
   },
 
   "devDependencies": {
