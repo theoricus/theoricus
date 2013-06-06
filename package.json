@@ -1,6 +1,6 @@
 {
   "name": "theoricus",
-  "version": "0.2.9",
+  "version": "0.2.10",
   "author": "Anderson Arboleya <anderson@arboleya.me>",
   "contributors": ["Henrique Matias <hems.inlet@gmail.com>"],
   "description" : "Tiny MV(C) implementation for client side projects.",

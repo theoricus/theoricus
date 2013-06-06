@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.10 - 06/06/2013
+ * Fixing critical error in processes related to dependencies resolution
+ * Removing duplicated destroy method in View
+
 ## 0.2.9 - 06/04/2013
  * Adding possibility to call 'navigate' in the middle of a Controller action
  * Automatically choosing action 'index' in Router, when no action is provided
