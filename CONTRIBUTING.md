@@ -24,24 +24,34 @@ Environment setup is simple achieved by:
 <a name="branching"/>
 ## Branching
 
-Before anything else, start a named branch. If you're fixing the View rendering
-routine, this would be nice:
+Before anything else, start a named branch. 
+
+If you're making a hotfix to the current stable version ( branch master ) you should branch from master:
 
 `````
-git checkout -b fixing-view-rendering
+git checkout -b fix/view-rendering
+[...comits...]
+[pull request]
+````
+
+If you're working on a new feture you should branch from dev:
+
+`````
+git checkout dev
+git checkout -b feature/new_feature_name
 [...comits...]
 [pull request]
 ````
 
 Always isolate your implementations into separated branches, it'll make it easy
-for others to look inside of it, easy to open pull requests (and those to get
-merged), easy to discuss the proposal or adopted solution, and so on.
+for others to understand, easy to open pull requests, easy to merge, easy to 
+discuss the proposal or adopted solution, easy, easy, easy, and so on.
 
 <a name="committing"/>
 ## Committing
 
 Try to not repeat yourself, *never* explain **what** you did -- it's easy to see
-with a simple DIFF. 
+with a simple DIFF therefore redundant.
 
 Instead, explains **WHY** you did it -- put into words the reasons that led you
 to implement something, expose the scenario, the studied cases, be solid.
