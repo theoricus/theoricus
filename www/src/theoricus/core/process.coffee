@@ -31,7 +31,7 @@ module.exports = class Process
   @param [theoricus.Theoricus] @the   Shortcut for current app's instace
   @route [theoricus.core.Route] @route Route responsible for the process
   ###
-  constructor:( @the, @processes, @route, @url, @parent_process, fn )->
+  constructor:( @the, @processes, @route, @at, @url, @parent_process, fn )->
 
     # initialize process logic
     do @initialize
@@ -49,8 +49,8 @@ module.exports = class Process
     @params = @route.extract_params @url
 
     # evaluates dependency route
-    if @route.at
-      @dependency = @route.rewrite_url_with_parms @route.at, @params
+    if @at
+      @dependency = @route.rewrite_url_with_parms @at, @params
 
 
   ###

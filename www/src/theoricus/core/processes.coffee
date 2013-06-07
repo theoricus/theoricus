@@ -55,7 +55,7 @@ module.exports = class Processes
     @locked = true
     @the.crawler.is_rendered = false
 
-    new Process @the, @, route, url, null, ( process, controller )=>
+    new Process @the, @, route, route.at, url, null, ( process, controller )=>
 
       @last_process = process
 
@@ -116,9 +116,9 @@ module.exports = class Processes
     if dep.length
       # rewriting route dependency based on parent url params
       params = dep[0].extract_params process.dependency
-      dep[0].at = dep[0].rewrite_url_with_parms dep[0].at, params
+      at = dep[0].rewrite_url_with_parms dep[0].at, params
 
-      return new Process @the, @, dep[0], process.dependency, process, (process)=>
+      return new Process @the, @, dep[0], at, process.dependency, process, (process)=>
         after_find process
 
     after_find null
