@@ -1,4 +1,3 @@
-ArrayUtil = require 'theoricus/utils/array_util'
 Router = require 'theoricus/core/router'
 Process = require 'theoricus/core/process'
 _ = require 'lodash'
@@ -85,7 +84,6 @@ module.exports = class Processes
 
         # if dependency is found
         if dependency?
-
           # searchs for its dependencies recursively
           @_filter_pending_processes dependency, after_filter
 
@@ -103,22 +101,24 @@ module.exports = class Processes
 
   # try to finds the dependency in many ways
   _find_dependency:( process, after_find )->
+    dependency = process.dependency
 
     # 1 - tries to find dependency within the ACTIVE PROCESSES
-    dep = _.filter @active_processes, (item)->
-      return item.url is process.dependency
-    return after_find dep[0] if dep.length
+    dep = _.find @active_processes, (item)->
+      return item.url is dependency
+    return after_find dep if dep?
 
     # 2 - tries to find dependency within the ROUTES (using strict route name)
-    dep = _.filter @router.routes, (item)->
-      return item.test process.dependency
+    dep = _.find @router.routes, (item)->
+      return item.test dependency
 
-    if dep.length
-      # rewriting route dependency based on parent url params
-      params = dep[0].extract_params process.dependency
-      at = dep[0].rewrite_url_with_parms dep[0].at, params
+    if dep?
 
-      return new Process @the, @, dep[0], at, process.dependency, process, (process)=>
+      # assemble route's `at` dependency based on parent url params
+      params = dep.extract_params process.dependency
+      at = dep.rewrite_url_with_parms dep.at, params
+
+      return new Process @the, @, dep, at, dependency, process, (process)=>
         after_find process
 
     after_find null
@@ -137,10 +137,11 @@ module.exports = class Processes
     # loops through all active process
     for active in @active_processes
 
-      # and checks if it's present in the pending processes as well
-      found = ArrayUtil.find @pending_processes, url: active.url
+      # and checks if it's present in the pending_processes as well
+      process = _.find @pending_processes, (item)->
+        return item.url is active.url
 
-      if (process = found?.item)?
+      if process?
         url = process.url
         if url? && url != active.url
           @dead_processes.push active
@@ -157,8 +158,10 @@ module.exports = class Processes
     if @dead_processes.length
       process = @dead_processes.pop()
       process.destroy @_destroy_dead_processes
-      search = route: match: process.route.match
-      ArrayUtil.delete @active_processes, search
+
+      @active_processes = _.reject @active_processes, (p)->
+        p.route.match is process.route.match
+
     else
       @_run_pending_processes()
 
@@ -171,9 +174,10 @@ module.exports = class Processes
 
       process = @pending_processes.pop()
       search  = route: match: process.route.match
-      found = ArrayUtil.find( @active_processes, search )?
+      found = _.find @active_processes, (found_process)->
+        return found_process.route.match is process.route.match
 
-      if not found
+      unless found?
         @active_processes.push process
         process.run @_run_pending_processes
       else
