@@ -1,10 +1,10 @@
 ArrayUtil = require 'theoricus/utils/array_util'
 Binder = require 'theoricus/mvc/lib/binder'
 Fetcher = require 'theoricus/mvc/lib/fetcher'
-Factory = require 'theoricus/core/factory'
 
 module.exports = class Model extends Binder
 
+  @Factory     = null # will be defined on Factory constructor
   @_fields     = []
   @_collection = []
 
@@ -170,7 +170,7 @@ module.exports = class Model extends Binder
     classname = ("#{@}".match /function\s(\w+)/)[1]
     records = []
     for record in [].concat data
-      Factory.model classname, record, (model)->
+      Model.Factory.model classname, record, (model)->
         records.push model
 
     ###

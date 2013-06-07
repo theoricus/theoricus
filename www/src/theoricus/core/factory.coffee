@@ -10,6 +10,8 @@ module.exports = class Factory
   @param [theoricus.Theoricus] @the   Shortcut for app's instance
   ###
   constructor:( @the )->
+    # sets the Factory inside Model class, statically
+    Model.Factory = @
 
   @model=@::model=( name, init = {}, fn )->
     # console.log "Factory.model( '#{name}' )"
