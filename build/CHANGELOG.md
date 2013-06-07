@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.11 - 06/07/2013
+ * Stop overwriting Route.at property on processes search mechanisms
+ * Exposing params, data and view properties to templates (closes #45)
+ * Removing all `ArrayUtil.find` calls from `Processes` class, in favor of
+ lodash simpler calls (better late than never), this will clear things up a bit
+
 ## 0.2.10 - 06/06/2013
  * Fixing critical error in processes related to dependencies resolution
  * Removing duplicated destroy method in View
