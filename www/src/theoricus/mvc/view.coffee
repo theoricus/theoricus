@@ -68,10 +68,12 @@ module.exports = class View
       @in()
 
       if @on_resize?
-        $( window ).unbind 'resize', => do @on_resize
-        $( window ).bind   'resize', => do @on_resize
+        $( window ).unbind 'resize', @_on_resize
+        $( window ).bind   'resize', @_on_resize
         @on_resize()
 
+  _on_resize:=>
+    do @on_resize
 
   ###
   In case you defined @events in your view they will be automatically binded
@@ -117,7 +119,7 @@ module.exports = class View
   ###
   destroy: () ->
     if @on_resize?
-      $( window ).unbind 'resize', @on_resize
+      $( window ).unbind 'resize', @_on_resize
 
     @before_destroy?()
     @el.empty()
