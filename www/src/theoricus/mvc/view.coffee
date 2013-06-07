@@ -33,13 +33,10 @@ module.exports = class View
   @param [Object] @el     Element where the view will be "attached/appended"
   ###
   _render:( @data = {}, template )=>
-    if @data? and @data.params?
-      msg = 'You have overwritten the `params` variable passed to you template.'
-      msg += ' You\'ll probably want to undo this, to improve compatibility and'
-      msg += ' semantics in your code.'
-      console.warn msg
-    else
-      @data.params = @process.params
+    data = 
+      view: @
+      params: @process.params
+      data: data
 
     @before_render?(@data)
 
