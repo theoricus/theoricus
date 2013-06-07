@@ -32,8 +32,8 @@ module.exports = class View
   @param [Object] @data   Data to be passed to the template
   @param [Object] @el     Element where the view will be "attached/appended"
   ###
-  _render:( @data = {}, template )=>
-    data = 
+  _render:( data = {}, template )=>
+    @data = 
       view: @
       params: @process.params
       data: data
