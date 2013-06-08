@@ -2,7 +2,7 @@
 
 Tiny MV(C) implementation for client side projects.
 
-> Version 0.2.11
+> Version 0.2.12
 
 [![Dependency Status](https://gemnasium.com/serpentem/theoricus.png)](https://gemnasium.com/serpentem/theoricus)
 

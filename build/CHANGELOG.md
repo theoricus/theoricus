@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.12 - 06/08/2013
+ * Fixing variable scope in `View._render`
+ * Saving local bidged method for `View._on_resize` in order to unbind it later
+ * Removing circular dependency between Factory and Model (closes [#39](https://github.com/serpentem/theoricus/pull/39)))
+ * Merging `giuilian/hotfix-model-instantiate`, which fixed the instantiation
+ of multiple recordos, waiting for the performed async operations
+
 ## 0.2.11 - 06/07/2013
  * Stop overwriting Route.at property on processes search mechanisms
  * Exposing params, data and view properties to templates (closes #45)
