@@ -112,8 +112,9 @@ module.exports = class Model extends Binder
 
     req.done ( data )=>
       fetcher.loaded = true
-      fetcher.records = @_instantiate data
-      fetcher.onload?( fetcher.records )
+      @_instantiate data, (results)->
+        fetcher.records = results
+        fetcher.onload?( fetcher.records )
 
     req.error ( error )=>
       fetcher.error = true
@@ -166,20 +167,24 @@ module.exports = class Model extends Binder
 
   @param [Object] data  Data to be parsed
   ###
-  @_instantiate = ( data ) ->
+  @_instantiate = ( data, callback ) ->
+
     classname = ("#{@}".match /function\s(\w+)/)[1]
     records = []
-    for record in [].concat data
-      Model.Factory.model classname, record, (model)->
-        records.push model
 
-    ###
-    When calling the rest service multiple times, the collection variable keeps 
-    the old data and duplicate the recordset between a rest call and another one.
-    For now, just flush the old collection when instantiate a new model instance
-    ###
-    @_collection = []
+    for record, at in data
 
-    @_collection = ( @_collection || [] ).concat records
+      Factory.model classname, record, (_model)=>
+        records.push _model
 
-    return if records.length is 1 then records[0] else records
+        if records.length is data.length
+
+          # When calling the rest service multiple times, the collection
+          # variable keeps the old data and duplicate the recordset between a
+          # rest call and another one. For now, just flush the old collection
+          # when instantiate a new model instance
+
+          @_collection = ( @_collection || [] ).concat records
+
+          callback (if records.length is 1 then records[0] else records)
+
