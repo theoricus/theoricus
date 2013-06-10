@@ -134,13 +134,12 @@ module.exports = class Model extends Binder
   @param [String] type
   ###
   @_build_gs = ( field, type, opts ) ->
-    _val = null
 
     classname = ("#{@}".match /function\s(\w+)/)[1]
     stype = ("#{type}".match /function\s(\w+)/)[1]
     ltype = stype.toLowerCase()
 
-    getter = -> _val
+    getter = -> @["_#{field}"]
     setter = (value) ->
       switch ltype
         when 'string' then is_valid = (typeof value is 'string')
@@ -148,8 +147,8 @@ module.exports = class Model extends Binder
         else is_valid = (value instanceof type)
 
       if is_valid or opts.validate is false
-        _val = value
-        @update field, _val
+        @["_#{field}"] = value
+        @update field, @["_#{field}"]
       else
         prop = "#{classname}.#{field}"
         msg = "Property '#{prop}' must to be #{stype}."
