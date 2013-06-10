@@ -189,3 +189,5 @@ module.exports = class Processes
       if @disable_transitions?
         @the.config.disable_transitions = @disable_transitions
         @disable_transitions = null
+
+      _.each @active_processes, (process)-> process.on_activate?()

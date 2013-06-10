@@ -40,8 +40,10 @@ module.exports = class View
 
     @before_render?(@data)
 
-    if @title?
-      document.title = @title
+    @process.on_activate = =>
+      @on_activate?()
+      if @title?
+        document.title = @title
 
     @el = $ @process.route.el
 

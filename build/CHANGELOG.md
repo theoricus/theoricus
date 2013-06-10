@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.13 - ?
+  * Adding `on_activate` method to Process
+  * Synchronizing View _render method, to update the window's title always
+  when process get activated. A process will render a view only one time, but
+  can get activated many times.
+
 ## 0.2.12 - 06/08/2013
  * Fixing variable scope in `View._render`
  * Saving local bidged method for `View._on_resize` in order to unbind it later
