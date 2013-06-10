@@ -190,4 +190,5 @@ module.exports = class Processes
         @the.config.disable_transitions = @disable_transitions
         @disable_transitions = null
 
-      _.each @active_processes, (process)-> process.on_activate?()
+      # calls the activate for the last active process only
+      (_.last @active_processes).on_activate?()
