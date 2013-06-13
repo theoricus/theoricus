@@ -1,234 +1,258 @@
 ArrayUtil = require 'theoricus/utils/array_util'
 Binder = require 'theoricus/mvc/lib/binder'
-<<<<<<< HEAD
-Fetcher = require 'theoricus/mvc/lib/fetcher'
+_ = require 'lodash'
 
 module.exports = class Model extends Binder
 
-  @Factory     = null # will be defined on Factory constructor
-  @_fields     = []
-  @_collection = []
-=======
-Factory = require 'theoricus/core/factory'
+  @_config  = urls: {}, keys: {}
+  @_records = []
 
-module.exports = class Model extends Binder
-
-  # Instance properties
->>>>>>> giulian/feature/model-refactor
-
-  rest:
-    "all":""
-    "create":""
-    "update":""
-    "delete":""
-
-  fields:null
-
-  # Class properties
-
-  @_records:[]
-
-  @fetcher:null
-
-  # Class methods
-
-  @fetch:(callback)->
-    @fetcher.fetch 
-  
-  @all:()->
-    return @_records
-  
-  @create:(attrs)->
-    model = new @
-    model[prop] = attrs[prop] for prop of attrs
-    model.uid = @_guid()
-    model.id = @_records.length
-    @_records.push model
-  
-  @delete:(id)->
-    for model, index in @_records
-      if model.id === id or model.guid === id
-        record_index = index
-
-    @_records.splice record_index, 1
-  
-  @read:(attr)->
-    ArrayUtil.find @_records, attr
-
-  @save:->
-    @fetcher.update @_records
-
-  @_guid:->
-    "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace /[xy]/g, (c) ->
-      r = Math.random() * 16 | 0
-      v = (if c is "x" then r else (r & 0x3 | 0x8))
-      v.toString 16
-
-<<<<<<< HEAD
-  
-  @param [String] key   
-  @param [String] method  
-  @param [String] url   
-  @param [String] domain  
-  ###
-  @_build_rest = ( key, method, url, domain ) ->
-    # console.log 'building ->', key, method, url, domain
-
-    return call = ( args... ) ->
-
-      if domain? && domain.substring( domain.length - 1 ) is "/"
-        domain = domain.substring 0, domain.length - 1
-
-      #console.log 'calling -->', key, method, url, domain, args
-      
-      # when asking to read a registry, check if it was already loaded
-      # if so, return the cached entry
-      if key is "read" and @_collection.length
-        found = ArrayUtil.find @_collection, {id: args[0]}
-        return found.item if found?
-      
-      # when calling a method, you can pass as last argument
-      # one object that will be sent as data during the "ajax call"
-      if args.length
-        if (typeof args[args.length-1] is 'object')
-          data = args.pop()
-        else
-          data = ''
-
-      # creating a new variable for request url in order to do the replacing
-      # logic from scratch every time the method is called
-      # for some "weird" reason without this "hack" the url would 
-      # build on top of the last built url, resulting in wrong addresses
-      r_url = url
-
-      # You can set variables on the URL using ":variable"
-      # and they'll be replace by the args you pass.
-      # 
-      # i.e. 
-      # @rest
-      #     'all' : [ 'GET', 'my/path/to/:id.json' ]
-      # 
-      # called as MyModel.all( 66 )
-      # will result in a call to "my/path/to/66.json"
-      # 
-      while (/:[a-z]+/.exec r_url)?
-        r_url = url.replace /:[a-z]+/, args.shift() || null
-
-      # if domain is specified we prepend to the url
-      r_url = "#{domain}/#{r_url}" if domain?
-
-      @_request method, r_url, data
+  id   : null
+  _keys: null
 
 
 
-  ###
-  General request method
+  ### --------------------------------------------------------------------------
+    Configures model
+  -------------------------------------------------------------------------- ###
+  @configure:( config )->
+    # configure urls ending points
+    for method in 'create read update delete all find'
+      if (url = config.urls[method])?
+        _config.urls[method] = url 
 
-  @param [String] method  URL request method
-  @param [String] url   URL to be requested
-  @param [Object] data  Data to be send
-  ###
-  @_request = ( method, url, data='' ) ->
-    # console.log "[Model] request", method, url, data
+    # configure keys and types
+    for key, type in config.keys
+      _config.keys[key] = type
 
-    fetcher = new Fetcher
 
-    req = 
-      url  : url
-      type : method
-      data : data
+  ### --------------------------------------------------------------------------
+    Constructor
+  -------------------------------------------------------------------------- ###
+
+  constructor:( @id, dict )->
+    @_keys = {}
+    @set dict
+
+
+  ### --------------------------------------------------------------------------
+    Global validate method, will perform simple validations for native types
+    as well as run custom validations against the given methods in configuration
+  -------------------------------------------------------------------------- ###
+  validate = (key, val)->
+    checker = _config.keys[key]
+
+    # validate against native types (Number, String, Array, Object, Date)
+    if /native code/.test checker
+      switch ("#{checker}".match /function\s(\w+)/)[1]
+        when 'String' then return (typeof val is 'string')
+        when 'Number' then return (typeof val is 'number')
+        else return (val instanceof type)
+
+    # validates against the given method
+    else
+      return checker val
+
+
+  ### --------------------------------------------------------------------------
+    Getter / Setter
+  -------------------------------------------------------------------------- ###
+  get:(keyumn)->
+    return @_keys[keyumn]
+
+  # set 'prop', 'val'
+  # set prop: 'val', prop2: 'val2'
+  set:(args...)->
+
+    # if a dictionary is given, set all keys individually
+    if args.length is 1
+      dict = args[0]
+      @set key, val for key, val of dict
+      return dict
+
+    # otherwise set the given key / val
+    key = arg[0]
+    val = arg[1]
+    if validate key, val
+      return @_keys[key] = val
+    else
+      throw new Error "Invalid type for keyumn '#{key}' = #{val}"
+
+
+  ### --------------------------------------------------------------------------
+    CURD and helpful methods
+  -------------------------------------------------------------------------- ###
+
+  @create:(keys, callback)->
+    record = new @ _records.length, keys
+    _records.push record
+
+    # returns created model if callback isn't specified
+    return record unless callback?
+
+    # sends request to server and handles response
+    req = @fetch _config.url.create, 'POST', keys
+    req.done (data)-> callback record, data, null
+    req.error (error)-> callback record, null, error
+
+
+  @read:(id, callback)->
+    return _records[id] unless callback?
+
+    # sends request to server and handles response
+    req = @fetch (_config.url.read.replace /(\:\w+)/, id), 'GET'
+    req.done (data)-> callback (@create data), data, null
+    req.error (error)-> callback record, null, error
+
+
+  update:(keys, callback)->
+    @set keys
+    return keys unless callback?
+
+    # sends request to server and handles response
+    req = @fetch (_config.url.update.replace /(\:\w+)/, @id), 'PUT'
+    req.done (data)-> callback @, data, null
+    req.error (error)-> callback @, null, error
+
+
+  delete:(callback)->
+    record = @_records.splice @get 'id', 1
+    record.id-- for record, _id in @_records when _id > id
+    return true unless callback?
+
+    # sends request to server and handles response
+    req = @fetch (_config.url.update.replace /(\:\w+)/, @id), 'DELETE'
+    req.done (data)-> callback true, data, null
+    req.error (error)-> callback false, null, error
+
+
+  @all:( callback )->
+    # returns local version if callback isn't specified
+    return @_records unless callback?
+
+    # sends request to server and handles response
+    req = @fetch _config.url.all, 'GET'
+    req.done (data)->
+      @create keys for keys in ([].concat data)
+      callback do @all, data, null
+    req.error (error)->
+      callback do @all, null, error
+
+
+  @find:( keys, callback )->
+    # returns local version if callback isn't specified
+    if not callback?
+      return _.find _records, keys
+
+    # sends request to server and handles response
+    req = @fetch _config.url.find, 'POST', keys
+    req.done (data)->
+      @create _keys for _keys in ([].concat data)
+      callback (@find keys), data, null
+    req.error (error)->
+      callback (@find keys), null, error
+
+
+  save:( callback )->
+    @update _keys, callback
+
+
+  ### --------------------------------------------------------------------------
+    Middleware
+  -------------------------------------------------------------------------- ###
+
+  @fetch:( url, type, data )->
+    req = {url, type, data}
     
-    # if url contains .json, sets dataType to json
-    # this theoritically helps firefox ( and perhaps other browsers )
-    # to deal with the request
-    req.dataType = 'json' if /\.json/.test( url )
-    
-    req = $.ajax req
+    # sets dataType to json if url ends .json
+    req.dataType = 'json'  if /\.json$/m.test( url )
 
-    req.done ( data )=>
-      fetcher.loaded = true
-      @_instantiate ([].concat data), (results)->
-        fetcher.records = results
-        fetcher.onload?( fetcher.records )
-
-    req.error ( error )=>
-      fetcher.error = true
-      if fetcher.onerror?
-        fetcher.onerror error
-      else
-          console.error error
-
-    fetcher
+    # return request obj to be listened / handled
+    return $.ajax req
 
 
 
-  ###
-  Builds local getters/setters for the given params
 
-  @param [String] field
-  @param [String] type
-  ###
-  @_build_gs = ( field, type, opts ) ->
-    _val = null
+### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  USAGE DRAFT
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
 
-    classname = ("#{@}".match /function\s(\w+)/)[1]
-    stype = ("#{type}".match /function\s(\w+)/)[1]
-    ltype = stype.toLowerCase()
-
-    getter = -> _val
-    setter = (value) ->
-      switch ltype
-        when 'string' then is_valid = (typeof value is 'string')
-        when 'number' then is_valid = (typeof value is 'number')
-        else is_valid = (value instanceof type)
-
-      if is_valid or opts.validate is false
-        _val = value
-        @update field, _val
-      else
-        prop = "#{classname}.#{field}"
-        msg = "Property '#{prop}' must to be #{stype}."
-        throw new Error msg
-
-    Object.defineProperty @::, field, get:getter, set:setter
-
-
-
-  ###
-  Instantiate one Model instance for each of the items present in data.
-
-  And array with 10 items will result in 10 new models, that will be 
-  cached into @_collection variable
-
-  @param [Object] data  Data to be parsed
-  ###
-  @_instantiate = ( data, callback ) ->
-
-    classname = ("#{@}".match /function\s(\w+)/)[1]
-    records = []
-
-    for record, at in data
-
-      Factory.model classname, record, (_model)=>
-        records.push _model
-
-        if records.length is data.length
-
-          # When calling the rest service multiple times, the collection
-          # variable keeps the old data and duplicate the recordset between a
-          # rest call and another one. For now, just flush the old collection
-          # when instantiate a new model instance
-
-          @_collection = ( @_collection || [] ).concat records
-
-          callback (if records.length is 1 then records[0] else records)
-
-=======
-  # Instance methods
-
-  remove:->
-
-  save:->
-
-  constructor:->
->>>>>>> giulian/feature/model-refactor
+# >>>>> MODEL
+# 
+# 
+# class User extends AppModel
+#
+#   @config
+#
+#     urls:
+#       'create' : '/users.json'
+#       'read'   : '/users/:id.json'
+#       'update' : '/users/:id.json'
+#       'delete' : '/users/:id.json'
+#       'all'    : '/users.json'
+#       'find'   : '/users/find.json'
+#
+#     keys:
+#       'name' : String
+#       'age'  : (val)-> return val >= 18 # validates if user is of age
+# 
+# 
+# >>>>> CONTROLLER
+# 
+# 
+# User = require 'app/models/user'
+# 
+# class Users extends AppController
+# 
+#   # CREATE
+#   record = User.create name: 'anderson', age: 29
+#   User.create name: 'anderson', age:29, (record, status, res)->
+#     console.log '-----------------------------------'
+#     console.log 'record created locally and remotely'
+#     console.log 'record', record
+#     console.log 'res', res
+#     console.log 'error', error
+# 
+#   # READ
+#   record = User.read 0
+#   User.read 0, (record, res, error)->
+#     console.log '-----------------------------------'
+#     console.log 'record read remotely'
+#     console.log 'record', record
+#     console.log 'res', res
+#     console.log 'error', error
+# 
+#   # UPDATE
+#   record.update name: 'arboleya', age: 30
+#   record.update name: 'arboleya', age: 30, (record, res, error)->
+#     console.log '-----------------------------------'
+#     console.log 'record updated locally and remotely'
+#     console.log 'record', record
+#     console.log 'res', res
+#     console.log 'error', error
+# 
+#   # DELETE
+#   do record.delete
+#   record.delete (res, error)->
+#     console.log '-----------------------------------'
+#     console.log 'record deleted locally and remotely'
+#     console.log 'res', res
+#     console.log 'error', error
+# 
+#   # ALL
+#   records = do User.all
+#   User.all (records, res, error)->
+#     console.log '-----------------------------------'
+#     console.log 'records fetched remotely and saved locally, returning all'
+#     console.log 'records', records
+#     console.log 'res', res
+#     console.log 'error', error
+# 
+#   # FIND
+#   records = do User.find name: 'anderson'
+#   User.find (records, res, error)->
+#     console.log '-----------------------------------'
+#     console.log 'records fetched remotely and saved locally, finding in both'
+#     console.log 'records', records
+#     console.log 'res', res
+#     console.log 'error', error
