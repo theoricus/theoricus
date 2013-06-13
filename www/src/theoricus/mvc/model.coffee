@@ -1,5 +1,6 @@
 ArrayUtil = require 'theoricus/utils/array_util'
 Binder = require 'theoricus/mvc/lib/binder'
+<<<<<<< HEAD
 Fetcher = require 'theoricus/mvc/lib/fetcher'
 
 module.exports = class Model extends Binder
@@ -7,29 +8,63 @@ module.exports = class Model extends Binder
   @Factory     = null # will be defined on Factory constructor
   @_fields     = []
   @_collection = []
+=======
+Factory = require 'theoricus/core/factory'
 
-  # SETUP METHODS ############################################################
+module.exports = class Model extends Binder
 
-  @rest = ( host, resources ) ->
+  # Instance properties
+>>>>>>> giulian/feature/model-refactor
 
-    [resources, host] = [host, null] unless resources?
+  rest:
+    "all":""
+    "create":""
+    "update":""
+    "delete":""
 
-    for k, v of resources
-      @[k] = @_build_rest.apply @, [k].concat(v.concat host)
+  fields:null
 
-  @fields = ( fields, opts = validate: true ) ->
-    @_build_gs key, type, opts for key, type of fields
+  # Class properties
 
+  @_records:[]
 
+  @fetcher:null
 
-  # # SETUP HELPERS ############################################################
+  # Class methods
 
-  ###
-  Builds a method to fetch the given service.
+  @fetch:(callback)->
+    @fetcher.fetch 
+  
+  @all:()->
+    return @_records
+  
+  @create:(attrs)->
+    model = new @
+    model[prop] = attrs[prop] for prop of attrs
+    model.uid = @_guid()
+    model.id = @_records.length
+    @_records.push model
+  
+  @delete:(id)->
+    for model, index in @_records
+      if model.id === id or model.guid === id
+        record_index = index
 
-  Notice the method is being returned inside a private scope
-  that contains all the variables needed to fetch the data.
+    @_records.splice record_index, 1
+  
+  @read:(attr)->
+    ArrayUtil.find @_records, attr
 
+  @save:->
+    @fetcher.update @_records
+
+  @_guid:->
+    "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace /[xy]/g, (c) ->
+      r = Math.random() * 16 | 0
+      v = (if c is "x" then r else (r & 0x3 | 0x8))
+      v.toString 16
+
+<<<<<<< HEAD
   
   @param [String] key   
   @param [String] method  
@@ -188,3 +223,12 @@ module.exports = class Model extends Binder
 
           callback (if records.length is 1 then records[0] else records)
 
+=======
+  # Instance methods
+
+  remove:->
+
+  save:->
+
+  constructor:->
+>>>>>>> giulian/feature/model-refactor
