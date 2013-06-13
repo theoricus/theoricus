@@ -1,10 +1,11 @@
 # Changelog
 
-## 0.2.13 - ?
+## 0.2.13 - 06/13/2013
   * Adding `on_activate` method to Process
   * Synchronizing View _render method, to update the window's title always
   when process get activated. A process will render a view only one time, but
   can get activated many times.
+  * Handling single result (non-array) in model's rest calls
 
 ## 0.2.12 - 06/08/2013
  * Fixing variable scope in `View._render`
