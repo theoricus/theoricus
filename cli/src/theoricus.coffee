@@ -8,7 +8,7 @@ require '../cli/vendors/inflection'
 
 Generator = require './commands/generator'
 NewProject = require './commands/new_project'
-Detroyer = require './commands/destroyer'
+Destroyer = require './commands/destroyer'
 Server = require './commands/server'
 Compiler = require './commands/compiler'
 
@@ -31,7 +31,7 @@ module.exports = class Theoricus
     return console.log @version if @cli.argv.version
 
     return new Generator @, @cli if @cli.argv.generate
-    return new Detroyer @, @cli if @cli.argv.destroy
+    return new Destroyer @, @cli if @cli.argv.destroy
     return new Server @, @cli if @cli.argv.start
     return new Compiler @, @cli if @cli.argv.compile
     return new Compiler @, @cli, true if @cli.argv.release
