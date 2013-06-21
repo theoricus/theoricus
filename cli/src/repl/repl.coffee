@@ -4,6 +4,7 @@ fs = require 'fs'
 
 colors = require 'colors'
 path = require 'path'
+vm = require 'vm'
 
 cs = require 'coffee-script'
 cs_eval = require './repl-cs'
@@ -11,11 +12,16 @@ cs_eval = require './repl-cs'
 Event = require '../utils/event'
 
 module.exports = class REPL extends Event
+
   mode: 'cs'
+  multiline: null
   initialized: false
 
   constructor:->
     console.log '➜  ' + 'initializing..'.grey
+
+    @mode = 'js'
+    @multiline = enabled: false, buffer: '', lines: 0
     {@stdout, @stdin} = process
 
 
@@ -29,10 +35,10 @@ module.exports = class REPL extends Event
     prompt = do @format_prompt
 
     @repl = repl.start {prompt, @eval, useColors, terminal}
-    @repl.rli.setPrompt prompt, prompt.stripColors.length
-    @repl.rli.prompt true
+    do @refresh_promt
 
     do @configure_repl
+    do @configure_multiline
     do @wrap_repl_interactions
     do @wrap_rli_interactions
 
@@ -80,6 +86,103 @@ module.exports = class REPL extends Event
 
 
 
+  # method completely borrowed from CoffeeScript REPL and adapted here
+  configure_multiline:->
+
+    # Handle Ctrl-v
+    @repl.inputStream.on 'keypress', (char, key) =>
+      return unless key and
+                    key.ctrl and
+                    not key.meta and
+                    not key.shift and
+                    key.name is 'v'
+
+      if @multiline
+
+        # allow arbitrarily switching between modes any time before
+        # multiple lines are entered
+        unless @multiline.buffer.match /\n/
+          @multiline.enabled = not @multiline.enabled
+          @multiline.lines = 0
+          return do @refresh_promt
+
+        # no-op unless the current line is empty
+        return if @repl.rli.line? and not @repl.rli.line.match /^\s*$/
+
+        # eval, print, loop
+        @multiline.enabled = not @multiline.enabled
+
+        @repl.rli.line = ''
+        @repl.rli.cursor = 0
+        @repl.rli.output.cursorTo 0
+        @repl.rli.output.clearLine 1
+
+        # multiline hack
+        if @mode is 'cs'
+          @multiline.buffer = @multiline.buffer.replace /\n/g, '\uFF00'
+        else if @mode is 'js'
+          @multiline.buffer = @multiline.buffer.replace /\n/g, ''
+
+        @repl.rli.emit 'line', @multiline.buffer
+        @multiline.buffer = ''
+        @multiline.lines = 0
+
+      else
+        @multiline.enabled = not @multiline.enabled
+        do @refresh_promt
+
+
+
+  # REPL & RLI wrappers
+  wrap_repl_interactions:->
+    @repl.on 'exit', => do process.exit
+
+
+
+  wrap_rli_interactions:->
+    quit = 0
+
+    on_line = (@repl.rli.listeners 'line')[0]
+    @repl.rli.removeListener 'line', on_line
+    @repl.rli.on 'line', (cmd) =>
+      if not @multiline.enabled
+        return on_line cmd
+
+      @multiline.buffer += "#{cmd}\n"
+      @multiline.lines++
+      quit = 0
+
+      do @refresh_promt
+
+    on_sigint = (@repl.rli.listeners 'SIGINT')[0]
+    @repl.rli.removeListener 'SIGINT', on_sigint
+    @repl.rli.on 'SIGINT', =>
+      return do @repl.rli.close if ++quit is 2
+      console.log  '\r\n(^C again to quit)'
+      do @refresh_promt
+
+
+
+  # repl custom eval
+  eval:(input, context, filename, callback)=>
+
+    # decides which mode to run on
+    switch @mode
+      when 'cs'
+        cs_eval.apply null, arguments
+      when 'js'
+
+        try # first try will wrap expressin in parens
+          callback null, (vm.runInContext input, context, filename)
+        catch e
+          # rising this error will re-execute the function if the error
+          # is a syntax error
+          callback e
+
+    do @refresh_promt
+
+
+
   # REPL commands
   help:( standard_cmds, max_length, polyfills )->
     @log '» '.bold.magenta + 'default'.bold.magenta
@@ -92,9 +195,11 @@ module.exports = class REPL extends Event
       framed = (polyfills + name).slice -max_length
       @log "#{framed}  #{cmd.help}"
 
+    @log '\n   ' + '» Note:'.bold.magenta + 'theoricus'.bold.magenta
+    @log '\tCTRL + V toogle between single line vs multiline modes'.grey
 
   set_mode:( mode )=>
-    @[mode] = mode
+    @mode = mode
     do @refresh_promt
     @log 'Mode switched to:'.grey, mode.green
 
@@ -128,63 +233,20 @@ module.exports = class REPL extends Event
 
 
 
-  # REPL & RLI wrappers
-  wrap_repl_interactions:->
-    @repl.on 'exit', =>
-      @emit 'close'
-      do process.exit
-
-  wrap_rli_interactions:->
-    quit = 0
-
-    # lines commented will be useful for a future multiline input implementation
-    # like the coffee repl does:
-    #   -> https://github.com/jashkenas/coffee-script/blob/master/src/repl.coffee#L43-L53
-    # 
-    # on_line = (@repl.rli.listeners 'line')[0]
-    # @repl.rli.removeListener 'line', on_line
-    @repl.rli.on 'line', (cmd) =>
-      # on_line cmd
-      quit = 0
-      prompt = do @format_prompt
-      @repl.rli.setPrompt prompt, prompt.stripColors.length
-      @repl.rli.prompt true
-
-    on_sigint = (@repl.rli.listeners 'SIGINT')[0]
-    @repl.rli.removeListener 'SIGINT', on_sigint
-    @repl.rli.on 'SIGINT', =>
-      return do @repl.rli.close if ++quit is 2
-
-      console.log  '\r\n(^C again to quit)'
-      prompt = do @format_prompt
-      @repl.rli.setPrompt prompt, prompt.stripColors.length
-      @repl.rli.prompt true
-
-
-
-  # repl custom eval
-  eval:(input, context, filename, callback)=>
-    # decides which mode to run on
-    switch @mode
-      when 'cs'
-        cs_eval.apply null, arguments
-        do @refresh_promt
-      when 'js'
-        try
-          callback null, (eval input)
-        catch err
-          callback err
-        do @refresh_promt
-
-
-
-  # prompt manipulations
+    # prompt manipulations
   format_prompt:->
     start = '➜ '.red
-    the = 'theoricus'.bold.grey
+
+    if @multiline.enabled
+      the = 'the'
+      the += ((Array(6).join '.') + @multiline.lines).slice -6
+      the = the.bold.grey
+    else
+      the = 'theoricus'.bold.grey
+
     mode = "(#{@mode})".cyan
-    # arrow = '⌘  '.red
     return "#{start} #{the}:#{mode} "
+
 
   refresh_promt:->
     prompt = do @format_prompt
