@@ -20,7 +20,7 @@ module.exports = class REPL extends Event
   constructor:->
     console.log '➜  ' + 'initializing..'.grey
 
-    @mode = 'css'
+    @mode = 'cs'
     @multiline = enabled: false, buffer: '', lines: 0
     {@stdout, @stdin} = process
 

@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.15 - 06/13/2013
+  * Fixing method stdout piping between Server REPL and Polvo
+  * Rolling back default mode to `cs` in REPL
+
 ## 0.2.14 - 06/13/2013
   * Introducing Theoricus REPL, just run `the -s` as you do, and done
 
