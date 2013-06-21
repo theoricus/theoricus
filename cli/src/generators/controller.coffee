@@ -3,7 +3,7 @@ path = require 'path'
 module.exports = class Controller
   fs = require 'fs'
 
-  constructor:( @the, name )->
+  constructor:( @the, name, @repl )->
     name_camel = name.camelize()
     name_lc = name.toLowerCase()
 
@@ -15,6 +15,7 @@ module.exports = class Controller
 
     controllers = path.join @the.app_root, 'src', 'app', 'controllers'
     filepath = path.join controllers, "#{name.toLowerCase()}.coffee"
+    relative = filepath.replace @the.app_root + '/', ''
 
     contents = (fs.readFileSync tmpl).toString()
     contents = contents.replace /~NAME_CAMEL/g, name_camel
@@ -25,6 +26,7 @@ module.exports = class Controller
     # write controller
     unless fs.existsSync filepath
       fs.writeFileSync filepath, contents
-      console.log "#{'Created'.bold} #{filepath}".green
+      if not @repl
+        console.log "#{'Created'.bold} #{relative}".green
     else
-      console.log "#{'Already exists'.red.bold} #{filepath}".green
+      (@repl or console).error "#{'Already exists'.bold} #{relative}".yellow

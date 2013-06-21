@@ -6,8 +6,11 @@ fsu = require "fs-util"
 
 module.exports = class Destroyer
 
-  constructor:( @the, @cli )->
+  constructor:( @the, @cli, type, name, rf, @repl )->
     return unless do @the.is_theoricus_app
+
+    if @cli is null
+      @cli = argv: _:[name], destroy: type, rf: rf
 
     type = @cli.argv.destroy
     name = @cli.argv._[0]
@@ -19,7 +22,7 @@ module.exports = class Destroyer
 
     unless @[type]?
       error_msg = "Valid options: controller, model, view, mvc."
-      throw new Error error_msg
+      (@repl or console).error error_msg
 
     @[type]( name )
 
@@ -31,7 +34,7 @@ module.exports = class Destroyer
   model:( name )->
     @rm "#{@APP_FOLDER}/models/#{name}.coffee"
 
-  view:( path)->
+  view:( path )->
     folder = (parts = path.split '/')[0]
     name = parts[1]
 
@@ -42,8 +45,7 @@ module.exports = class Destroyer
         \t\t theoricus rm view person/index
         \t\t theoricus rm view user/list\n
       """
-      throw new Error error_msg
-      return
+      return (@repl or console).error error_msg
 
     if @cli.argv.rf
       @rm "#{@APP_FOLDER}/views/#{folder}"
@@ -59,6 +61,8 @@ module.exports = class Destroyer
 
 
   rm:( filepath )->
+    relative = filepath.replace @the.app_root + '/', ''
+
     if fs.existsSync filepath
       try
         if fs.lstatSync( filepath ).isDirectory()
@@ -70,6 +74,7 @@ module.exports = class Destroyer
           fs.unlinkSync filepath
       catch err
         throw new Error err
-      console.log "#{'Removed'.bold} #{filepath}".red
+      if not @repl
+        console.log "#{'Removed'.bold} #{relative}".red
     else
-      console.log "#{'Not found'.bold} #{filepath}".yellow
+      (@repl or console).error "#{'Not found'.bold} #{relative}".yellow

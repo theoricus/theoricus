@@ -5,13 +5,17 @@ View = require '../generators/view'
 Question = require '../generators/question'
 
 module.exports = class Generator extends Question
+  log_changes: true
 
-  constructor:( @the, @cli )->
+  constructor:( @the, @cli, type, name, @repl )->
     return unless do @the.is_theoricus_app
+
+    if @cli is null
+      @cli = argv: generate: type, _:[name]
+
     do @create
 
-  create: ()->
-
+  create:->
     if @cli.argv.generate is true
       q = "Which you would like to create? [model|view|controller|mvc] : "
       f = /(model|view|controller|mvc)/
@@ -23,7 +27,11 @@ module.exports = class Generator extends Question
     type = @cli.argv.generate
     unless @[type]?
       error_msg = "Valid options: controller, model, view, mvc."
-      throw new Error error_msg
+
+      if @repl
+
+      else
+        return console.error error_msg
 
     name = @cli.argv._[0]
     unless name?
@@ -38,13 +46,13 @@ module.exports = class Generator extends Question
 
   mvc:( name )->
     @model name.singularize()
-    @view "#{name}/index"
+    @view "#{name}/index", true
     @controller name
 
   model:( name )->
-    new Model @the, name, @cli
+    new Model @the, name, @repl
 
-  view:( path )->
+  view:( path, mvc = false )->
     folder = (parts = path.split '/')[0]
     name   =  parts[1]
 
@@ -63,9 +71,10 @@ module.exports = class Generator extends Question
           Remember that controller names are plural.
           View names are singular.
       """
+
       return console.log error_msg
 
-    new View @the, name, folder, false, @cli
+    new View @the, name, folder, mvc, @repl
 
   controller:( name )->
-    new Controller @the, name, @cli
+    new Controller @the, name, @repl

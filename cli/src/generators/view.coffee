@@ -4,8 +4,8 @@ path = require 'path'
 
 module.exports = class View
 
-  constructor:( @the, name, controller_name_lc, mvc = false, @cli )->
-  
+  constructor:( @the, name, controller_name_lc, mvc, @repl )->
+
     # TODO add option to pass the engine for javascript, styles and jade
     # by now it's hardcoded for coffeescript, stylus and jade
 
@@ -34,6 +34,10 @@ module.exports = class View
       template_path = "#{template_folder}/#{name_lc}.jade"
       style_path = "#{style_folder}/#{name_lc}.styl"
 
+    view_relative = view_path.replace @the.app_root + '/', ''
+    template_relative = template_path.replace @the.app_root + '/', ''
+    style_relative = style_path.replace @the.app_root + '/', ''
+
     # prepare contents
     tmpl_mvc = "#{@the.root}/cli/templates/mvc"
 
@@ -57,19 +61,25 @@ module.exports = class View
     contents = contents.replace /~CONTROLLER_NAME_LC/g, controller_name_lc
 
     # write view
-    fs.writeFileSync view_path, contents
-    console.log "#{'Created'.bold} #{view_path}".green
+    unless fs.existsSync view_path
+      fs.writeFileSync view_path, contents
+      if not @repl
+        console.log "#{'Created'.bold} #{view_relative}".green
+    else
+      (@repl or console).error "#{'Already exists'.bold} #{view_relative}".yellow
 
     # write jade
     unless fs.existsSync template_path
       fs.writeFileSync template_path, (fs.readFileSync tmpl_template)
-      console.log "#{'Created'.bold} #{template_path}".green
+      if not @repl
+        console.log "#{'Created'.bold} #{template_relative}".green
     else
-      console.log "#{'Already exists'.bold} #{template_path}".green
+      (@repl or console).error "#{'Already exists'.bold} #{template_relative}".yellow
 
     # write stylus
     unless fs.existsSync style_path
       fs.writeFileSync style_path, fs.readFileSync tmpl_style
-      console.log "#{'Created'.bold} #{style_path}".green
+      if not @repl
+        console.log "#{'Created'.bold} #{style_relative}".green
     else
-      console.log "#{'Already exists'.bold} #{style_path}".green
+      (@repl or console).error "#{'Already exists'.bold} #{style_relative}".yellow
