@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.2.14 - 06/13/2013
+  * Introducing Theoricus REPL, just run `the -s` as you do, and done
+
 ## 0.2.13 - 06/13/2013
   * Adding `on_activate` method to Process
   * Synchronizing View _render method, to update the window's title always
