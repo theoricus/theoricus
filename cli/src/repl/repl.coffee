@@ -221,7 +221,7 @@ module.exports = class REPL extends Event
   destroy:( input )=>
     [type, name, rf] = input.trim().split ' '
 
-    if not type (/^--/.test type)
+    if not type or (/^--/.test type)
       return @error 'Type not informed (model, view, controller, mvc) »'.red,
                   '.d [type] [name] [--rf]'.white
 
