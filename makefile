@@ -1,8 +1,10 @@
 .PHONY: build docs
 
 CS=node_modules/coffee-script/bin/coffee
-CODO=node_modules/codo/bin/codo
+YUIDOC=node_modules/yuidocjs/lib/cli.js
+
 VERSION=`$(CS) build/bumper.coffee --version`
+
 
 setup:
 	npm link
@@ -24,15 +26,16 @@ test: build
 
 
 # docs generation
-docs.cli:
-	rm -rf docs-cli
-	$(CODO) cli/src -o docs-cli --title Theoricus CLI Documentation
-	cd docs-cli && python -m SimpleHTTPServer 8080
-
 docs.www:
-	rm -rf docs-www
-	$(CODO) www/src -o docs-www --title Theoricus Documentation
-	cd docs-www && python -m SimpleHTTPServer 8080
+	cd www/src && \
+	../../$(YUIDOC) \
+	--syntaxtype coffee \
+	-e .coffee \
+	-o ../../docs/www \
+	-t ../../docs/bootstrap-theme \
+	-H ../../docs/bootstrap-theme/helpers/helpers.js \
+	--server \
+	.
 
 
 
