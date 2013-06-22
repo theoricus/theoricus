@@ -43,6 +43,7 @@
     "codo": "1.6.x",
     "mocha": "1.9.x",
     "mocha-phantomjs": "2.0.x",
-    "should": "1.2.x"
+    "should": "1.2.x",
+    "yuidocjs": "0.3.x"
   }
 }
