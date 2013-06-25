@@ -28,13 +28,13 @@ module.exports = class Theoricus
   base_path: ''
 
   ###*
-    Instance of Fatory class.
+    Instance of Factory class.
     @property {Factory} factory
   ###
   factory  : null
 
   ###*
-    Instance of Config class, fed by the Settings class.
+    Instance of {{#crossLink "Config"}}{{/crossLink}} class, fed by the Settings class.
     @property {Config} config
   ###
   config   : null
