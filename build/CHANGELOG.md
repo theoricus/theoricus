@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.16 - 06/26/2013
+  * Fixing `instantiate_method` in Model, referencing Factory class from the
+  right place. (closes [#58](https://github.com/serpentem/theoricus/pull/58))
+
 ## 0.2.15 - 06/13/2013
   * Fixing method stdout piping between Server REPL and Polvo
   * Rolling back default mode to `cs` in REPL
