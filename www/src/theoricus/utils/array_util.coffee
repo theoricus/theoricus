@@ -1,10 +1,26 @@
+###*
+  utils module
+  @module utils
+###
+
 ObjectUtil = require 'theoricus/utils/object_util'
 
+###*
+  ArrayUtil class.
+  @class ArrayUtil
+###
 module.exports = class ArrayUtil
   
-  ###
-  @param [] src
-  @param [] search
+  ###*
+  
+  Search for a record within the given source array that contains the `search` filter.
+
+  @method find
+  @param src {Array} Source array.
+  @param search {Object} Object to be found within the source array.
+  @example
+    fruits = {name: "orange", id:0}, {name: "banana", id:1}, {name: "watermelon", id:2}
+    ArrayUtil.find fruits, {name: "orange"} # returns {name: "orange", id:0}
   ###
   @find:( src, search )->
     for v, i in src
@@ -14,9 +30,17 @@ module.exports = class ArrayUtil
         return {item: v, index:i } if ObjectUtil.find(v, search)?
     return null
 
-  ###
-  @param [] src
-  @param [] search
+  ###*
+
+  Delete a record within the given source array that contains the `search` filter.
+
+  @method delete
+  @param src {Array} Source array.
+  @param search {Object} Object to be found within the source array.
+  @example
+    fruits = [{name: "orange", id:0}, {name: "banana", id:1}, {name: "watermelon", id:2}]
+    ArrayUtil.delete fruits, {name: "banana"}
+    console.log fruits #[{name: "orange", id:0}, {name: "watermelon", id:2}]
   ###
   @delete:( src, search )->
     item = ArrayUtil.find src, search
