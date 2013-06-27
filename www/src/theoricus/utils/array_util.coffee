@@ -16,6 +16,7 @@ module.exports = class ArrayUtil
   Search for a record within the given source array that contains the `search` filter.
 
   @method find
+  @static
   @param src {Array} Source array.
   @param search {Object} Object to be found within the source array.
   @example
@@ -35,6 +36,7 @@ module.exports = class ArrayUtil
   Delete a record within the given source array that contains the `search` filter.
 
   @method delete
+  @static
   @param src {Array} Source array.
   @param search {Object} Object to be found within the source array.
   @example
