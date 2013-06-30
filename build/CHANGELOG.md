@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.2.19 - 06/30/2013
+ * Upgrading outdated dependencies
+
 ## 0.2.18 - 06/30/2013
   * Embedding indexing system (by (snapshooter)[https://github.com/serpentem/snapshooter])
 
