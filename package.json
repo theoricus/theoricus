@@ -36,6 +36,7 @@
     "optimist": "0.5.x",
     "polvo": "0.3.x",
     "source-map-support": "0.1.x",
+    "snapshooter": "0.2.x"
   },
 
   "devDependencies": {
