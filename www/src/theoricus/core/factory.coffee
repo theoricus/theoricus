@@ -30,7 +30,6 @@ module.exports = class Factory
   Returns an instantiated Model.
 
   @method model
-  @static
   @param name {String} Model name.
   @param init {Object} Default properties to be setted in the model instance.
   @param fn {Function} Callback function returning the model instance.
@@ -69,7 +68,6 @@ module.exports = class Factory
   Returns an instantiated View.
 
   @method view
-  @static
   @param path {String} Path to the view file.
   @param fn {Function} Callback function returning the view instance.
   ###
@@ -106,7 +104,6 @@ module.exports = class Factory
   Returns an instantiated Controller.
 
   @method controller
-  @static
   @param name {String} Controller name.
   @param fn {Function} Callback function returning the controller instance.
   ###
@@ -142,7 +139,6 @@ module.exports = class Factory
   Returns an AMD compiled template.
 
   @method template
-  @static
   @param path {String} Path to the template.
   @param fn {Function} Callback function returning the template string.
   ###
@@ -160,7 +156,6 @@ module.exports = class Factory
   Returns an AMD compiled style.
 
   @method style
-  @static
   @param path {String} Path to the style.
   @param fn {Function} Callback function returning the style string.
   ###
