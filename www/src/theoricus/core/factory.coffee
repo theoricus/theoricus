@@ -8,7 +8,8 @@ View = require 'theoricus/mvc/view'
 Controller = require 'theoricus/mvc/controller'
 
 ###*
-  Factory class.
+  Factory is responsible for loading/creating the MVC classes.
+
   @class Factory
 ###
 
@@ -17,7 +18,6 @@ module.exports = class Factory
   controllers: {}
 
   ###*
-  Factory is responsible for creating the MVC classes.
 
   @constructor
   @param the {Theoricus} Shortcut for app's instance
