@@ -1,6 +1,11 @@
 ## Router & Route logic inspired by RouterJS:
 ## https://github.com/haithembelhaj/RouterJs
 
+###*
+  Core module
+  @module core
+###
+
 StringUril = require 'theoricus/utils/string_util'
 Route = require 'theoricus/core/route'
 
@@ -8,19 +13,31 @@ require 'history'
 
 Factory = null
 
-###
-Proxies browser's History API, routing request to and from the aplication
+###*
+  Proxies browser's History API, routing request to and from the aplication
+  @class Router
 ###
 module.exports = class Router
 
-  routes: []
-  listeners: []
+  ###*
+    Array storing all the routes defined in the application's route file.
 
+    @property {Array} routes
+  ###
+  routes: []
+
+  ###*
+    If false, doesn't handle the url route.
+
+    @property {Boolean} trigger
+  ###
   trigger: true
 
-  ###
-  @param [theoricus.Theoricus] @the   Shortcut for app's instance
-  @param [Function] @on_change  state/url change handler
+  ###*
+  @class Router
+  @constructor
+  @param @the {Theoricus} Shortcut for app's instance
+  @param @on_change {Function} state/url change handler
   ###
   constructor:( @the, @Routes, @on_change )->
     Factory = @the.factory
@@ -37,13 +54,13 @@ module.exports = class Router
       @run url
     , 1
 
-  ###
+  ###*
   Creates and store a route
-  
-  @param [String] route
-  @param [String] to
-  @param [String] at
-  @param [String] el
+  @method map
+  @param route {String}
+  @param to {String} Controller and action to which the route will be sent.
+  @param at {String} Route to be called as a dependency.
+  @param el {String} CSS selector to define where the template will be rendered.
   ###
   map:( route, to, at, el )->
     @routes.push route = new Route route, to, at, el, @
@@ -61,7 +78,7 @@ module.exports = class Router
 
       #remove base path from incoming url
       ( url = url.replace @the.base_path, '' ) if @the.base_path?
-      
+
       # removes the prepended '.' from HistoryJS
       url = url.slice 1 if (url.slice 0, 1) is '.'
 
