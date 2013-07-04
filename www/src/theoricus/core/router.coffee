@@ -14,7 +14,7 @@ require 'history'
 Factory = null
 
 ###*
-  Proxies browser's History API, routing request to and from the aplication
+  Proxies browser's History API, routing request to and from the aplication.
   @class Router
 ###
 module.exports = class Router
@@ -36,8 +36,8 @@ module.exports = class Router
   ###*
   @class Router
   @constructor
-  @param @the {Theoricus} Shortcut for app's instance
-  @param @on_change {Function} state/url change handler
+  @param @the {Theoricus} Shortcut for app's instance.
+  @param @on_change {Function} state/url change handler.
   ###
   constructor:( @the, @Routes, @on_change )->
     Factory = @the.factory
@@ -55,17 +55,22 @@ module.exports = class Router
     , 1
 
   ###*
-  Creates and store a route
-  @method map
-  @param route {String}
-  @param to {String} Controller and action to which the route will be sent.
-  @param at {String} Route to be called as a dependency.
-  @param el {String} CSS selector to define where the template will be rendered.
+    Creates and store a route within `routes` array.
+    @method map
+    @param route {String}
+    @param to {String} Controller and action to which the route will be sent.
+    @param at {String} Route to be called as a dependency.
+    @param el {String} CSS selector to define where the template will be rendered.
   ###
   map:( route, to, at, el )->
     @routes.push route = new Route route, to, at, el, @
     return route
 
+  ###*
+    Handle the url route.
+    @method route
+    @param state {Object} HTML5 pushstate object
+  ###
   route:( state )->
 
     if @trigger
@@ -115,12 +120,28 @@ module.exports = class Router
 
     @trigger = true
 
+  ###*
+    Change the url route.
+
+    @method navigate
+    @param url {String} Route to be updated.
+    @param [trigger=true] {String} If false,
+    @param [replace=false] {String} If true, pushes a new state to the browser.
+  ###
+
   navigate:( url, trigger = true, replace = false )->
     @trigger = trigger
 
     action   = if replace then "replaceState" else "pushState"
     History[action] null, null, url
 
+  ###*
+    Set the url if the browser doesn't support HTML5 pushstate.
+
+    @method run
+    @param url {String} Route to be updated.
+    @param [trigger=true] {String} If false, doesn't handle the url route.
+  ###
   run:( url, trigger = true )=>
     ( url = url.replace @the.base_path, '' ) if @the.base_path?
 
@@ -129,11 +150,27 @@ module.exports = class Router
     @trigger = trigger
     @route { title: url }
 
+  ###*
+    If `index` is negative go back through browser history `index` times, if `index` is positive go forward through browser history `index` times.
+
+    @method go
+    @param index {Number}
+  ###
   go:( index )->
     History.go index
 
+  ###*
+    Go back once through browser history.
+
+    @method back
+  ###
   back:()->
     History.back()
 
+  ###*
+    Go forward once through browser history.
+
+    @method forward
+  ###
   forward:()->
     History.forward()
