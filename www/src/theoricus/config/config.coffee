@@ -32,8 +32,8 @@ module.exports = class Config
 
   ###*
   Config constructor, initializing the app's config settings.
-
-  @method constructor
+  @class Config
+  @constructor
   @param @the {Theoricus} Shortcut for app's instance
   @param @Settings {Object} App settings
   ###

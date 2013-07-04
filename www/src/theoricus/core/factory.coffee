@@ -18,7 +18,7 @@ module.exports = class Factory
   controllers: {}
 
   ###*
-
+  @class Factory
   @constructor
   @param the {Theoricus} Shortcut for app's instance
   ###
@@ -45,7 +45,7 @@ module.exports = class Factory
       model = new NewModel
 
       # FIXME: This will throw an error on browser: "Uncaught TypeError: Expecting a function in instanceof check, but got #<Main>"
-      # 
+      #
       # unless (model = new NewModel) instanceof Model
       #   msg = "#{classpath} is not a Model instance - you probably forgot to "
       #   msg += "extend thoricus/mvc/Model"
@@ -77,7 +77,7 @@ module.exports = class Factory
     classname = (parts = path.split '/').pop().camelize()
     namespace = parts[parts.length - 1]
     classpath = "app/views/#{path}"
-    
+
     require ['app/views/app_view', classpath], ( AppView, View )=>
       unless (view = new View) instanceof View
         msg = "#{classpath} is not a View instance - you probably forgot to "
