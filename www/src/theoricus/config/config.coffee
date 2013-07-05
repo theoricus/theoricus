@@ -34,8 +34,8 @@ module.exports = class Config
   Config constructor, initializing the app's config settings.
   @class Config
   @constructor
-  @param @the {Theoricus} Shortcut for app's instance
-  @param @Settings {Object} App settings
+  @param the {Theoricus} Shortcut for app's instance
+  @param Settings {Object} App settings
   ###
   constructor:( @the, @Settings )->
     @disable_transitions = @Settings.disable_transitions ? false
