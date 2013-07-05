@@ -15,6 +15,10 @@ Controller = require 'theoricus/mvc/controller'
 
 module.exports = class Factory
 
+  ###*
+    Store the loaded controllers.
+    @property controllers {Array}
+  ###
   controllers: {}
 
   ###*
