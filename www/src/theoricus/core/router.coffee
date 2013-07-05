@@ -55,10 +55,10 @@ module.exports = class Router
     , 1
 
   ###*
-    Creates and store a route within `routes` array.
+    Create and store a route within `routes` array.
     @method map
-    @param route {String}
-    @param to {String} Controller and action to which the route will be sent.
+    @param route {String} Url state.
+    @param to {String} Controller '/' action to which the route will be sent.
     @param at {String} Route to be called as a dependency.
     @param el {String} CSS selector to define where the template will be rendered.
   ###
@@ -67,9 +67,9 @@ module.exports = class Router
     return route
 
   ###*
-    Handle the url route.
+    Handle the url state.
     @method route
-    @param state {Object} HTML5 pushstate object
+    @param state {Object} HTML5 pushstate state
   ###
   route:( state )->
 
@@ -121,10 +121,10 @@ module.exports = class Router
     @trigger = true
 
   ###*
-    Change the url route.
+    Change the url state.
 
     @method navigate
-    @param url {String} Route to be updated.
+    @param url {String} New url state.
     @param [trigger=true] {String} If false,
     @param [replace=false] {String} If true, pushes a new state to the browser.
   ###
@@ -139,8 +139,8 @@ module.exports = class Router
     Set the url if the browser doesn't support HTML5 pushstate.
 
     @method run
-    @param url {String} Route to be updated.
-    @param [trigger=true] {String} If false, doesn't handle the url route.
+    @param url {String} New url state.
+    @param [trigger=true] {String} If false, doesn't handle the url's state.
   ###
   run:( url, trigger = true )=>
     ( url = url.replace @the.base_path, '' ) if @the.base_path?
