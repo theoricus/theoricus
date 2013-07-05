@@ -1,18 +1,43 @@
+###*
+  Core module
+  @module core
+###
+
 Model = require 'theoricus/mvc/model'
 View = require 'theoricus/mvc/view'
 Controller = require 'theoricus/mvc/controller'
 
+###*
+  Factory is responsible for loading/creating the MVC classes.
+
+  @class Factory
+###
+
 module.exports = class Factory
 
+  ###*
+    Store the loaded controllers.
+    @property controllers {Array}
+  ###
   controllers: {}
 
-  ###
-  @param [theoricus.Theoricus] @the   Shortcut for app's instance
+  ###*
+  @class Factory
+  @constructor
+  @param the {Theoricus} Shortcut for app's instance
   ###
   constructor:( @the )->
     # sets the Factory inside Model class, statically
     Model.Factory = @
 
+  ###*
+  Returns an instantiated Model.
+
+  @method model
+  @param name {String} Model name.
+  @param init {Object} Default properties to be setted in the model instance.
+  @param fn {Function} Callback function returning the model instance.
+  ###
   @model=@::model=( name, init = {}, fn )->
     # console.log "Factory.model( '#{name}' )"
 
@@ -24,7 +49,7 @@ module.exports = class Factory
       model = new NewModel
 
       # FIXME: This will throw an error on browser: "Uncaught TypeError: Expecting a function in instanceof check, but got #<Main>"
-      # 
+      #
       # unless (model = new NewModel) instanceof Model
       #   msg = "#{classpath} is not a Model instance - you probably forgot to "
       #   msg += "extend thoricus/mvc/Model"
@@ -43,10 +68,12 @@ module.exports = class Factory
       console.error 'Model not found: ' + classpath
       fn null
 
-  ###
-  Returns an instantiated [theoricus.mvc.View] View
+  ###*
+  Returns an instantiated View.
 
-  @param [String] path  path to the view file
+  @method view
+  @param path {String} Path to the view file.
+  @param fn {Function} Callback function returning the view instance.
   ###
   view:( path, fn )->
     # console.log "Factory.view( '#{path}' )"
@@ -54,7 +81,7 @@ module.exports = class Factory
     classname = (parts = path.split '/').pop().camelize()
     namespace = parts[parts.length - 1]
     classpath = "app/views/#{path}"
-    
+
     require ['app/views/app_view', classpath], ( AppView, View )=>
       unless (view = new View) instanceof View
         msg = "#{classpath} is not a View instance - you probably forgot to "
@@ -77,10 +104,12 @@ module.exports = class Factory
       fn null
 
 
-  ###
-  Returns an instantiated [theoricus.mvc.Controller] Controller
+  ###*
+  Returns an instantiated Controller.
 
-  @param [String] name  controller name
+  @method controller
+  @param name {String} Controller name.
+  @param fn {Function} Callback function returning the controller instance.
   ###
   controller:( name, fn )->
     # console.log "Factory.controller( '#{name}' )"
@@ -110,10 +139,12 @@ module.exports = class Factory
         console.error 'Controller not found: ' + classpath
         fn null
 
-  ###
-  Returns an AMD compiled template
+  ###*
+  Returns an AMD compiled template.
 
-  @param [String] path  path to the template
+  @method template
+  @param path {String} Path to the template.
+  @param fn {Function} Callback function returning the template string.
   ###
   @template=@::template=( path, fn )->
     # console.log "Factory.template( #{path} )"
@@ -125,9 +156,12 @@ module.exports = class Factory
 
 
 
-  ### Returns an AMD compiled style
-  
-  @param [String] path  path to the style
+  ###*
+  Returns an AMD compiled style.
+
+  @method style
+  @param path {String} Path to the style.
+  @param fn {Function} Callback function returning the style string.
   ###
   @style=@::style=( path, fn )->
     # console.log "Factory.template( #{path} )"

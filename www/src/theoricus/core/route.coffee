@@ -1,23 +1,107 @@
+###*
+  Core module
+  @module core
+###
+
+
+###*
+  
+  Responsible for manipulating and validating url state.
+
+  @class Route
+###
 module.exports = class Route
 
-  # static regex for reuse
+  ###*
+
+    Match named params
+
+    @static
+    @property named_param_reg {RegExp}
+    @example
+      "works/:id".match Route.named_param_reg # matchs ':id'
+  ###
   @named_param_reg: /:\w+/g
+
+  ###*
+
+    @static
+    @property splat_param_reg {RegExp}
+  ###
   @splat_param_reg: /\*\w+/g
 
-  # regex matcher
+  ###*
+
+    Regex responsible for parsing the url state.
+
+    @property matcher {RegExp}
+  ###
   matcher: null
 
-  # construct variables
+  ###*
+
+    Url state.
+
+    @property match {String}
+  ###
   match: null
+
+  ###*
+
+    Controller '/' action to which the route will be sent.
+    
+    @property to {String}
+  ###
   to: null
+
+  ###*
+
+    Route to be called as a dependency.
+    
+    @property at {String}
+  ###
   at: null
+
+  ###*
+
+    CSS selector to define where the template will be rendered.
+    
+    @property el {String}
+  ###
   el: null
 
-  # api info
+  ###*
+
+    Store the controller name extracted from url.
+    
+    @property controller_name {String}
+  ###
   controller_name: null
+
+  ###*
+
+    Store the controllers' action name extracted from url.
+    
+    @property action_name {String}
+  ###
   action_name: null
+
+  ###*
+
+    Store the controllers' action parameters extracted from url.
+    
+    @property param_names {String}
+  ###
   param_names: null
 
+  ###*
+    @class Route
+    @constructor
+    @param @match {String} Url state.
+    @param @to {String} Controller '/' action to which the route will be sent.
+    @param @at {String} Route to be called as a dependency.
+    @param @el {String} CSS selector to define where the template will be rendered.
+  ###
   constructor:( @match, @to, @at, @el )->
 
     # prepare regex matcher str for reuse
@@ -28,7 +112,14 @@ module.exports = class Route
     # fitlers controller and action name
     [@controller_name, @action_name] = to.split '/'
 
+  ###*
+  
+    Extract the url named parameters.
 
+    @method extract_params
+    @param url {String}
+
+  ###
   extract_params:( url )->
     # initialize empty params object
     params = {}
@@ -51,12 +142,25 @@ module.exports = class Route
 
     return params
 
+  ###*
+
+    @method rewrite_url_with_parms
+    @param url {String}
+    @param params {Object}
+
+  ###
   rewrite_url_with_parms:( url, params )->
     for key, value of params
       reg = new RegExp "[:\\*]+#{key}", 'g'
       url = url.replace reg, value
     return url
 
-  # test given url against the route
+  ###*
+
+    Test given url against the route
+    
+    @method test
+    @param url {String} Url to be tested.
+  ###
   test:( url )->
     @matcher.test url
