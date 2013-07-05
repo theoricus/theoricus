@@ -1,8 +1,7 @@
-.PHONY: build docs
+.PHONY: docs
 
 CS=node_modules/coffee-script/bin/coffee
-CODO=node_modules/codo/bin/codo
-VERSION=`$(CS) build/bumper.coffee --version`
+VERSION=`$(CS) scripts/bumper.coffee --version`
 
 setup:
 	npm link
@@ -38,13 +37,13 @@ docs.www:
 
 # managing version
 bump.minor:
-	$(CS) build/bumper.coffee --minor
+	$(CS) scripts/bumper.coffee --minor
 
 bump.major:
-	$(CS) build/bumper.coffee --major
+	$(CS) scripts/bumper.coffee --major
 
 bump.patch:
-	$(CS) build/bumper.coffee --patch
+	$(CS) scripts/bumper.coffee --patch
 
 
 
