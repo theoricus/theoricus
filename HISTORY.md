@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.2.20 - 07/04/2013
+ * Adding postinstall hook to replace symlinks functionality (closes [#62](https://github.com/serpentem/theoricus/issues/62))
+
 ## 0.2.19 - 06/30/2013
  * Upgrading outdated dependencies
 
