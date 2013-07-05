@@ -33,9 +33,18 @@ docs.www:
 	-o ../../docs/www \
 	-t ../../docs/bootstrap-theme \
 	-H ../../docs/bootstrap-theme/helpers/helpers.js \
-	--server \
 	.
 
+docs.www.server:
+	cd www/src && \
+	../../$(YUIDOC) \
+	--syntaxtype coffee \
+	-e .coffee \
+	-o ../../docs/www \
+	-t ../../docs/bootstrap-theme \
+	-H ../../docs/bootstrap-theme/helpers/helpers.js \
+	--server \
+	.
 
 
 # managing version
