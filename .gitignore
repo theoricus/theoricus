@@ -4,3 +4,6 @@ docs-*
 
 cli/templates/app_skel/node_modules
 cli/templates/app_skel/public/js
+
+# lodash is copied from node_modules to the vendors folder on postinstall
+www/vendors/lodash.js

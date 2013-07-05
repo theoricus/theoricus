@@ -11,7 +11,8 @@
   },
 
   "scripts": {
-    "test": "make test"
+    "test": "make test",
+    "postinstall": "coffee scripts/postinstall.coffee"
   },
 
   "repository": {
