@@ -55,6 +55,7 @@ setup
       'history': "#{theoricus}/vendors/history.js"
       'inflection': "#{theoricus}/vendors/inflection.js"
       'jquery': "#{theoricus}/vendors/jquery.js"
+      'lodash': "#{theoricus}/vendors/lodash.js"
 
       # app
       # 'app_vendor_name': 'vendors/app_vendor_name.js'

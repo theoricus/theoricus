@@ -174,7 +174,7 @@ module.exports = class Model extends Binder
 
     for record, at in data
 
-      Factory.model classname, record, (_model)=>
+      Model.Factory.model classname, record, (_model)=>
         records.push _model
 
         if records.length is data.length

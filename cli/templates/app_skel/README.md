@@ -28,6 +28,15 @@ the -r
 the -p
 ````
 
+# Indexing app to static version
+
+````bash
+the -i output_folder
+the -i output_folder [--snapshooter=-s]
+the -i output_folder [--url localhost:3000 ]
+the -i output_folder [--url localhost:3000 ] [--snapshooter=-s]
+````
+
 # Help
 
 For more options, run:

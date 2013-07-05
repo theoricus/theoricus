@@ -1,9 +1,8 @@
-.PHONY: build docs
+.PHONY: docs
 
 CS=node_modules/coffee-script/bin/coffee
 YUIDOC=node_modules/yuidocjs/lib/cli.js
-
-VERSION=`$(CS) build/bumper.coffee --version`
+VERSION=`$(CS) scripts/bumper.coffee --version`
 
 
 setup:
@@ -41,13 +40,13 @@ docs.www:
 
 # managing version
 bump.minor:
-	$(CS) build/bumper.coffee --minor
+	$(CS) scripts/bumper.coffee --minor
 
 bump.major:
-	$(CS) build/bumper.coffee --major
+	$(CS) scripts/bumper.coffee --major
 
 bump.patch:
-	$(CS) build/bumper.coffee --patch
+	$(CS) scripts/bumper.coffee --patch
 
 
 

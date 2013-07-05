@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.2.20 - 07/04/2013
+ * Adding postinstall hook to replace symlinks functionality (closes [#62](https://github.com/serpentem/theoricus/issues/62))
+
+## 0.2.19 - 06/30/2013
+ * Upgrading outdated dependencies
+
+## 0.2.18 - 06/30/2013
+  * Embedding indexing system (by (snapshooter)[https://github.com/serpentem/snapshooter])
+
+## 0.2.17 - 06/30/2013
+  * Fixing release mode, forking Polvo the right way
+  * Updating `app_skel` to include `lodash` as vendor
+
+## 0.2.16 - 06/26/2013
+  * Fixing `instantiate_method` in Model, referencing Factory class from the
+  right place. (closes [#58](https://github.com/serpentem/theoricus/pull/58))
+
 ## 0.2.15 - 06/13/2013
   * Fixing method stdout piping between Server REPL and Polvo
   * Rolling back default mode to `cs` in REPL
