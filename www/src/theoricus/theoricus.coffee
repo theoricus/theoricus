@@ -48,9 +48,10 @@ module.exports = class Theoricus
   ###*
     Theoricus constructor, must to be invoked by the application with a `super`
     call.
-    @method constructor
-    @param @Settings {Object} App Settings
-    @param @Routes {Object} App Routes
+    @class Theoricus
+    @constructor
+    @param Settings {Object} App Settings
+    @param Routes {Object} App Routes
   ###
   constructor:( @Settings, @Routes )->
     @config  = new Config @, @Settings
