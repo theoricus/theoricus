@@ -42,7 +42,6 @@
   "devDependencies": {
     "chai": "1.7.x",
     "mocha": "1.9.x",
-    "mocha-phantomjs": "2.0.x",
-    "should": "1.2.x"
+    "wd": "0.0.32"
   }
 }
