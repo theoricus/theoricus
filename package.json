@@ -40,8 +40,7 @@
     "snapshooter": "0.2.x"
   },
   "devDependencies": {
-    "chai": "1.5.x",
-    "codo": "1.6.x",
+    "chai": "1.7.x",
     "mocha": "1.9.x",
     "mocha-phantomjs": "2.0.x",
     "should": "1.2.x"
