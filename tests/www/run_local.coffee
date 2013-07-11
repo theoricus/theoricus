@@ -1,0 +1,1 @@
+(require './run').test 'local', null, 'localhost:8080'
