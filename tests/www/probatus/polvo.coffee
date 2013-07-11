@@ -7,7 +7,7 @@ setup
 
   server:
     root: 'public'
-    port: 11235
+    port: 8080
 
   # ----------------------------------------------------------------------------
   # INPUT FOLDERS AND FILES
