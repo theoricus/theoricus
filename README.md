@@ -2,6 +2,8 @@
 
 Tiny MV(C) implementation for client side projects.
 
+[![Stories in Ready](http://badge.waffle.io/serpentem/theoricus.png)](http://waffle.io/serpentem/theoricus)  
+
 > Version 0.2.20
 
 [![Dependency Status](https://gemnasium.com/serpentem/theoricus.png)](https://gemnasium.com/serpentem/theoricus) [![Build Status](https://secure.travis-ci.org/serpentem/theoricus.png)](http://travis-ci.org/serpentem/theoricus) [![Selenium Test Status](https://saucelabs.com/buildstatus/arboleya)](https://saucelabs.com/u/arboleya)
