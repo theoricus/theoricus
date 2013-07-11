@@ -1,0 +1,24 @@
+---
+language: node_js
+
+node_js:
+  - 0.10
+
+env:
+  global:
+    - secure: 'KgTBSnpwEMs+RVxWGqKlB80/DCP9Nz3QJI/koRGsxdoLjb4hxL3iQM74f+VtHUopk7hMFDQn/lHFOEmnHn4UVI5FdUR2cRASnPP2NsA4RbwqMxN0QkqhptM2qWh1o3tWQafJEh8gOxc2UMBl0cXWr66OxwKGT+d691bmrwg1i18='
+    - secure: 'haKcl0zcGeJciqMz4psxTYGPHIARsQyMV3nIfaJz0pfPC/6D1ldh1VvtJH5u0Knvc1x2CB0G3/kyeIj46awYZOJax2Kklgx1CeA9XZ2TxczLgQXuWnryWjFwnLNyYy3b4wTWNXUU7P8wFMBuC4V+ck3CwR6YA7dvdgz1OrjeZlA='
+
+addons:
+  sauce_connect: true
+
+before_script:
+  # - curl https://gist.github.com/santiycr/5139565/raw/sauce_connect_setup.sh | bash
+  - make test.www.start
+  - sleep 5
+
+script:
+  - make test.www.start_server
+
+after_script:
+  - make test.www.stop_server
