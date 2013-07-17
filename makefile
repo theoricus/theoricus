@@ -20,12 +20,6 @@ build:
 
 
 
-# test
-test: build
-	# TODO: add testing routine
-
-
-
 # docs generation
 docs.cli:
 	rm -rf docs-cli
@@ -38,11 +32,12 @@ docs.www:
 	cd docs-www && python -m SimpleHTTPServer 8080
 
 
+
 # local tests
-test.www.local.prepare:
+test.start_polvo_and_selenium:
 	@$(CS) tests/www/tasks/all.coffee
 
-test.www.local:
+test:
 	@$(MOCHA) --compilers coffee:coffee-script \
 	--ui bdd \
 	--reporter spec \
@@ -51,21 +46,22 @@ test.www.local:
 
 
 # remote tests
-test.www.start_sauce_connect:
+test.start_sauce_connect:
 	@java -jar tests/www/services/Sauce-Connect.jar $(SAUCE_USERNAME) $(SAUCE_ACCESS_KEY)
 
-test.www.start_server:
+test.start_polvo:
 	@$(CS) tests/www/tasks/polvo.coffee --start
 
-test.www.stop_server:
+test.stop_polvo:
 	@$(CS) tests/www/tasks/polvo.coffee --stop
 
-test.www:
+test_sauce_labs:
 	@$(MOCHA) --compilers coffee:coffee-script \
 	--ui bdd \
 	--reporter spec \
 	--timeout 60000 \
 	tests/www/run_sauce_labs.coffee
+
 
 
 # managing version
