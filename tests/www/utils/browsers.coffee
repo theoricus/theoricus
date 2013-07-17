@@ -164,7 +164,7 @@ module.exports =
     tags: ['theoricus', 'test', 'ios', 'ipad']
     'record-video': true
 
-  # ANDROID
+  # ANDROID (awaiting support for android on sauce-connect)
   # ----------------------------------------------------------------------------
   # android_phone:
   #  local: false
