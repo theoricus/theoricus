@@ -6,9 +6,9 @@ Tiny MV(C) implementation for client side projects.
 
 > Version 0.2.20
 
-[![Dependency Status](https://gemnasium.com/serpentem/theoricus.png)](https://gemnasium.com/serpentem/theoricus) [![Build Status](https://secure.travis-ci.org/serpentem/theoricus.png)](http://travis-ci.org/serpentem/theoricus) [![Selenium Test Status](https://saucelabs.com/buildstatus/arboleya)](https://saucelabs.com/u/arboleya)
+[![Dependency Status](https://gemnasium.com/serpentem/theoricus.png)](https://gemnasium.com/serpentem/theoricus) [![Build Status](https://secure.travis-ci.org/serpentem/theoricus.png)](http://travis-ci.org/serpentem/theoricus) [![Selenium Test Status](https://saucelabs.com/buildstatus/theoricus)](https://saucelabs.com/u/theoricus)
 
-[![Selenium Test Status](https://saucelabs.com/browser-matrix/arboleya.svg)](https://saucelabs.com/u/arboleya)
+[![Selenium Test Status](https://saucelabs.com/browser-matrix/theoricus.svg)](https://saucelabs.com/u/theoricus)
 
 # About
 
