@@ -15,8 +15,7 @@ exports.test = ( name, conf, base_url, mark_as_passed )->
 
         # when testing local, ignores browsers that haven't the local prop set
         if name is 'local' 
-          if not (browser_conf.local or browser_conf.local_only)
-            continue
+          continue if not browser_conf.local
 
           browser_conf.platform = null
         
