@@ -46,6 +46,33 @@ module.exports =
     'record-video': true
 
 
+  # safari
+  # ----------------------------------------------------------------------------
+  safari_snow:
+    local: false
+    version: 5
+    browserName: 'safari'
+    platform: 'OS X 10.6'
+    tags: ['theoricus', 'test', 'safari5', 'snow']
+    'record-video': true
+
+  safari_mountain:
+    local: true
+    version: 6
+    browserName: 'safari'
+    platform: 'OS X 10.8'
+    tags: ['theoricus', 'test', 'safari6', 'mountain']
+    'record-video': true
+
+  safari_winxp:
+    local: false
+    version: 5
+    browserName: 'safari'
+    platform: 'Windows 7'
+    tags: ['theoricus', 'test', 'safari5', 'winxp']
+    'record-video': true
+
+
   # last firefox
   # ----------------------------------------------------------------------------
   firefox_winxp:
