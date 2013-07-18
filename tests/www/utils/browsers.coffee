@@ -5,7 +5,7 @@ module.exports =
   chrome_winxp:
     local: false
     browserName: 'chrome'
-    version: 27
+    version: '27'
     platform: 'Windows XP'
     tags: ['theoricus', 'test', 'chrome', 'winxp']
     'record-video': true
@@ -50,7 +50,7 @@ module.exports =
   # ----------------------------------------------------------------------------
   safari_snow:
     local: false
-    version: 5
+    version: '5'
     browserName: 'safari'
     platform: 'OS X 10.6'
     tags: ['theoricus', 'test', 'safari5', 'snow']
@@ -58,7 +58,7 @@ module.exports =
 
   safari_mountain:
     local: true
-    version: 6
+    version: '6'
     browserName: 'safari'
     platform: 'OS X 10.8'
     tags: ['theoricus', 'test', 'safari6', 'mountain']
@@ -66,7 +66,7 @@ module.exports =
 
   safari_winxp:
     local: false
-    version: 5
+    version: '5'
     browserName: 'safari'
     platform: 'Windows 7'
     tags: ['theoricus', 'test', 'safari5', 'winxp']
@@ -78,7 +78,7 @@ module.exports =
   firefox_winxp:
     local: false
     browserName: 'firefox'
-    version: 21
+    version: '21'
     platform: 'Windows XP'
     tags: ['theoricus', 'test', 'firefox', 'winxp']
     'record-video': true
@@ -127,7 +127,7 @@ module.exports =
   ie6_winxp:
     local: false
     browserName: 'internet explorer '
-    version: 6
+    version: '6'
     platform: 'Windows XP'
     tags: ['theoricus', 'test', 'ie6', 'winxp']
     'record-video': true
@@ -135,7 +135,7 @@ module.exports =
   ie7_winxp:
     local: false
     browserName: 'internet explorer'
-    version: 7
+    version: '7'
     platform: 'Windows XP'
     tags: ['theoricus', 'test', 'ie7', 'winxp']
     'record-video': true
@@ -143,7 +143,7 @@ module.exports =
   ie8_winxp:
     local: false
     browserName: 'internet explorer'
-    version: 8
+    version: '8'
     platform: 'Windows XP'
     tags: ['theoricus', 'test', 'ie8', 'winxp']
     'record-video': true
@@ -152,7 +152,7 @@ module.exports =
   ie8_win7:
     local: false
     browserName: 'internet explorer'
-    version: 8
+    version: '8'
     platform: 'Windows 7'
     tags: ['theoricus', 'test', 'ie8', 'win7']
     'record-video': true
@@ -160,7 +160,7 @@ module.exports =
   ie9_win7:
     local: false
     browserName: 'internet explorer'
-    version: 9
+    version: '9'
     platform: 'Windows 7'
     tags: ['theoricus', 'test', 'ie9', 'win7']
     'record-video': true
@@ -169,7 +169,7 @@ module.exports =
   ie10_win8:
     local: false
     browserName: 'internet explorer'
-    version: 10
+    version: '10'
     platform: 'Windows 8'
     tags: ['theoricus', 'test', 'ie10', 'win8']
     'record-video': true
