@@ -6,7 +6,7 @@ exports.test = ( browser, browser_conf, base_url, mark_as_passed )->
       browser.init browser_conf, ->
         browser.get base_url, ->
           browser.title (err, title) ->
-            title.should.equal 'My Awesome App - made with Theoricus'
+            title.should.equal 'Probatus'
             browser.quit (err)->
               should.not.exist err
               return done null unless mark_as_passed
