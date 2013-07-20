@@ -34,6 +34,10 @@ docs.www:
 
 
 # local tests
+test.start_selenium:
+	@$(CS) tests/www/tasks/selenium.coffee --start
+
+
 test.start_polvo_and_selenium:
 	@$(CS) tests/www/tasks/all.coffee
 
