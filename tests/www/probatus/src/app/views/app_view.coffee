@@ -10,3 +10,7 @@ exports.module = class AppView extends View
       $( item ).click ( event ) =>
         @navigate $( event.delegateTarget ).attr 'href'
         return off
+
+  after_render:( params... )->
+    # calls google.prettify
+    do window.prettyPrint
