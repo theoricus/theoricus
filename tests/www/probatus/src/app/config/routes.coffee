@@ -8,14 +8,37 @@ module.exports = class Routes
       to: "pages/container"
       at: null
       el: "body"
-
-    '/404':
-      to: "pages/notfound"
+    
+    '/pages/index':
+      to: "pages/index"
       at: "/pages"
       el: "#container"
 
-    '/pages/index':
-      to: "pages/index"
+
+
+    '/routing/simple':
+      to: "routing/simple"
+      at: "/pages"
+      el: "#container"
+
+    '/routing/deep/?(:name)?':
+      to: "routing/deep"
+      at: "/routing/simple"
+      el: "#simple-container"
+
+    '/routing/dynamic':
+      to: "routing/dynamic"
+      at: "/routing/deep"
+      el: "#deep-container"
+
+    '/routing/dynamic/:name':
+      to: "routing/dynamic"
+      at: "/routing/deep/:name"
+      el: "#deep-container"
+
+
+    '/404':
+      to: "pages/notfound"
       at: "/pages"
       el: "#container"
 
