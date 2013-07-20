@@ -37,6 +37,24 @@ module.exports = class Routes
       el: "#deep-container"
 
 
+
+    '/title/theoricus':
+      to: "title/theoricus"
+      at: "/pages"
+      el: "#container"
+
+    '/title/is':
+      to: "title/is"
+      at: "/pages"
+      el: "#container"
+
+    '/title/awesome':
+      to: "title/awesome"
+      at: "/pages"
+      el: "#container"
+
+
+
     '/404':
       to: "pages/notfound"
       at: "/pages"
