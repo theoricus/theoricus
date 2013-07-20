@@ -1,4 +1,5 @@
 should = do (require 'chai').should
+quit = require '../utils/quit'
 
 exports.test = ( browser, browser_conf, base_url, mark_as_passed )->
   describe 'using ' + browser_conf.name, ->
@@ -7,7 +8,4 @@ exports.test = ( browser, browser_conf, base_url, mark_as_passed )->
         browser.get base_url, ->
           browser.title (err, title) ->
             title.should.equal 'Probatus'
-            browser.quit (err)->
-              should.not.exist err
-              return done null unless mark_as_passed
-              mark_as_passed browser.sessionID, done
+            quit browser, mark_as_passed, done
