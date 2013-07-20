@@ -3,9 +3,9 @@ quit = require '../utils/quit'
 colors = require 'colors'
 
 exports.test = ( browser, browser_conf, base_url, mark_as_passed )->
-  describe 'using ' + browser_conf.name, ->
+  describe '★  testing routes', ->
+    describe 'using ' + browser_conf.name, ->
 
-    describe 'testing routes', ->
 
       # ------------------------------------------------------------------------
       # menu
