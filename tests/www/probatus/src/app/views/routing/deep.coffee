@@ -8,7 +8,7 @@ module.exports = class Deep extends AppView
   after_render:->
     return if initialized
     initialized = true
-    ($ '#deep-param').data 'initial', true
+    ($ '#deep-param').data 'initial', (window.history.pushState?)
 
   before_destroy:->
     ($ '#deep-param').data 'initial', false
