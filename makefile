@@ -45,7 +45,8 @@ test:
 	@$(MOCHA) --compilers coffee:coffee-script \
 	--ui bdd \
 	--reporter spec \
-	--timeout 10000 \
+	--timeout 600000 \
+	--bail \
 	tests/www/run_local.coffee
 
 
@@ -63,7 +64,8 @@ test_sauce_labs:
 	@$(MOCHA) --compilers coffee:coffee-script \
 	--ui bdd \
 	--reporter spec \
-	--timeout 10000 \
+	--timeout 600000 \
+	--bail \
 	tests/www/run_sauce_labs.coffee
 
 
