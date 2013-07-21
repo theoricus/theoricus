@@ -17,7 +17,7 @@ before_script:
 - sleep 5
 
 script:
-- make test_sauce_connect
+- make test_sauce_labs
 
 after_script:
 - make test.stop_polvo
