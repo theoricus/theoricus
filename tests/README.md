@@ -61,32 +61,23 @@ make test.start_selenium
 make test
 ````
 
-# Testing on Sauce Labs
+# Testing on sauce labs `while developing`
 
 ## 1) Tab 1
 
 ````
-make test.start_sauce_connect
+cd tests/www/probatus
+the -s
 ````
 
 ## 2) Tab 2
 
 ````
-make test.start_polvo
+make test.start_sauce_connect
 ````
 
-## 3) Tab 3
+## 2) Tab 3
 
 ````
-make test_sauce_labs
-````
-
-# NOTE
-
-To run `make test_sauce` remember to first add your sauce username/accesskey in
-available in your shell.
-
-````
-export SAUCE_USERNAME=YOUR-SAUCE-USERNAME
-export SAUCE_ACCESS_KEY=YOUR-SAUCE-API-KEY
+make test
 ````
