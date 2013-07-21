@@ -86,7 +86,7 @@ module.exports =
   firefox_winxp:
     local: false
     browserName: 'firefox'
-    version: '21'
+    version: firefox_last
     platform: 'Windows XP'
     tags: ['theoricus', 'test', 'firefox', 'winxp']
     'record-video': true
@@ -94,6 +94,7 @@ module.exports =
   firefox_win7:
     local: false
     browserName: 'firefox'
+    version: firefox_last
     platform: 'Windows 7'
     tags: ['theoricus', 'test', 'firefox', 'win7']
     'record-video': true
@@ -101,6 +102,7 @@ module.exports =
   firefox_win8:
     local: false
     browserName: 'firefox'
+    version: firefox_last
     platform: 'Windows 8'
     tags: ['theoricus', 'test', 'firefox', 'win8']
     'record-video': true
@@ -108,6 +110,7 @@ module.exports =
   firefox_linux:
     local: false
     browserName: 'firefox'
+    version: firefox_last
     platform: 'Linux'
     tags: ['theoricus', 'test', 'firefox', 'linux']
     'record-video': true
@@ -115,6 +118,7 @@ module.exports =
   firefox_snow:
     local: false
     browserName: 'firefox'
+    version: firefox_next_to_last
     platform: 'OS X 10.6'
     tags: ['theoricus', 'test', 'firefox', 'snow']
     'record-video': true
@@ -123,6 +127,7 @@ module.exports =
     local: true
     local_only: true
     browserName: 'firefox'
+    version: firefox_last
     platform: 'OS X 10.8'
     tags: ['theoricus', 'test', 'firefox', 'snow']
     'record-video': true
