@@ -138,7 +138,7 @@ exports.test = ( browser, browser_conf, base_url, timeout, mark_as_passed )->
       it 'check /deep route\'s state to assure it has changed' , (done)->
         browser.eval '$("#deep-param").data("initial");', (err, status)->
           should.not.exist err
-          should.not.exist status
+          should.not.equal true
           done null
 
       it 'check if `dynamic-param` is theoricus', (done)->
