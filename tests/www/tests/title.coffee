@@ -2,6 +2,8 @@ should = do (require 'chai').should
 quit = require '../utils/quit'
 colors = require 'colors'
 
+{page_is_rendered} = require '../utils/conditions'
+
 exports.test = ( browser, browser_conf, base_url, timeout, mark_as_passed )->
   describe '★  testing title', ->
 
@@ -31,7 +33,7 @@ exports.test = ( browser, browser_conf, base_url, timeout, mark_as_passed )->
               done null
 
       it 'wait until page is rendered', (done)->
-        browser.waitForCondition 'window.crawler.is_rendered == true;', timeout, 30, (err, res)->
+        browser.waitForCondition page_is_rendered, timeout, 30, (err, res)->
           should.not.exist err
           res.should.be.true
           done null
@@ -56,7 +58,7 @@ exports.test = ( browser, browser_conf, base_url, timeout, mark_as_passed )->
               done null
 
       it 'wait until page is rendered', (done)->
-        browser.waitForCondition 'window.crawler.is_rendered == true;', timeout, 30, (err, res)->
+        browser.waitForCondition page_is_rendered, timeout, 30, (err, res)->
           should.not.exist err
           res.should.be.true
           done null
@@ -81,7 +83,7 @@ exports.test = ( browser, browser_conf, base_url, timeout, mark_as_passed )->
               done null
 
       it 'wait until page is rendered', (done)->
-        browser.waitForCondition 'window.crawler.is_rendered == true;', timeout, 30, (err, res)->
+        browser.waitForCondition page_is_rendered, timeout, 30, (err, res)->
           should.not.exist err
           res.should.be.true
           done null

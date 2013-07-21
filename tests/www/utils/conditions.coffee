@@ -1,0 +1,1 @@
+exports.page_is_rendered = 'window.crawler && window.crawler.is_rendered == true;'
