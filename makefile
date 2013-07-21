@@ -63,7 +63,7 @@ test_sauce_labs:
 	@$(MOCHA) --compilers coffee:coffee-script \
 	--ui bdd \
 	--reporter spec \
-	--timeout 60000 \
+	--timeout 10000 \
 	tests/www/run_sauce_labs.coffee
 
 
