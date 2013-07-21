@@ -26,5 +26,4 @@ exports.test = ( name, conf, base_url, mark_as_passed )->
         browser_conf.name = browser_name
         browser = if conf then wd.remote conf else do wd.remote
         test = (require file).test
-        console.log 'test', browser?, browser_conf?, base_url?, 10000, mark_as_passed?
         test browser, browser_conf, base_url, 10000, mark_as_passed
