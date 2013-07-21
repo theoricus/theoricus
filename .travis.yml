@@ -5,8 +5,13 @@ node:
 
 env:
   global:
-    - secure: MttKc7u8EGWuKEMtqp1H+Xrhmuc3I65O9SIkU8gjQ5fTDnDPGRzfxIZ+vbmdZ679l+vkbkMAPSB7bI0EYviWLFGNpRs8/n//5L2g5uSxSMAEzQAHVwEgH5CodxWchy1bLmqnrX+bim94ocPRsK6BkG8gNSTElBhosAquI7otDUY=
-    - secure: COrpRm+TeEUgHqneOKmPp86UilF5WSOBVYRMM1uJev6JhY5soJ8FWahqnsrK\nNqKgYXk2f5cf5+/MN/61qHvOtPeFtfIxeCEZCv6RC7XmybYUvSRLN3AfwkmY\nXHSk0YUEAkGwabbLH74QEDNYcVyNb4FQkXA7H3XkV+ofFk6c1/M=
+    - secure: ! 'DslWb1+Hb4do/m/YE955FZ/SEbBTCzgNdhdS+p0/si2PXh9SlmDxsW8aaLCP
+                  taFGNxuIX7s2/3zCOXeytwGII+mVTTPP0ctW2ZKKb/gWSIiMBkW6NT/wEU7B
+                  Iqzk5hunntibx74Z8AS0MYbymL0NfOIA6tklWq3ODOt2prJmpdw='
+
+    - secure: ! 'ihNdrWe/GtrU5JYVNO5f5Yts4LuSQGfegM7iZotjEzw6t8EiwQsvKxKLuQ/K
+                 d1Wa+eh3QeqY4JsAvhhgP3sDF7urDr5Pi1UQqCG3V8HzBq2fg4Lvh0GIsFTP
+                 wVuaURkLsvQ0vdvXJZ0PNBkd+pPn/9mRMgiykq/Zxqp8UdPxy6c='
 
 addons:
   sauce_connect: true
