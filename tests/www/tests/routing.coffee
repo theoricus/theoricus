@@ -2,7 +2,7 @@ should = do (require 'chai').should
 quit = require '../utils/quit'
 colors = require 'colors'
 
-exports.test = ( browser, browser_conf, base_url, mark_as_passed )->
+exports.test = ( browser, browser_conf, base_url, timeout, mark_as_passed )->
   describe '★  testing routes', ->
     describe 'using ' + browser_conf.name, ->
 
@@ -12,7 +12,7 @@ exports.test = ( browser, browser_conf, base_url, mark_as_passed )->
       it 'wait until menu is visible', (done)->
         browser.init browser_conf, ->
           browser.get base_url, ->
-            browser.waitForElementByClassName 'menu', 2000, ->
+            browser.waitForElementByClassName 'menu', timeout, ->
               browser.elementByClassName 'menu', (err, el)->
                 should.not.exist err
                 should.exist el
@@ -55,7 +55,7 @@ exports.test = ( browser, browser_conf, base_url, mark_as_passed )->
               done null
 
       it 'wait until page is rendered', (done)->
-        browser.waitForCondition 'window.crawler.is_rendered == true;', 2000, 30, (err, res)->
+        browser.waitForCondition 'window.crawler.is_rendered == true;', timeout, 30, (err, res)->
           should.not.exist err
           res.should.be.true
           done null
@@ -88,7 +88,7 @@ exports.test = ( browser, browser_conf, base_url, mark_as_passed )->
               done null
       
       it 'wait until page is rendered', (done)->
-        browser.waitForCondition 'window.crawler.is_rendered == true;', 2000, 30, (err, res)->
+        browser.waitForCondition 'window.crawler.is_rendered == true;', timeout, 30, (err, res)->
           should.not.exist err
           res.should.be.true
           done null
@@ -121,7 +121,7 @@ exports.test = ( browser, browser_conf, base_url, mark_as_passed )->
               done null
 
       it 'wait until page is rendered', (done)->
-        browser.waitForCondition 'window.crawler.is_rendered == true;', 2000, 30, (err, res)->
+        browser.waitForCondition 'window.crawler.is_rendered == true;', timeout, 30, (err, res)->
           should.not.exist err
           res.should.be.true
           done null
