@@ -132,6 +132,9 @@ module.exports =
   # ----------------------------------------------------------------------------
 
   # WIN XP
+
+  # # IE's prior to 10 are waiting for some fixes on router
+
   # ie6_winxp:
   #   local: false
   #   browserName: 'internet explorer '
