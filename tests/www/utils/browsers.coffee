@@ -143,49 +143,46 @@ module.exports =
   # ----------------------------------------------------------------------------
 
   # WIN XP
+  ie6_winxp:
+    local: false
+    browserName: 'internet explorer '
+    version: '6'
+    platform: 'Windows XP'
+    tags: ['theoricus', 'test', 'ie6', 'winxp']
+    'record-video': true
 
-  # # IE's prior to 10 are waiting for some fixes on router
+  ie7_winxp:
+    local: false
+    browserName: 'internet explorer'
+    version: '7'
+    platform: 'Windows XP'
+    tags: ['theoricus', 'test', 'ie7', 'winxp']
+    'record-video': true
 
-  # ie6_winxp:
-  #   local: false
-  #   browserName: 'internet explorer '
-  #   version: '6'
-  #   platform: 'Windows XP'
-  #   tags: ['theoricus', 'test', 'ie6', 'winxp']
-  #   'record-video': true
+  ie8_winxp:
+    local: false
+    browserName: 'internet explorer'
+    version: '8'
+    platform: 'Windows XP'
+    tags: ['theoricus', 'test', 'ie8', 'winxp']
+    'record-video': true
 
-  # ie7_winxp:
-  #   local: false
-  #   browserName: 'internet explorer'
-  #   version: '7'
-  #   platform: 'Windows XP'
-  #   tags: ['theoricus', 'test', 'ie7', 'winxp']
-  #   'record-video': true
+  # WIN 7
+  ie8_win7:
+    local: false
+    browserName: 'internet explorer'
+    version: '8'
+    platform: 'Windows 7'
+    tags: ['theoricus', 'test', 'ie8', 'win7']
+    'record-video': true
 
-  # ie8_winxp:
-  #   local: false
-  #   browserName: 'internet explorer'
-  #   version: '8'
-  #   platform: 'Windows XP'
-  #   tags: ['theoricus', 'test', 'ie8', 'winxp']
-  #   'record-video': true
-
-  # # WIN 7
-  # ie8_win7:
-  #   local: false
-  #   browserName: 'internet explorer'
-  #   version: '8'
-  #   platform: 'Windows 7'
-  #   tags: ['theoricus', 'test', 'ie8', 'win7']
-  #   'record-video': true
-
-  # ie9_win7:
-  #   local: false
-  #   browserName: 'internet explorer'
-  #   version: '9'
-  #   platform: 'Windows 7'
-  #   tags: ['theoricus', 'test', 'ie9', 'win7']
-  #   'record-video': true
+  ie9_win7:
+    local: false
+    browserName: 'internet explorer'
+    version: '9'
+    platform: 'Windows 7'
+    tags: ['theoricus', 'test', 'ie9', 'win7']
+    'record-video': true
 
   # WIN 8
   ie10_win8:
