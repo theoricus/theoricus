@@ -1,3 +1,8 @@
+firefox_last = '22'
+firefox_next_to_last = '21'
+
+chrome_last = '28'
+
 module.exports =
 
   # last chrome
