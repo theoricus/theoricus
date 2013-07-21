@@ -65,30 +65,29 @@ test.stop_polvo:
 	@$(CS) tests/www/tasks/polvo.coffee --stop
 
 test_sauce_labs:
-	# Technique (skipping pull requests) borrowed from WD:
-	# 	https://github.com/admc/wd/blob/master/Makefile
-
-	ifdef TRAVIS
-		# secure env variables are not available for pull reuqests
-		# so you won't be able to run test against Sauce on these
-		ifneq ($(TRAVIS_PULL_REQUEST),false)
-			@echo 'Skipping Sauce Labs tests as this is a pull request'
-		else
-				@$(MOCHA) --compilers coffee:coffee-script \
-			--ui bdd \
-			--reporter spec \
-			--timeout 600000 \
-			--bail \
-			tests/www/run_sauce_labs.coffee
-		endif
-	else
+# Technique (skipping pull requests) borrowed from WD:
+# 	https://github.com/admc/wd/blob/master/Makefile
+ifdef TRAVIS
+# secure env variables are not available for pull reuqests
+# so you won't be able to run test against Sauce on these
+ifneq ($(TRAVIS_PULL_REQUEST),false)
+	@echo 'Skipping Sauce Labs tests as this is a pull request'
+else
 		@$(MOCHA) --compilers coffee:coffee-script \
-		--ui bdd \
-		--reporter spec \
-		--timeout 600000 \
-		--bail \
-		tests/www/run_sauce_labs.coffee
-	endif
+	--ui bdd \
+	--reporter spec \
+	--timeout 600000 \
+	--bail \
+	tests/www/run_sauce_labs.coffee
+endif
+else
+	@$(MOCHA) --compilers coffee:coffee-script \
+	--ui bdd \
+	--reporter spec \
+	--timeout 600000 \
+	--bail \
+	tests/www/run_sauce_labs.coffee
+endif
 	
 
 
