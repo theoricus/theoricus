@@ -53,13 +53,16 @@ module.exports =
 
   # safari
   # ----------------------------------------------------------------------------
-  safari_snow:
-    local: false
-    version: '5'
-    browserName: 'safari'
-    platform: 'OS X 10.6'
-    tags: ['theoricus', 'test', 'safari5', 'snow']
-    'record-video': true
+ 
+  # # safari5 on snow reports false `phishing's alert` when
+  # # opening page through sauce connect
+  # safari_snow:
+  #   local: false
+  #   version: '5'
+  #   browserName: 'safari'
+  #   platform: 'OS X 10.6'
+  #   tags: ['theoricus', 'test', 'safari5', 'snow']
+  #   'record-video': true
 
   safari_mountain:
     local: true
