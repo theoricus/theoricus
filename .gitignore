@@ -11,3 +11,6 @@ www/vendors/lodash.js
 
 # ignoring testable app's release folder
 tests/www/probatus/public/js
+
+# ignoring sauce labs's log
+sauce_connect.log
