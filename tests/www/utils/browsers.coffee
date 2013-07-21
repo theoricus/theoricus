@@ -2,6 +2,7 @@ firefox_last = '22'
 firefox_next_to_last = '21'
 
 chrome_last = '28'
+chrome_next_to_last = '27'
 
 module.exports =
 
@@ -10,7 +11,7 @@ module.exports =
   chrome_winxp:
     local: false
     browserName: 'chrome'
-    version: '27'
+    version: chrome_next_to_last
     platform: 'Windows XP'
     tags: ['theoricus', 'test', 'chrome', 'winxp']
     'record-video': true
@@ -18,6 +19,7 @@ module.exports =
   chrome_win7:
     local: false
     browserName: 'chrome'
+    version: chrome_next_to_last
     platform: 'Windows 7'
     tags: ['theoricus', 'test', 'chrome', 'win7']
     'record-video': true
@@ -25,6 +27,7 @@ module.exports =
   chrome_win8:
     local: false
     browserName: 'chrome'
+    version: chrome_next_to_last
     platform: 'Windows 8'
     tags: ['theoricus', 'test', 'chrome', 'win8']
     'record-video': true
@@ -32,6 +35,7 @@ module.exports =
   chrome_linux:
     local: false
     browserName: 'chrome'
+    version: chrome_last
     platform: 'Linux'
     tags: ['theoricus', 'test', 'chrome', 'linux']
     'record-video': true
@@ -39,6 +43,7 @@ module.exports =
   chrome_snow:
     local: false
     browserName: 'chrome'
+    version: chrome_next_to_last
     platform: 'OS X 10.6'
     tags: ['theoricus', 'test', 'chrome', 'snow']
     'record-video': true
@@ -46,6 +51,7 @@ module.exports =
   chrome_mountain:
     local: true
     browserName: 'chrome'
+    # version: chrome_last
     platform: 'OS X 10.8'
     tags: ['theoricus', 'test', 'chrome', 'mountain']
     'record-video': true
