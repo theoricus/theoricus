@@ -1,23 +1,22 @@
----
 language: node_js
 
-node_js:
-- 0.10
+node:
+  - 0.10.x
 
 env:
   global:
-  - secure: j1Y2TZDHaMUsVuM6fm3VcrRlfh00DDz56OI96m/iwf8WPvN03RjJqSdLCgg8cy/gpPZQu6CFyqSF6XCWsHbgOJ9X8/DMrokJbqUQ8kczAX5Vskp7ZC6Wezv6dauuenphTO+6BG0TDYZBzngJNVqbu8pltOgymX91qHcErNFWCJs=
-  - secure: alC+VBtY3xDenUrH7ZtEXgvQIY8ZHQhh6X/dcK5968IXH9wskU+048hlrrfvGhlMNlwnhp5ZBVpQuU4DBnQipHLEtKwdFaTzPtBocnv5O32E9HmQE4OHinWCS2KuQ6xzDdDcRXAbnyIRN3VuIHeJwDSAKIIjOrci/mfd8X+80Fk=
+    - secure: MttKc7u8EGWuKEMtqp1H+Xrhmuc3I65O9SIkU8gjQ5fTDnDPGRzfxIZ+vbmdZ679l+vkbkMAPSB7bI0EYviWLFGNpRs8/n//5L2g5uSxSMAEzQAHVwEgH5CodxWchy1bLmqnrX+bim94ocPRsK6BkG8gNSTElBhosAquI7otDUY=
+    - secure: COrpRm+TeEUgHqneOKmPp86UilF5WSOBVYRMM1uJev6JhY5soJ8FWahqnsrK\nNqKgYXk2f5cf5+/MN/61qHvOtPeFtfIxeCEZCv6RC7XmybYUvSRLN3AfwkmY\nXHSk0YUEAkGwabbLH74QEDNYcVyNb4FQkXA7H3XkV+ofFk6c1/M=
 
 addons:
   sauce_connect: true
 
 before_script:
-- make test.start_polvo_in_bg
-- sleep 5
+  - make test.start_polvo_in_bg
+  - sleep 5
 
 script:
-- make test_sauce_labs
+  - make test_sauce_labs
 
 after_script:
-- make test.stop_polvo
+  - make test.stop_polvo
