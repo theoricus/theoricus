@@ -55,9 +55,10 @@ test.start_sauce_connect:
 	@java -jar tests/www/services/Sauce-Connect.jar $(SAUCE_USERNAME) $(SAUCE_ACCESS_KEY)
 
 test.start_polvo:
-	@$(CS) tests/www/tasks/polvo.coffee --start
+	$(CS) tests/www/tasks/polvo.coffee --start > .tmp.polvo.log &
 
 test.stop_polvo:
+	@rm -rf .tmp.polvo.log
 	@$(CS) tests/www/tasks/polvo.coffee --stop
 
 test_sauce_labs:
