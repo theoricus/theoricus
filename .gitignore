@@ -13,4 +13,4 @@ www/vendors/lodash.js
 tests/www/probatus/public/js
 
 # ignoring sauce labs's logs
-sauce_connect.log.*
+sauce_connect.log*
