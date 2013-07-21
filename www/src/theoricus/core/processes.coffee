@@ -184,7 +184,7 @@ module.exports = class Processes
         @_run_pending_processes()
     else
       @locked = false
-      window.crawler.is_rendered = true
+      @the.crawler.is_rendered = true
 
       if @disable_transitions?
         @the.config.disable_transitions = @disable_transitions
