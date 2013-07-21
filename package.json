@@ -35,7 +35,7 @@
     "fs-util": "0.3.x",
     "lodash": "1.3.x",
     "optimist": "0.6.x",
-    "polvo": "0.3.x",
+    "polvo": "0.4.x",
     "source-map-support": "0.1.x",
     "snapshooter": "0.2.x"
   },
