@@ -41,6 +41,7 @@ listen_for_shutdown = ->
   conn.on 'connection', (socket)->
     socket.on 'shutdown', ( data )->
       do socket.disconnect
+      do stop
       do process.exit
 
 emit_shutdown = ->
