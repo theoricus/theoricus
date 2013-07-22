@@ -17,11 +17,11 @@ addons:
   sauce_connect: true
 
 before_script:
-  - make test.start_polvo_in_bg
+  - make test.app.run.bg
   - sleep 5
 
 script:
   - make test_sauce_labs
 
 after_script:
-  - make test.stop_polvo
+  - make test.app.kill.bg
