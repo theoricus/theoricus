@@ -3,7 +3,6 @@ path = require 'path'
 pn   = path.normalize
 exec = (require "child_process").exec
 spawn = (require "child_process").spawn
-fork = require( "child_process" ).fork
 
 module.exports = class NewProject
 
