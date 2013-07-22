@@ -1,6 +1,7 @@
 # Changelog
 
 0.2.21 - ?
+ * Setting up environment for functional tests
  * Adding `--base` flag in order to run theoricus without entering the app dir
 
 ## 0.2.20 - 07/04/2013
