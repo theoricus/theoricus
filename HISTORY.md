@@ -1,5 +1,8 @@
 # Changelog
 
+0.2.21 - ?
+ * Adding `--base` flag in order to run theoricus without entering the app dir
+
 ## 0.2.20 - 07/04/2013
  * Adding postinstall hook to replace symlinks functionality (closes [#62](https://github.com/serpentem/theoricus/issues/62))
 
