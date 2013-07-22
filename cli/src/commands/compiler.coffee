@@ -11,3 +11,7 @@ module.exports = class Compiler
 
     @polvo_path = path.join @the.root, 'node_modules', 'polvo', 'bin', 'polvo'
     @polvo = fork @polvo_path, [opt, '--stdio'], cwd: @the.app_root
+
+    process.on 'SIGTERM', =>
+      do @polvo.kill
+      do process.exit
