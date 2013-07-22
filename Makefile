@@ -1,5 +1,10 @@
 .PHONY: docs
 
+THE=bin/the
+SELENIUM=tests/www/services/selenium-server-standalone-2.33.0.jar
+SAUCE_CONNECT=tests/www/services/Sauce-Connect.jar
+CHROME_DRIVER=tests/www/services/chromedriver
+
 CS=node_modules/coffee-script/bin/coffee
 MOCHA=node_modules/mocha/bin/mocha
 VERSION=`$(CS) scripts/bumper.coffee --version`
@@ -38,22 +43,18 @@ docs:
 
 # SELENIUM & SAUCE CONNECT
 test.selenium.run:
-	@java -jar \
-		tests/www/services/selenium-server-standalone-2.33.0.jar \
-		-Dwebdriver.chrome.driver=www/services/chromedriver
+	@java -jar $(SELENIUM) -Dwebdriver.chrome.driver=$(CHROME_DRIVER)
 
 test.sauce.connect.run:
-	@java -jar \
-		tests/www/services/Sauce-Connect.jar \
-		$(SAUCE_USERNAME) $(SAUCE_ACCESS_KEY)
+	@java -jar $(SAUCE_CONNECT) $(SAUCE_USERNAME) $(SAUCE_ACCESS_KEY)
 
 
 # APP RUNNERS
 test.app.run:
-	@bin/the -p --base tests/www/probatus
+	@$(THE) -p --base tests/www/probatus
 
 test.app.run.bg:
-	@bin/the -p --base tests/www/probatus > tests/.probatus.log & \
+	@$(THE) -p --base tests/www/probatus > tests/.probatus.log & \
 		echo "$$!" > tests/.probatus.pid
 
 test.app.kill.bg:
