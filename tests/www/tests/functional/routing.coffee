@@ -1,8 +1,8 @@
 should = do (require 'chai').should
-quit = require '../utils/quit'
 colors = require 'colors'
 
-{page_is_rendered} = require '../utils/conditions'
+{page_is_rendered} = require '../../utils/conditions'
+quit = require '../../utils/quit'
 
 exports.test = ( browser, browser_conf, base_url, timeout, mark_as_passed )->
   describe '★  testing routes', ->
