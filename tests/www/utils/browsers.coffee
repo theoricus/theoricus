@@ -8,45 +8,45 @@ module.exports =
 
   # last chrome
   # ----------------------------------------------------------------------------
-  chrome_winxp:
-    local: false
-    browserName: 'chrome'
-    version: chrome_next_to_last
-    platform: 'Windows XP'
-    tags: ['theoricus', 'test', 'chrome', 'winxp']
-    'record-video': true
+  # chrome_winxp:
+  #   local: false
+  #   browserName: 'chrome'
+  #   version: chrome_next_to_last
+  #   platform: 'Windows XP'
+  #   tags: ['theoricus', 'test', 'chrome', 'winxp']
+  #   'record-video': true
 
-  chrome_win7:
-    local: false
-    browserName: 'chrome'
-    version: chrome_next_to_last
-    platform: 'Windows 7'
-    tags: ['theoricus', 'test', 'chrome', 'win7']
-    'record-video': true
+  # chrome_win7:
+  #   local: false
+  #   browserName: 'chrome'
+  #   version: chrome_next_to_last
+  #   platform: 'Windows 7'
+  #   tags: ['theoricus', 'test', 'chrome', 'win7']
+  #   'record-video': true
 
-  chrome_win8:
-    local: false
-    browserName: 'chrome'
-    version: chrome_next_to_last
-    platform: 'Windows 8'
-    tags: ['theoricus', 'test', 'chrome', 'win8']
-    'record-video': true
+  # chrome_win8:
+  #   local: false
+  #   browserName: 'chrome'
+  #   version: chrome_next_to_last
+  #   platform: 'Windows 8'
+  #   tags: ['theoricus', 'test', 'chrome', 'win8']
+  #   'record-video': true
 
-  chrome_linux:
-    local: false
-    browserName: 'chrome'
-    version: chrome_last
-    platform: 'Linux'
-    tags: ['theoricus', 'test', 'chrome', 'linux']
-    'record-video': true
+  # chrome_linux:
+  #   local: false
+  #   browserName: 'chrome'
+  #   version: chrome_last
+  #   platform: 'Linux'
+  #   tags: ['theoricus', 'test', 'chrome', 'linux']
+  #   'record-video': true
 
-  chrome_snow:
-    local: false
-    browserName: 'chrome'
-    version: chrome_next_to_last
-    platform: 'OS X 10.6'
-    tags: ['theoricus', 'test', 'chrome', 'snow']
-    'record-video': true
+  # chrome_snow:
+  #   local: false
+  #   browserName: 'chrome'
+  #   version: chrome_next_to_last
+  #   platform: 'OS X 10.6'
+  #   tags: ['theoricus', 'test', 'chrome', 'snow']
+  #   'record-video': true
 
   chrome_mountain:
     local: true
@@ -60,15 +60,23 @@ module.exports =
   # safari
   # ----------------------------------------------------------------------------
  
-  # # safari5 on snow reports false `phishing's alert` when
-  # # opening page through sauce connect
-  # safari_snow:
+  # safari_winxp:
   #   local: false
   #   version: '5'
   #   browserName: 'safari'
-  #   platform: 'OS X 10.6'
-  #   tags: ['theoricus', 'test', 'safari5', 'snow']
+  #   platform: 'Windows 7'
+  #   tags: ['theoricus', 'test', 'safari5', 'winxp']
   #   'record-video': true
+
+  # # # safari5 on snow reports false `phishing's alert` when
+  # # # opening page through sauce connect
+  # # safari_snow:
+  # #   local: false
+  # #   version: '5'
+  # #   browserName: 'safari'
+  # #   platform: 'OS X 10.6'
+  # #   tags: ['theoricus', 'test', 'safari5', 'snow']
+  # #   'record-video': true
 
   safari_mountain:
     local: true
@@ -78,56 +86,49 @@ module.exports =
     tags: ['theoricus', 'test', 'safari6', 'mountain']
     'record-video': true
 
-  safari_winxp:
-    local: false
-    version: '5'
-    browserName: 'safari'
-    platform: 'Windows 7'
-    tags: ['theoricus', 'test', 'safari5', 'winxp']
-    'record-video': true
 
 
   # last firefox
   # ----------------------------------------------------------------------------
-  firefox_winxp:
-    local: false
-    browserName: 'firefox'
-    version: firefox_last
-    platform: 'Windows XP'
-    tags: ['theoricus', 'test', 'firefox', 'winxp']
-    'record-video': true
+  # firefox_winxp:
+  #   local: false
+  #   browserName: 'firefox'
+  #   version: firefox_last
+  #   platform: 'Windows XP'
+  #   tags: ['theoricus', 'test', 'firefox', 'winxp']
+  #   'record-video': true
 
-  firefox_win7:
-    local: false
-    browserName: 'firefox'
-    version: firefox_last
-    platform: 'Windows 7'
-    tags: ['theoricus', 'test', 'firefox', 'win7']
-    'record-video': true
+  # firefox_win7:
+  #   local: false
+  #   browserName: 'firefox'
+  #   version: firefox_last
+  #   platform: 'Windows 7'
+  #   tags: ['theoricus', 'test', 'firefox', 'win7']
+  #   'record-video': true
 
-  firefox_win8:
-    local: false
-    browserName: 'firefox'
-    version: firefox_last
-    platform: 'Windows 8'
-    tags: ['theoricus', 'test', 'firefox', 'win8']
-    'record-video': true
+  # firefox_win8:
+  #   local: false
+  #   browserName: 'firefox'
+  #   version: firefox_last
+  #   platform: 'Windows 8'
+  #   tags: ['theoricus', 'test', 'firefox', 'win8']
+  #   'record-video': true
 
-  firefox_linux:
-    local: false
-    browserName: 'firefox'
-    version: firefox_last
-    platform: 'Linux'
-    tags: ['theoricus', 'test', 'firefox', 'linux']
-    'record-video': true
+  # firefox_linux:
+  #   local: false
+  #   browserName: 'firefox'
+  #   version: firefox_last
+  #   platform: 'Linux'
+  #   tags: ['theoricus', 'test', 'firefox', 'linux']
+  #   'record-video': true
 
-  firefox_snow:
-    local: false
-    browserName: 'firefox'
-    version: firefox_next_to_last
-    platform: 'OS X 10.6'
-    tags: ['theoricus', 'test', 'firefox', 'snow']
-    'record-video': true
+  # firefox_snow:
+  #   local: false
+  #   browserName: 'firefox'
+  #   version: firefox_next_to_last
+  #   platform: 'OS X 10.6'
+  #   tags: ['theoricus', 'test', 'firefox', 'snow']
+  #   'record-video': true
 
   firefox_mountain:
     local: true
@@ -159,13 +160,13 @@ module.exports =
     tags: ['theoricus', 'test', 'ie7', 'winxp']
     'record-video': true
 
-  ie8_winxp:
-    local: false
-    browserName: 'internet explorer'
-    version: '8'
-    platform: 'Windows XP'
-    tags: ['theoricus', 'test', 'ie8', 'winxp']
-    'record-video': true
+  # ie8_winxp:
+  #   local: false
+  #   browserName: 'internet explorer'
+  #   version: '8'
+  #   platform: 'Windows XP'
+  #   tags: ['theoricus', 'test', 'ie8', 'winxp']
+  #   'record-video': true
 
   # WIN 7
   ie8_win7:
