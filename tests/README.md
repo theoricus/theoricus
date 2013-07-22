@@ -2,7 +2,7 @@
 
 The tests consists of:
 
-1. A `testable` application
+1. A testable application codename `probatus`
 2. Tests written on top of Selenium WebDriver, that mimics an user navigating through the pages
 
 Tough it may be slow, it tests exactly the current real features of all browsers.
@@ -69,11 +69,23 @@ Remember to link theoricus first (`npm link`)
 
 ### + Tab 1
 
+Starting `probatus` application in `release` mode:
+
 ````
-make test.start_polvo_and_selenium
+make test.app.run
+````
+
+### + Tab 3
+
+Starting Selenium:
+
+````
+make test.selenium.run
 ````
 
 ### + Tab 2
+
+Running tests:
 
 ````
 make test
@@ -83,6 +95,8 @@ make test
 
 ### + Tab 1
 
+To test while developing the `probatus` app, one must simply run it normally through `theoricus -s` to enter the `dev` mode, making use of the common wath'n'compile routine and so on.
+
 ````
 cd tests/www/probatus
 the -s
@@ -90,11 +104,15 @@ the -s
 
 ### + Tab 2
 
+Starting Selenium:
+
 ````
-make test.start_selenium
+make test.selenium.run
 ````
 
 ### + Tab 3
+
+Running tests:
 
 ````
 make test
@@ -104,17 +122,23 @@ make test
 
 ### + Tab 1
 
+Starting `probatus` application in `release` mode:
+
 ````
-make test.start_polvo
+make test.app.run
 ````
 
 ### + Tab 2
 
+Starting Sauce Connect:
+
 ````
-make test.start_sauce_connect
+make test.sauce.connect.run
 ````
 
 ### + Tab 3
+
+Running tests:
 
 ````
 make test_sauce_labs
