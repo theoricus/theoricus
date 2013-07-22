@@ -4,12 +4,19 @@ CS=node_modules/coffee-script/bin/coffee
 MOCHA=node_modules/mocha/bin/mocha
 VERSION=`$(CS) scripts/bumper.coffee --version`
 
+
+#-------------------------------------------------------------------------------
+# SETTTING UP DEV ENV
+
 setup:
 	npm link
 	@echo 'Downloading and unzipping selenium'
 
 	@echo 'Downloading and unzipping chrome driver for selenium'
 
+
+#-------------------------------------------------------------------------------
+# DEVELOPING
 
 # watch / build
 watch:
@@ -19,28 +26,41 @@ build:
 	$(CS) -mco lib cli/src
 
 
+#-------------------------------------------------------------------------------
+# GENERATING DOCS
 
-# docs generation
-docs.cli:
-	rm -rf docs-cli
-	$(CODO) cli/src -o docs-cli --title Theoricus CLI Documentation
-	cd docs-cli && python -m SimpleHTTPServer 8080
-
-docs.www:
-	rm -rf docs-www
-	$(CODO) www/src -o docs-www --title Theoricus Documentation
-	cd docs-www && python -m SimpleHTTPServer 8080
+docs:
+	# to be merged
 
 
+#-------------------------------------------------------------------------------
+# TESTS
 
-# local tests
-test.start_selenium:
-	@$(CS) tests/www/tasks/selenium.coffee --start
+# SELENIUM & SAUCE CONNECT
+test.selenium.run:
+	@java -jar \
+		tests/www/services/selenium-server-standalone-2.33.0.jar \
+		-Dwebdriver.chrome.driver=www/services/chromedriver
+
+test.sauce.connect.run:
+	@java -jar \
+		tests/www/services/Sauce-Connect.jar \
+		$(SAUCE_USERNAME) $(SAUCE_ACCESS_KEY)
 
 
-test.start_polvo_and_selenium:
-	@$(CS) tests/www/tasks/all.coffee
+# APP RUNNERS
+test.app.run:
+	@bin/the -p --base tests/www/probatus
 
+test.app.run.bg:
+	@bin/the -p --base tests/www/probatus > tests/.probatus.log & \
+		echo "$$!" > tests/.probatus.pid
+
+test.app.kill.bg:
+	@kill `cat .probatus.pid` && rm tests/.probatus.pid tests/.probatus.log
+
+
+# TESTING LOCALLY
 test:
 	@$(MOCHA) --compilers coffee:coffee-script \
 	--ui bdd \
@@ -50,20 +70,7 @@ test:
 	tests/www/run_local.coffee
 
 
-# remote tests
-test.start_sauce_connect:
-	@java -jar tests/www/services/Sauce-Connect.jar $(SAUCE_USERNAME) $(SAUCE_ACCESS_KEY)
-
-test.start_polvo:
-	$(CS) tests/www/tasks/polvo.coffee --start
-
-test.start_polvo_in_bg:
-	$(CS) tests/www/tasks/polvo.coffee --start > .tmp.polvo.log &
-
-test.stop_polvo:
-	@rm -rf .tmp.polvo.log
-	@$(CS) tests/www/tasks/polvo.coffee --stop
-
+# TESTING ON SAUCE LABS
 test_sauce_labs:
 # Technique (skipping pull requests) borrowed from WD:
 # 	https://github.com/admc/wd/blob/master/Makefile
@@ -73,7 +80,7 @@ ifdef TRAVIS
 ifneq ($(TRAVIS_PULL_REQUEST),false)
 	@echo 'Skipping Sauce Labs tests as this is a pull request'
 else
-		@$(MOCHA) --compilers coffee:coffee-script \
+	@$(MOCHA) --compilers coffee:coffee-script \
 	--ui bdd \
 	--reporter spec \
 	--timeout 600000 \
@@ -88,11 +95,11 @@ else
 	--bail \
 	tests/www/run_sauce_labs.coffee
 endif
-	
 
 
+#-------------------------------------------------------------------------------
+# MANAGING VERSIONS
 
-# managing version
 bump.minor:
 	$(CS) scripts/bumper.coffee --minor
 
@@ -103,8 +110,9 @@ bump.patch:
 	$(CS) scripts/bumper.coffee --patch
 
 
+#-------------------------------------------------------------------------------
+# PUBLISHING / RE-PUBLISHING
 
-# publishing / re-publishing
 publish:
 	git tag $(VERSION)
 	git push origin $(VERSION)
