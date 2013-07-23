@@ -5,8 +5,6 @@ browsers = require './utils/browsers'
 
 files = fsu.find (path.join __dirname, 'tests'), /\.coffee$/m
 
-(require 'chai').Assertion.includeStack = true
-
 exports.test = ( name, conf, base_url, mark_as_passed )->
 
   timeout = if name is 'local' then 5000 else 60000
