@@ -19,6 +19,7 @@ exports.test = ( name, conf, base_url, mark_as_passed )->
           continue if not browser_conf.local
 
           browser_conf.platform = null
+          browser_conf.version = null
         
         # otherwise, skipe local_only configs
         else if browser_conf.local_only is true
