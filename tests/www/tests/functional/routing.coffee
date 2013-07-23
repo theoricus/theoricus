@@ -6,7 +6,7 @@ quit = require '../../utils/quit'
 
 exports.test = ( browser, browser_conf, base_url, timeout, mark_as_passed )->
 
-  describe '★  testing routes', ->
+  describe 'testing routes', ->
     describe 'using ' + browser_conf.name, ->
 
       # ------------------------------------------------------------------------

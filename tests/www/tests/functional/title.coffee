@@ -5,7 +5,7 @@ colors = require 'colors'
 quit = require '../../utils/quit'
 
 exports.test = ( browser, browser_conf, base_url, timeout, mark_as_passed )->
-  describe '★  testing title', ->
+  describe 'testing title', ->
 
     describe 'using ' + browser_conf.name, ->
 
