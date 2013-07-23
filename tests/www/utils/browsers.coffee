@@ -24,21 +24,21 @@ module.exports =
   #   tags: ['theoricus', 'test', 'chrome', 'win7']
   #   'record-video': true
 
-  # chrome_win8:
-  #   local: false
-  #   browserName: 'chrome'
-  #   version: chrome_next_to_last
-  #   platform: 'Windows 8'
-  #   tags: ['theoricus', 'test', 'chrome', 'win8']
-  #   'record-video': true
+  chrome_win8:
+    local: false
+    browserName: 'chrome'
+    version: chrome_next_to_last
+    platform: 'Windows 8'
+    tags: ['theoricus', 'test', 'chrome', 'win8']
+    'record-video': true
 
-  # chrome_linux:
-  #   local: false
-  #   browserName: 'chrome'
-  #   version: chrome_last
-  #   platform: 'Linux'
-  #   tags: ['theoricus', 'test', 'chrome', 'linux']
-  #   'record-video': true
+  chrome_linux:
+    local: false
+    browserName: 'chrome'
+    version: chrome_last
+    platform: 'Linux'
+    tags: ['theoricus', 'test', 'chrome', 'linux']
+    'record-video': true
 
   # chrome_snow:
   #   local: false
@@ -51,7 +51,7 @@ module.exports =
   chrome_mountain:
     local: true
     browserName: 'chrome'
-    # version: chrome_last
+    version: chrome_next_to_last
     platform: 'OS X 10.8'
     tags: ['theoricus', 'test', 'chrome', 'mountain']
     'record-video': true
@@ -68,17 +68,17 @@ module.exports =
   #   tags: ['theoricus', 'test', 'safari5', 'winxp']
   #   'record-video': true
 
-  # # # safari5 on snow reports false `phishing's alert` when
-  # # # opening page through sauce connect
-  # # safari_snow:
-  # #   local: false
-  # #   version: '5'
-  # #   browserName: 'safari'
-  # #   platform: 'OS X 10.6'
-  # #   tags: ['theoricus', 'test', 'safari5', 'snow']
-  # #   'record-video': true
+  # safari5 on snow reports false `phishing's alert` when
+  # opening page through sauce connect
+  safari5_snow:
+    local: false
+    version: '5'
+    browserName: 'safari'
+    platform: 'OS X 10.6'
+    tags: ['theoricus', 'test', 'safari5', 'snow']
+    'record-video': true
 
-  safari_mountain:
+  safari6_mountain:
     local: true
     version: '6'
     browserName: 'safari'
@@ -106,21 +106,21 @@ module.exports =
   #   tags: ['theoricus', 'test', 'firefox', 'win7']
   #   'record-video': true
 
-  # firefox_win8:
-  #   local: false
-  #   browserName: 'firefox'
-  #   version: firefox_last
-  #   platform: 'Windows 8'
-  #   tags: ['theoricus', 'test', 'firefox', 'win8']
-  #   'record-video': true
+  firefox_win8:
+    local: false
+    browserName: 'firefox'
+    version: firefox_last
+    platform: 'Windows 8'
+    tags: ['theoricus', 'test', 'firefox', 'win8']
+    'record-video': true
 
-  # firefox_linux:
-  #   local: false
-  #   browserName: 'firefox'
-  #   version: firefox_last
-  #   platform: 'Linux'
-  #   tags: ['theoricus', 'test', 'firefox', 'linux']
-  #   'record-video': true
+  firefox_linux:
+    local: false
+    browserName: 'firefox'
+    version: firefox_last
+    platform: 'Linux'
+    tags: ['theoricus', 'test', 'firefox', 'linux']
+    'record-video': true
 
   # firefox_snow:
   #   local: false
