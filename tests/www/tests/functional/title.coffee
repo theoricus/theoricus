@@ -109,4 +109,4 @@ exports.test = ( browser, browser_conf, base_url, timeout, mark_as_passed )->
             should.not.exist err
             should.exist title
             title.should.equal 'Theoricus is awesome'
-            quit browser, mark_as_passed, done
+            do done
