@@ -64,7 +64,7 @@ exports.test = ( browser, browser_conf, base_url, timeout, mark_as_passed )->
       # ------------------------------------------------------------------------
       # /title/is
       describe 'link /title/is', ->
-        it 'click /title/theoricus link and check if redirect begun', (done)->
+        it 'click /title/is link and check if redirect begun', (done)->
           browser.elementById 'title-is', (err, el)->
             should.not.exist err
             el.click (err)->
@@ -91,7 +91,7 @@ exports.test = ( browser, browser_conf, base_url, timeout, mark_as_passed )->
       # ------------------------------------------------------------------------
       # /title/awesome
       describe 'link /title/awesome', ->
-        it 'click /title/theoricus link and check if redirect begun', (done)->
+        it 'click /title/awesome link and check if redirect begun', (done)->
           browser.elementById 'title-awesome', (err, el)->
             browser.clickElement el, ->
               browser.eval 'window.location.pathname', (err, pathname)->
