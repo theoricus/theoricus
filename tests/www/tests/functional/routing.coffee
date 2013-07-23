@@ -7,20 +7,29 @@ quit = require '../../utils/quit'
 exports.test = ( browser, browser_conf, base_url, timeout, mark_as_passed )->
 
   describe 'testing routes', ->
+
+    before (done)->
+      browser.init browser_conf, (err)->
+        should.not.exist err
+        browser.get base_url, (err)->
+          should.not.exist err
+          do done
+
+    after (done)->
+      quit browser, mark_as_passed, done
+
     describe 'using ' + browser_conf.name, ->
 
       # ------------------------------------------------------------------------
       # menu
       describe 'menu must to exist', ->
         it 'wait until menu is visible', (done)->
-          browser.init browser_conf, ->
-            browser.get base_url, ->
-              browser.waitForElementByClassName 'menu', timeout, (err)->
-                should.not.exist err
-                browser.elementByClassName 'menu', (err, el)->
-                  should.not.exist err
-                  should.exist el
-                  do done
+          browser.waitForElementByClassName 'menu', timeout, (err)->
+            should.not.exist err
+            browser.elementByClassName 'menu', (err, el)->
+              should.not.exist err
+              should.exist el
+              do done
 
       # ------------------------------------------------------------------------
       # /simple link
@@ -158,4 +167,4 @@ exports.test = ( browser, browser_conf, base_url, timeout, mark_as_passed )->
             el.text (err, text)->
               should.exist text
               text.should.equal 'theoricus'
-              quit browser, mark_as_passed, done
+              do done

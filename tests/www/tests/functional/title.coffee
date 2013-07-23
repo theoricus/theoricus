@@ -5,21 +5,31 @@ colors = require 'colors'
 quit = require '../../utils/quit'
 
 exports.test = ( browser, browser_conf, base_url, timeout, mark_as_passed )->
+
   describe 'testing title', ->
+
+    before (done)->
+      browser.init browser_conf, (err)->
+        should.not.exist err
+        browser.get base_url, (err)->
+          should.not.exist err
+          do done
+
+    after (done)->
+      quit browser, mark_as_passed, done
 
     describe 'using ' + browser_conf.name, ->
 
       # ------------------------------------------------------------------------
       # menu
-      describe 'menu must to be visible', ->
+      describe 'menu must to exist', ->
         it 'wait until menu is visible', (done)->
-          browser.init browser_conf, ->
-            browser.get base_url, ->
-              browser.waitForElementByClassName 'menu', timeout, ->
-                browser.elementByClassName 'menu', (err, el)->
-                  should.not.exist err
-                  should.exist el
-                  do done
+          browser.waitForElementByClassName 'menu', timeout, (err)->
+            should.not.exist err
+            browser.elementByClassName 'menu', (err, el)->
+              should.not.exist err
+              should.exist el
+              do done
 
       # ------------------------------------------------------------------------
       # /title/theoricus
@@ -27,7 +37,9 @@ exports.test = ( browser, browser_conf, base_url, timeout, mark_as_passed )->
 
         it 'click /title/theoricus link and check if redirect begun', (done)->
           browser.elementById 'title-theoricus', (err, el)->
-            browser.clickElement el, ->
+            should.not.exist err
+            el.click (err)->
+              should.not.exist err
               browser.eval 'window.location.pathname', (err, pathname)->
                 should.not.exist err
                 should.exist pathname
@@ -52,7 +64,9 @@ exports.test = ( browser, browser_conf, base_url, timeout, mark_as_passed )->
       describe 'link /title/is', ->
         it 'click /title/theoricus link and check if redirect begun', (done)->
           browser.elementById 'title-is', (err, el)->
-            browser.clickElement el, ->
+            should.not.exist err
+            el.click (err)->
+              should.not.exist err
               browser.eval 'window.location.pathname', (err, pathname)->
                 should.not.exist err
                 should.exist pathname
