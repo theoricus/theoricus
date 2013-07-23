@@ -8,6 +8,9 @@ files = fsu.find (path.join __dirname, 'tests'), /\.coffee$/m
 (require 'chai').Assertion.includeStack = true
 
 exports.test = ( name, conf, base_url, mark_as_passed )->
+
+  timeout = if name is 'local' then 5000 else 60000
+
   describe name, ->
 
     for file in files
@@ -26,4 +29,4 @@ exports.test = ( name, conf, base_url, mark_as_passed )->
         browser_conf.name = browser_name
         browser = if conf then wd.remote conf else do wd.remote
         test = (require file).test
-        test browser, browser_conf, base_url, 60000, mark_as_passed
+        test browser, browser_conf, base_url, timeout, mark_as_passed
