@@ -84,6 +84,7 @@ else
 	--ui bdd \
 	--reporter spec \
 	--timeout 600000 \
+	--bail \
 	tests/www/run_sauce_labs.coffee
 endif
 else
@@ -91,6 +92,7 @@ else
 	--ui bdd \
 	--reporter spec \
 	--timeout 600000 \
+	--bail \
 	tests/www/run_sauce_labs.coffee
 endif
 
