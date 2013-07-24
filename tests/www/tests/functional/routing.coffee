@@ -2,7 +2,6 @@ should = do (require 'chai').should
 colors = require 'colors'
 
 conds = require '../../utils/conditions'
-quit = require '../../utils/quit'
 Hook = require '../../utils/hooks'
 
 
