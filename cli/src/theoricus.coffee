@@ -1,4 +1,4 @@
-require('source-map-support').install()
+require('source-map-support').install handleUncaughtExceptions: false
 
 fs = require "fs"
 path = require "path"
