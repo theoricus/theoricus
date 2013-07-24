@@ -42,11 +42,7 @@ exports.test = ( browser, browser_conf, base_url, timeout, mark_as_passed )->
             should.not.exist err
             el.click (err)->
               should.not.exist err
-              browser.eval 'window.location.pathname', (err, pathname)->
-                should.not.exist err
-                should.exist pathname
-                pathname.should.equal '/routing/simple'
-                do done
+              do done
 
         it 'wait until page is rendered', (done)->
           browser.waitForCondition page_is_rendered, timeout, 30, (err, res)->
@@ -68,10 +64,7 @@ exports.test = ( browser, browser_conf, base_url, timeout, mark_as_passed )->
             should.not.exist err
             el.click (err)->
               should.not.exist err
-              browser.eval 'window.location.pathname', (err, pathname)->
-                should.exist pathname
-                pathname.should.equal '/routing/deep'
-                do done
+              do done
 
         it 'wait until page is rendered', (done)->
           browser.waitForCondition page_is_rendered, timeout, 30, (err, res)->
@@ -102,10 +95,7 @@ exports.test = ( browser, browser_conf, base_url, timeout, mark_as_passed )->
             should.not.exist err
             el.click (err)->
               should.not.exist err
-              browser.eval 'window.location.pathname', (err, pathname)->
-                should.exist pathname
-                pathname.should.equal '/routing/dynamic'
-                do done
+              do done
         
         it 'wait until page is rendered', (done)->
           browser.waitForCondition page_is_rendered, timeout, 30, (err, res)->
@@ -136,10 +126,7 @@ exports.test = ( browser, browser_conf, base_url, timeout, mark_as_passed )->
             should.not.exist err
             el.click (err)->
               should.not.exist err
-              browser.eval 'window.location.pathname', (err, pathname)->
-                should.exist pathname
-                pathname.should.equal '/routing/dynamic/theoricus'
-                do done
+              do done
 
         it 'wait until page is rendered', (done)->
           browser.waitForCondition page_is_rendered, timeout, 30, (err, res)->

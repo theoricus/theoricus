@@ -42,11 +42,7 @@ exports.test = ( browser, browser_conf, base_url, timeout, mark_as_passed )->
             should.not.exist err
             el.click (err)->
               should.not.exist err
-              browser.eval 'window.location.pathname', (err, pathname)->
-                should.not.exist err
-                should.exist pathname
-                pathname.should.equal '/title/theoricus'
-                do done
+              do done
 
         it 'wait until page is rendered', (done)->
           browser.waitForCondition page_is_rendered, timeout, 30, (err, res)->
@@ -69,11 +65,7 @@ exports.test = ( browser, browser_conf, base_url, timeout, mark_as_passed )->
             should.not.exist err
             el.click (err)->
               should.not.exist err
-              browser.eval 'window.location.pathname', (err, pathname)->
-                should.not.exist err
-                should.exist pathname
-                pathname.should.equal '/title/is'
-                do done
+              do done
 
         it 'wait until page is rendered', (done)->
           browser.waitForCondition page_is_rendered, timeout, 30, (err, res)->
@@ -93,12 +85,9 @@ exports.test = ( browser, browser_conf, base_url, timeout, mark_as_passed )->
       describe 'link /title/awesome', ->
         it 'click /title/awesome link and check if redirect begun', (done)->
           browser.elementById 'title-awesome', (err, el)->
-            browser.clickElement el, ->
-              browser.eval 'window.location.pathname', (err, pathname)->
-                should.not.exist err
-                should.exist pathname
-                pathname.should.equal '/title/awesome'
-                do done
+            el.click (err)->
+              should.not.exist err
+              do done
 
         it 'wait until page is rendered', (done)->
           browser.waitForCondition page_is_rendered, timeout, 30, (err, res)->
