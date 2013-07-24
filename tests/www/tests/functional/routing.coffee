@@ -27,7 +27,7 @@ exports.test = ( browser, browser_conf, base_url, timeout, mark_as_passed )->
       # ------------------------------------------------------------------------
       describe 'menu must to exist', ->
         it 'wait until menu is visible', (done)->
-          browser.waitForElementByClassName 'menu-x', timeout, (err)->
+          browser.waitForElementByClassName 'menu', timeout, (err)->
             should.not.exist err
             browser.elementByClassName 'menu', (err, el)->
               should.not.exist err
