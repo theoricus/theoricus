@@ -7,7 +7,7 @@ Hook = require '../../utils/hooks'
 
 exports.test = ( browser, browser_conf, base_url, timeout, mark_as_passed )->
 
-  describe 'testing title', ->
+  describe 'testing routes', ->
 
     describe 'using ' + browser_conf.name, ->
 
