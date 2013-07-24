@@ -1,6 +1,5 @@
 <a name="contributing"/>
 # Contributing
-----
 
 - [Setup](#setup)
 - [Branching](#branching)
