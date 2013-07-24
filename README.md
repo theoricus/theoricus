@@ -69,6 +69,7 @@ Got your hands into the source? We're here to help you.
   - [Contributing](https://github.com/serpentem/theoricus/blob/master/CONTRIBUTING.md)
   - [Showcase](https://github.com/serpentem/theoricus/wiki/showcase)
   - [CHANGELOG.md](https://github.com/serpentem/theoricus/tree/master/build/CHANGELOG.md)
+  - [Compatibility](#compatibility)
 
 <a name="installing" />
 # Installing
@@ -179,3 +180,8 @@ the -s
 
 Visit the url [http://localhost:11235](http://localhost:11235) and you should
 see a success status.
+
+<a name="compatibility" />
+# Compatibility
+
+[![Selenium Test Status](https://saucelabs.com/browser-matrix/theoricus.svg)](https://saucelabs.com/u/theoricus)
