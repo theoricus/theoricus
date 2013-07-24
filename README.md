@@ -14,15 +14,6 @@ Theoricus uses simple naming conventions (as you see in rails and many others),
 with a powerful build system behind it. There's also a naviagation mechanism
 built to let your free to code your shit instead of handling url's manually.
 
-Theoricus uses some lovely pre-processed languages to accomplish the goals:
-
- - [Stylus](https://github.com/learnboost/stylus) (css)
- - [Jade](https://github.com/visionmedia/jade) (html)
- - [CoffeeScript](https://github.com/jashkenas/coffee-script) (js)
-
-> More languages will be available in the future, following
-[Polvo](http://github.com/serpentem/polvo) capabilities.
-
 It's in a very alpha version, use at your own risk.
 
 Have fun. :)
@@ -37,6 +28,12 @@ Have fun. :)
  * Powerful build system *(on top of [Polvo](http://github.com/serpentem/polvo)
  and [FsUtil](http://github.com/serpentem/fs-util))*
  * Simplistic JSON-Rest interface for models
+
+# Languages
+
+You can use pure `'html`, `css` and `javascript`, as well as some pre-processed languages supported by Polvo [Polvo](http://github.com/serpentem/polvo).
+
+See the complete list [here](https://github.com/serpentem/polvo#supported-languages).
 
 # Issues
 Do not hesitate to open a feature request or a bug report.
