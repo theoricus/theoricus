@@ -1,10 +1,12 @@
 should = do (require 'chai').should
 quit = require './quit'
 
-failures = 0
-passed = no
+failures = null
+passed = null
 
 exports.before = (browser, browser_conf, base_url, done)->
+  failures = 0
+  passed = no
 
   browser.init browser_conf, (err)->
     console.log err if err?
