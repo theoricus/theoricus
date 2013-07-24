@@ -63,7 +63,7 @@ Got your hands into the source? We're here to help you.
   - [Demo Application](https://github.com/serpentem/theoricus-demo-app)
   - [Contributing](https://github.com/serpentem/theoricus/blob/master/CONTRIBUTING.md)
   - [Showcase](https://github.com/serpentem/theoricus/wiki/showcase)
-  - [CHANGELOG.md](https://github.com/serpentem/theoricus/tree/master/build/CHANGELOG.md)
+  - [Changelog](https://github.com/serpentem/theoricus/blob/master/History.md)
   - [Compatibility](#compatibility)
 
 <a name="installing" />
