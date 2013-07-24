@@ -17,7 +17,7 @@ exports.test = ( browser, browser_conf, base_url, timeout, mark_as_passed )->
           browser.get base_url, (err)->
             console.log err if err?
             should.not.exist err
-            do done
+            done err
 
       after (done)->
         quit browser, mark_as_passed, done
@@ -31,7 +31,7 @@ exports.test = ( browser, browser_conf, base_url, timeout, mark_as_passed )->
             browser.elementByClassName 'menu', (err, el)->
               should.not.exist err
               should.exist el
-              do done
+              done err
 
       # ------------------------------------------------------------------------
       # /simple link
