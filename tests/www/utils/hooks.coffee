@@ -1,40 +1,28 @@
 should = do (require 'chai').should
 quit = require './quit'
 
+failures = 0
+passed = no
 
-module.exports = class Hooks
+exports.before = (browser, browser_conf, base_url, done)->
 
-  browser: null
-  browser_conf: null
-  base_url: null
-  mark_as_passed: null
-
-  failures: 0
-  passed: no
-
-  self = null
-
-  constructor: (@browser, @browser_conf, @base_url, @mark_as_passed)->
-    self = @
-
-  before: (done)->
-    self.browser.init self.browser_conf, (err)->
+  browser.init browser_conf, (err)->
+    console.log err if err?
+    should.not.exist err
+    browser.get base_url, (err)->
       console.log err if err?
       should.not.exist err
-      self.browser.get self.base_url, (err)->
-        console.log err if err?
-        should.not.exist err
-        do done
+      do done
 
-  after: (done)->
-    quit self.browser, self.mark_as_passed, (self.failures is 0), done
+exports.after = (browser, mark_as_passed, done)->
+  quit browser, mark_as_passed, (failures is 0), done
 
-  beforeEach: ->
-    self.passed = no
+exports.beforeEach = ->
+  passed = no
 
-  afterEach: ->
-    self.failures++ if not self.passed
+exports.afterEach = ->
+  failures++ if not passed
 
-  pass: (done)->
-    self.passed = yes
-    do done
+exports.pass = (done)->
+  passed = yes
+  do done

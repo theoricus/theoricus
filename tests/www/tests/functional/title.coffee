@@ -13,14 +13,16 @@ exports.test = ( browser, browser_conf, base_url, timeout, mark_as_passed )->
 
       # hooking mocha before/after methods to watch tests execution in order
       # to to see if some of them have failed, notifying sauce labs properly
-      hook = new Hook browser, browser_conf, base_url, mark_as_passed
-      
-      before hook.before
-      after hook.after
-      beforeEach hook.beforeEach
-      afterEach hook.afterEach
-      
-      pass = hook.pass
+      before (done)->
+        Hook.before browser, browser_conf, base_url, done
+
+      after (done)->
+        Hook.after browser, mark_as_passed, done
+
+      beforeEach -> Hook.beforeEach
+      afterEach -> Hook.afterEach
+
+      pass = Hook.pass
 
 
       # menu
