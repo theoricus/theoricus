@@ -32,7 +32,7 @@ exports.test = ( browser, browser_conf, base_url, timeout, mark_as_passed )->
             browser.elementByClassName 'menu', (err, el)->
               should.not.exist err
               should.exist el
-              do done
+              pass done
 
       # /title/theoricus
       # ------------------------------------------------------------------------
@@ -43,20 +43,20 @@ exports.test = ( browser, browser_conf, base_url, timeout, mark_as_passed )->
             should.not.exist err
             el.click (err)->
               should.not.exist err
-              do done
+              pass done
 
         it 'wait until page is rendered', (done)->
           browser.waitForCondition conds.is_rendered, timeout, 30, (err, res)->
             should.not.exist err
             res.should.be.true
-            do done
+            pass done
 
         it 'check if title is `Theoricus`', (done)->
           browser.title (err, title)->
             should.not.exist err
             should.exist title
             title.should.equal 'Theoricus'
-            do done
+            pass done
 
       # /title/is
       # ------------------------------------------------------------------------
@@ -66,20 +66,20 @@ exports.test = ( browser, browser_conf, base_url, timeout, mark_as_passed )->
             should.not.exist err
             el.click (err)->
               should.not.exist err
-              do done
+              pass done
 
         it 'wait until page is rendered', (done)->
           browser.waitForCondition conds.is_rendered, timeout, 30, (err, res)->
             should.not.exist err
             res.should.be.true
-            do done
+            pass done
 
         it 'check if title is `Theoricus`', (done)->
           browser.title (err, title)->
             should.not.exist err
             should.exist title
             title.should.equal 'Theoricus is'
-            do done
+            pass done
 
       # /title/awesome
       # ------------------------------------------------------------------------
@@ -88,17 +88,17 @@ exports.test = ( browser, browser_conf, base_url, timeout, mark_as_passed )->
           browser.elementById 'title-awesome', (err, el)->
             el.click (err)->
               should.not.exist err
-              do done
+              pass done
 
         it 'wait until page is rendered', (done)->
           browser.waitForCondition conds.is_rendered, timeout, 30, (err, res)->
             should.not.exist err
             res.should.be.true
-            do done
+            pass done
 
         it 'check if title is `Theoricus`', (done)->
           browser.title (err, title)->
             should.not.exist err
             should.exist title
             title.should.equal 'Theoricus is awesome'
-            do done
+            pass done
