@@ -7,7 +7,7 @@ files = fsu.find (path.join __dirname, 'tests'), /\.coffee$/m
 
 exports.test = ( name, conf, base_url, mark_as_passed )->
 
-  timeout = if name is 'local' then 5000 else 15000
+  timeout = if name is 'local' then 3000 else 10000
 
   describe name, ->
 
