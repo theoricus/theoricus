@@ -17,6 +17,7 @@ before_script:
   - curl https://gist.github.com/everzet/5698159/raw/sauce_connect_setup.sh | bash
   - make test.app.run.bg
   - sleep 5
+  - curl http://localhost:8080
 
 script:
   - make test_sauce_labs
