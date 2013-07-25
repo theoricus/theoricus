@@ -41,7 +41,7 @@
   },
   "devDependencies": {
     "chai": "1.7.x",
-    "mocha": "1.9.x",
+    "mocha": "1.12.x",
     "request": "2.22.x",
     "wd": "0.0.32"
   }
