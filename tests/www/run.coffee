@@ -8,8 +8,8 @@ files = fsu.find (path.join __dirname, 'tests'), /\.coffee$/m
 exports.test = ( name, conf, base_url, mark_as_passed )->
 
   timeout = if name is 'local' then 3000 else 10000
-
-  describe name.toUpperCase(), ->
+  title =  "[#{do name.toUpperCase}]"
+  describe title, ->
 
     for file in files
       for browser_name, browser_conf of browsers
