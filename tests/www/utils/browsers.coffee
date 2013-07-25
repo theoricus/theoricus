@@ -122,13 +122,13 @@ module.exports =
     tags: ['theoricus', 'test', 'firefox', 'linux']
     'record-video': true
 
-  # firefox_snow:
-  #   local: false
-  #   browserName: 'firefox'
-  #   version: firefox_next_to_last
-  #   platform: 'OS X 10.6'
-  #   tags: ['theoricus', 'test', 'firefox', 'snow']
-  #   'record-video': true
+  firefox_snow:
+    local: false
+    browserName: 'firefox'
+    # version: firefox_next_to_last # must to be null in sauce labs
+    platform: 'OS X 10.6'
+    tags: ['theoricus', 'test', 'firefox', 'snow']
+    'record-video': true
 
   firefox_mountain:
     local: true
