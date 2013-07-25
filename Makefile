@@ -71,6 +71,10 @@ test:
 
 
 # TESTING ON SAUCE LABS
+
+# NOTE: The `--bail` option is hidden until Mocha fix the hooks execution
+# 					https://github.com/visionmedia/mocha/issues/937
+
 test_sauce_labs:
 # Technique (skipping pull requests) borrowed from WD:
 # 	https://github.com/admc/wd/blob/master/Makefile
@@ -84,7 +88,6 @@ else
 	--ui bdd \
 	--reporter spec \
 	--timeout 600000 \
-	--bail \
 	tests/www/run_sauce_labs.coffee
 endif
 else
@@ -92,7 +95,6 @@ else
 	--ui bdd \
 	--reporter spec \
 	--timeout 600000 \
-	--bail \
 	tests/www/run_sauce_labs.coffee
 endif
 
