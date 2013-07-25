@@ -1,3 +1,8 @@
+###*
+  Core module
+  @module core
+###
+
 StringUtil = require 'theoricus/utils/string_util'
 View = require 'theoricus/mvc/view'
 
@@ -6,30 +11,59 @@ Responsible for "running" a [theoricus.core.Route] Route
 
 @author {https://github.com/arboleya arboleya}
 ###
+###*
+  Responsible for executing the controller render action based on the {{#crossLink "Router"}}{{/crossLink}} information.
+  @class Process
+###
 module.exports = class Process
 
-  # @property [theoricus.mvc.Controller] controller
+  ###*
+  Route controller instance.
+
+  @property {Controller} controller
+  ###
   controller: null
 
-  # @property [theoricus.core.Route] route
+  ###*
+  Route storing the information which will be used to render the view.
+  
+  @property {Route} route
+  ###
   route: null
 
-  # parent process (in which this one depends)
+  ###*
+  Stores the route dependency url.
+  
+  @property {String} dependency
+  ###
   dependency: null
 
-  # will set be true in the run method, right before the action execution, and
-  # set to false right after the action is executed. this way the navigate
-  # method on controller can abort the process prematurely as needed.
+  ###*
+  Will set be true in the run method, right before the action execution, and set to false right after the action is executed. this way the navigate method on controller can abort the process prematurely as needed.
+  
+  @property {Boolean} is_in_the_middle_of_running_an_action
+  ###
   is_in_the_middle_of_running_an_action: false
 
-  # process params
+  ###*
+  Stores the url parameters.
+
+  @property {Object} params
+  ###
   params: null
 
-  ###
+  ###*
   Instantiate controller responsible for the route
-  
-  @param [theoricus.Theoricus] @the   Shortcut for current app's instace
-  @route [theoricus.core.Route] @route Route responsible for the process
+
+  @class Process
+  @constructor
+  @param @the {Theoricus} Shortcut for app's instance.
+  @param @processes {Theoricus} Processes instance.
+  @param @route {Route} Route to be manipulated.
+  @param @at {Route} Route dependency.
+  @param @url {String} Current url state.
+  @param @parent_process {Process}
+  @param fn {Function} Callback to be called after the dependency have been manipulated, and the controller loaded.
   ###
   constructor:( @the, @processes, @route, @at, @url, @parent_process, fn )->
 
@@ -40,7 +74,11 @@ module.exports = class Process
     @the.factory.controller @route.controller_name, ( @controller )=>
       fn @, @controller
 
-
+  ###*
+  Evaluates the @route dependency.
+  
+  @method initialize
+  ###
   initialize:->
     if @url is null and @parent_process?
       @url = @route.rewrite_url_with_parms @route.match, @parent_process.params
@@ -52,12 +90,10 @@ module.exports = class Process
     if @at
       @dependency = @route.rewrite_url_with_parms @at, @params
 
-
-  ###
-  Executes controller's action, in case it isn't declared executes an 
-  standard one.
+  ###*
+  Executes controller's action, in case it isn't declared executes a default one.
   
-  @return [theoricus.mvc.View] view
+  
   ###
   run:( after_run )->
 

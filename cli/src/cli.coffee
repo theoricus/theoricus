@@ -55,11 +55,19 @@ module.exports = class Cli
       .alias('p', 'preview')
       .describe('p', 'Releases app for production at localhost')
 
+      .alias('i', 'index')
+      .describe('i', 'Saving indexed version of app using `Snapshooter`')
+
+
       .alias('v', 'version')
       .describe('v', 'Shows theoricus version')
 
       .alias('h', 'help')
       .describe('h', 'Shows this help screen')
+
+      .describe('url', 'Use with `-i` to inform a specif url to crawl')
+      .describe('snapshooter', 'Use with `-i` to pass custom flags to `Snapshooter`')
+      .string( 'snapshooter' )
 
       .describe('rf', 'Use with -d [view|mvc] for deleting the whole view folder')
       .describe('src', 'Use with -n for use a specific theoricus version as a git submodule')

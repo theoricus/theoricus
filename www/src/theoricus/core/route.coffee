@@ -8,6 +8,8 @@
   
   Responsible for manipulating and validating url state.
 
+  Stores the data defined in the application config `routes.coffee`
+
   @class Route
 ###
 module.exports = class Route
@@ -143,6 +145,7 @@ module.exports = class Route
     return params
 
   ###*
+    Returns a string with the url param names replaced by param values.
 
     @method rewrite_url_with_parms
     @param url {String}
@@ -157,7 +160,7 @@ module.exports = class Route
 
   ###*
 
-    Test given url against the route
+    Test given url against the url state defined in the route.
     
     @method test
     @param url {String} Url to be tested.

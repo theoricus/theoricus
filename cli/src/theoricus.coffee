@@ -11,6 +11,7 @@ NewProject = require './commands/new_project'
 Destroyer = require './commands/destroyer'
 Server = require './commands/server'
 Compiler = require './commands/compiler'
+Index = require './commands/index'
 
 Cli = require './cli'
 
@@ -33,6 +34,7 @@ module.exports = class Theoricus
     return new Generator @, @cli if @cli.argv.generate
     return new Destroyer @, @cli if @cli.argv.destroy
     return new Server @, @cli if @cli.argv.start
+    return new Index @, @cli if @cli.argv.index
     return new Compiler @, @cli if @cli.argv.compile
     return new Compiler @, @cli, true if @cli.argv.release
     return new Compiler @, @cli, true, true if @cli.argv.preview
