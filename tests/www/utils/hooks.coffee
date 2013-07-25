@@ -1,30 +1,31 @@
 should = do (require 'chai').should
 quit = require './quit'
 
-failures = null
-passed = null
+module.exports = (ctx, browser, browser_conf, base_url, mark_as_passed) ->
 
-exports.before = (browser, browser_conf, base_url, done)->
+  passed = false
+
+  assertions = 0
   failures = 0
-  passed = no
 
-  browser.init browser_conf, (err)->
-    console.log err if err?
-    should.not.exist err
-    browser.get base_url, (err)->
+  ctx.beforeAll (done)->
+    browser.init browser_conf, (err)->
       console.log err if err?
       should.not.exist err
-      do done
+      browser.get base_url, (err)->
+        console.log err if err?
+        should.not.exist err
+        do done
 
-exports.after = (browser, mark_as_passed, done)->
-  quit browser, mark_as_passed, (failures is 0), done
+  ctx.afterAll (done)->
+    quit browser, mark_as_passed, (failures is 0), done
 
-exports.beforeEach = ->
-  passed = no
+  ctx.beforeEach ->
+    passed = false
 
-exports.afterEach = ->
-  failures++ if not passed
+  ctx.afterEach ->
+    failures++ if not passed
 
-exports.pass = (done)->
-  passed = yes
-  do done
+  pass = (done) ->
+    passed = true
+    do done if done

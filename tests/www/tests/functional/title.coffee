@@ -2,7 +2,7 @@ should = do (require 'chai').should
 colors = require 'colors'
 
 conds = require '../../utils/conditions'
-Hook = require '../../utils/hooks'
+hook = require '../../utils/hooks'
 
 
 exports.test = ( browser, browser_conf, base_url, timeout, mark_as_passed )->
@@ -11,19 +11,7 @@ exports.test = ( browser, browser_conf, base_url, timeout, mark_as_passed )->
 
     describe 'using ' + browser_conf.name, ->
 
-      # hooking mocha before/after methods to watch tests execution in order
-      # to to see if some of them have failed, notifying sauce labs properly
-      before (done)->
-        Hook.before browser, browser_conf, base_url, done
-
-      after (done)->
-        Hook.after browser, mark_as_passed, done
-
-      beforeEach -> Hook.beforeEach
-      afterEach -> Hook.afterEach
-
-      pass = Hook.pass
-
+      pass = hook @, browser, browser_conf, base_url, mark_as_passed
 
       # menu
       # ------------------------------------------------------------------------
