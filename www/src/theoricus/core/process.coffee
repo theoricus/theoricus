@@ -6,11 +6,6 @@
 StringUtil = require 'theoricus/utils/string_util'
 View = require 'theoricus/mvc/view'
 
-###
-Responsible for "running" a [theoricus.core.Route] Route
-
-@author {https://github.com/arboleya arboleya}
-###
 ###*
   Responsible for executing the controller render action based on the {{#crossLink "Router"}}{{/crossLink}} information.
   @class Process
@@ -32,7 +27,7 @@ module.exports = class Process
   route: null
 
   ###*
-  Stores the route dependency url.
+  Stores the `@route` dependency url.
   
   @property {String} dependency
   ###
@@ -53,12 +48,12 @@ module.exports = class Process
   params: null
 
   ###*
-  Instantiate controller responsible for the route
+  Responsible for executing the controller render action based on the {{#crossLink "Router"}}{{/crossLink}} information.
 
   @class Process
   @constructor
   @param @the {Theoricus} Shortcut for app's instance.
-  @param @processes {Theoricus} Processes instance.
+  @param @processes {Processes} Processes instance.
   @param @route {Route} Route to be manipulated.
   @param @at {Route} Route dependency.
   @param @url {String} Current url state.
@@ -75,7 +70,7 @@ module.exports = class Process
       fn @, @controller
 
   ###*
-  Evaluates the @route dependency.
+  Evaluates the `@route` dependency.
   
   @method initialize
   ###
@@ -93,7 +88,7 @@ module.exports = class Process
   ###*
   Executes controller's action, in case it isn't declared executes a default one.
   
-  
+  @param after_run {Function} Callback to be called after the view was rendered.
   ###
   run:( after_run )->
 
@@ -112,14 +107,6 @@ module.exports = class Process
       @controller.process = null
       after_run()
 
-    # mounts an array with action params followed by a callback
-    callback = (@view)=>
-      unless @view instanceof View
-        controller_name = @route.controller_name.camelize()
-        msg = "Check your `#{controller_name}` controller, the action "
-        msg += "`#{action}` must return a View instance."
-        console.error msg
-
     # sets the callback
     @controller.after_render = @after_run
 
@@ -131,11 +118,11 @@ module.exports = class Process
 
 
 
-  ###
-  Executes view's transition "out" method, wait for its end
-  empty the dom element and then call a callback
+  ###*
+  Executes view's transition "out" method, wait for it to empty the dom element and then call a callback.
   
-  @return [theoricus.mvc.View] view
+  @method destroy
+  @param @after_destroy {Function} Callback to be called after the view was removed.
   ###
   destroy:( @after_destroy )->
     # call the OUT transition with the given callback
