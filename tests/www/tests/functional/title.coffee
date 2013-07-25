@@ -9,7 +9,7 @@ exports.test = ( browser, browser_conf, base_url, timeout, mark_as_passed )->
 
   describe '# TITLE', ->
 
-    describe '@ ' + browser_conf.name, ->
+    describe.only '@ ' + browser_conf.name, ->
 
       pass = hook @, browser, browser_conf, base_url, mark_as_passed
 
