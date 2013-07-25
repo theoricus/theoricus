@@ -9,7 +9,7 @@ exports.test = ( name, conf, base_url, mark_as_passed )->
 
   timeout = if name is 'local' then 3000 else 10000
 
-  describe name, ->
+  describe name.toUpperCase(), ->
 
     for file in files
       for browser_name, browser_conf of browsers
