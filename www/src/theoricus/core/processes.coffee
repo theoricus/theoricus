@@ -1,3 +1,8 @@
+###*
+  Core module
+  @module core
+###
+
 Router = require 'theoricus/core/router'
 Process = require 'theoricus/core/process'
 _ = require 'lodash'
@@ -9,6 +14,11 @@ module.exports = class Processes
   # utils
 
   # variables
+  ###*
+  Block the url state to be changed. Useful if there is a current {{#crossLink "Process"}}{{/crossLink}} being executed.
+
+  @property {Boolean} locked
+  ###
   locked: false
   disable_transitions: null
 
@@ -16,19 +26,25 @@ module.exports = class Processes
   dead_processes: []
   pending_processes: []
 
-  # EXEC ORDER
-  # --------------------------------------------------------------------------
-  # 1. _on_router_change
-  # 2. _filter_pending_processes
-  # 3. _filter_dead_processes
-  # 4. _destroy_dead_processes - one by one, waiting or not foll callback
-  #   4.1 Timing can be sync/async
-  # 5. _run_pending_process - one by one, waiting or not foll callback
-  #   5.1 timing can be sync/async
-  # --------------------------------------------------------------------------
+  ###*
+  Responsible for handling the page/url change. It removes last Process, runs new Process dependencies, and then add the required Process. 
 
-  ###
-  @param [theoricus.Theoricus] @the   Shortcut for app's instance
+  __Execution order__
+
+  1. `_on_router_change`
+
+  2. `_filter_pending_processes`
+
+  3. `_filter_dead_processes`
+
+  4. `_destroy_dead_processes` - one by one, waiting or not for callback (timing can be sync/async)
+
+  6. `_run_pending_process` - one by one, waiting or not for callback (timing can be sync/async)
+
+  @class Processes
+  @constructor
+  @param @the {Theoricus} Shortcut for app's instance.
+  @param @Routes {Object} App Routes
   ###
   constructor:( @the, @Routes )->
     Factory = @the.factory
@@ -40,12 +56,12 @@ module.exports = class Processes
     $(document).ready =>
       @router = new Router @the, @Routes, @_on_router_change
 
-  ###
-  1st
-
-  Triggered on router chance
-
-  @param [theoricus.core.Router] route
+  ###*
+  Executed when the route changes, it creates a {{#crossLink "Process"}}{{/crossLink}} to manipulate the route, removes the current process, and run the new process alongside its dependencies.
+  
+  @method _on_router_change
+  @param route {Route} Route containing the controller and url state information.
+  @param url {String} Current url state.
   ###
   _on_router_change:( route, url )=>
     if @locked
@@ -71,6 +87,10 @@ module.exports = class Processes
   If no  throws an error
 
   @param [theoricus.core.Process] process
+  ###
+  ###*
+    
+  
   ###
   _filter_pending_processes:( process, after_filter )->
 
@@ -99,7 +119,13 @@ module.exports = class Processes
     else
       do after_filter
 
-  # try to finds the dependency in many ways
+  ###*
+  Finds the dependency of the given {{#crossLink "Process"}}{{/crossLink}}
+
+  @method _find_dependency
+  @param process {Process} Processto find the dependency.
+  @param after_find {Function} Callback to be called after the dependency has been found.
+  ###
   _find_dependency:( process, after_find )->
     dependency = process.dependency
 
@@ -124,12 +150,11 @@ module.exports = class Processes
     after_find null
 
 
-  ###
-  3th
+  ###*
+  Check which of the processes needs to stay active in order to render current process.
+  The ones that doesn't, are pushed to dead_processes.
 
-  Check which of the routes needs to stay active in order to render
-  current process.
-  The ones that doesn't, are pushed to dead_processes
+  @method _filter_dead_processes
   ###
   _filter_dead_processes:()->
     @dead_processes = []
@@ -148,11 +173,10 @@ module.exports = class Processes
       else
         @dead_processes.push active
 
-  ###
-  4th
+  ###*
+  Destroy the dead processes (doesn't need to be active) one by one, then run the pending process.
 
-  Destroy dead processes one by one ( passing the next destroy as callback )
-  then run the pending proccess
+  @method _destroy_dead_processes
   ###
   _destroy_dead_processes:()=>
     if @dead_processes.length
@@ -165,15 +189,15 @@ module.exports = class Processes
     else
       @_run_pending_processes()
 
-  ###
-  5th
-  Execute run method of pending processes that are not active
+  ###*
+  Run the processes that are not active yet.
+
+  @method _run_pending_processes
   ###
   _run_pending_processes:()=>
     if @pending_processes.length
 
       process = @pending_processes.pop()
-      search  = route: match: process.route.match
       found = _.find @active_processes, (found_process)->
         return found_process.route.match is process.route.match
 
