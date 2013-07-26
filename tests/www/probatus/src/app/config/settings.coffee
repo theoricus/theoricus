@@ -4,7 +4,7 @@ module.exports = class Settings
   @animate_at_startup: false
 
   # enables / disables auto fadein-fadeout as transitions
-  @enable_auto_transitions: true
+  @enable_auto_transitions: false
 
   # enables / disables autotic bading between model x hml (very experimental)
   @autobind: false
