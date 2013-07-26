@@ -1,8 +1,8 @@
 should = do (require 'chai').should
 colors = require 'colors'
 
-conds = require '../../utils/conditions'
-hook = require '../../utils/hooks'
+conds = require '../utils/conditions'
+hook = require '../utils/hooks'
 
 
 exports.test = ( browser, browser_conf, base_url, timeout, mark_as_passed )->
