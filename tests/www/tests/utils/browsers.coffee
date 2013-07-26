@@ -11,8 +11,8 @@ module.exports = ->
     firefox_mountain
 
     # safari
+    safari5_win7
     safari5_snow
-    safari5_winxp
     safari6_mountain
 
     # ie
@@ -76,11 +76,11 @@ chrome_mountain =
 # safari
 # ----------------------------------------------------------------------------
 
-safari5_winxp = 
+safari5_win7 = 
   version: '5'
   browserName: 'safari'
   platform: 'Windows 7'
-  tags: ['theoricus', 'safari5', 'winxp']
+  tags: ['theoricus', 'safari5', 'win7']
   'record-video': true
 
 safari5_snow = 
