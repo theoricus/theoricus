@@ -157,10 +157,11 @@ module.exports = class Processes
   _destroy_dead_processes:()=>
     if @dead_processes.length
       process = @dead_processes.pop()
-      process.destroy @_destroy_dead_processes
 
       @active_processes = _.reject @active_processes, (p)->
         p.route.match is process.route.match
+
+      process.destroy @_destroy_dead_processes
 
     else
       @_run_pending_processes()
