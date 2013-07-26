@@ -1,8 +1,15 @@
-module.exports = ->
+exports['local'] = ->
+  return [
+    chrome_mountain
+    firefox_mountain
+    safari6_mountain
+  ]
+
+exports['sauce labs'] = ->
   return [
     # chrome
-    chrome_win8
     chrome_linux
+    chrome_win8
     chrome_mountain
 
     # firefox
