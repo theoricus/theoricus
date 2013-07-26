@@ -4,6 +4,7 @@ Style = require 'styles/routing/deep'
 module.exports = class Deep extends AppView
 
   after_render:->
+    super
     pathname = window.location.pathname
     return if pathname is '/routing/dynamic/theoricus'
     ($ '#deep-param').data 'initial', true
