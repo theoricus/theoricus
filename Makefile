@@ -58,7 +58,7 @@ test.app.run.bg:
 		echo "$$!" > tests/.probatus.pid
 
 test.app.kill.bg:
-	@kill `cat .probatus.pid` && rm tests/.probatus.pid tests/.probatus.log
+	@kill `cat tests/.probatus.pid` && rm tests/.probatus.pid tests/.probatus.log
 
 
 # TESTING LOCALLY
