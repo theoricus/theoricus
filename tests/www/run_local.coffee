@@ -1,1 +1,1 @@
-(require './run').test 'local', null, 'http://localhost:8080'
+(require './run').test 'local', null, 'http://localhost:8080', null, 3000

@@ -5,9 +5,8 @@ browsers = require './utils/browsers'
 
 files = fsu.find (path.join __dirname, 'tests'), /\.coffee$/m
 
-exports.test = ( name, conf, base_url, mark_as_passed )->
+exports.test = ( name, conf, base_url, mark_as_passed, timeout )->
 
-  timeout = if name is 'local' then 3000 else 10000
   title =  "[#{do name.toUpperCase}]"
   describe title, ->
 
