@@ -7,14 +7,12 @@ browsers = do (require './utils/browsers')[env]
 hook = require './utils/hooks'
 
 
-# compute timeout, remote_conf and notify_sauce_labs flag based on env
+# compute timeout notify_sauce_labs flag based on env
 if env is 'local'
   timeout = 1000
-  # remote_conf = null
   notify_sauce_labs = false
 else
   timeout = 3000
-  remote_conf = sauce_conf
   notify_sauce_labs = true
 
 
@@ -57,7 +55,10 @@ describe "[#{env}]", ->
     describe "[#{browser_name}]", ->
 
       # INIT WD
-      browser = wd.remote remote_conf
+      if env is 'local'
+        browser = do wd.remote
+      else
+        browser = wd.remote sauce_conf
 
       # SET MOCHA HOOKS
       pass = hook @, browser, browser_conf, base_url, notify_sauce_labs
