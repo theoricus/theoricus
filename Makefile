@@ -67,7 +67,7 @@ test:
 	--ui bdd \
 	--reporter spec \
 	--timeout 600000 \
-	tests/www/tests/run_local.coffee
+	tests/www/tests/runner.coffee --env='local'
 
 
 # TESTING ON SAUCE LABS
@@ -88,14 +88,14 @@ else
 	--ui bdd \
 	--reporter spec \
 	--timeout 600000 \
-	tests/www/tests/run_sauce_labs.coffee
+	tests/www/tests/runner.coffee --env='sauce labs'
 endif
 else
 	@$(MOCHA) --compilers coffee:coffee-script \
 	--ui bdd \
 	--reporter spec \
 	--timeout 600000 \
-	tests/www/tests/run_sauce_labs.coffee
+	tests/www/tests/runner.coffee --env='sauce labs'
 endif
 
 

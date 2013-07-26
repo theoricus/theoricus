@@ -1,1 +1,0 @@
-(require './run').test 'sauce labs'
