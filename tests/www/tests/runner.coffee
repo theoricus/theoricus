@@ -42,6 +42,9 @@ describe "[#{env}]", ->
   # loop through all browser configs
   for browser_conf in browsers
 
+    # computes session name based on the last two tags
+    browser_conf.name = (browser_conf.tags.slice 1 ).join '_'
+
     # when testing local
     if env is 'local'
 
@@ -49,10 +52,8 @@ describe "[#{env}]", ->
       browser_conf.platform = null
       browser_conf.version = null
 
-
     # 2nd root suite - based on browser
-    browser_name = (browser_conf.tags.slice 1 ).join '_'
-    describe "[#{browser_name}]", ->
+    describe "[#{browser_conf.name}]", ->
 
       # INIT WD
       if env is 'local'
