@@ -15,7 +15,7 @@ exports['sauce labs'] = ->
     # firefox
     firefox_win8
     firefox_linux
-    firefox_mountain
+    firefox_snow
 
     # safari
     safari5_win7
@@ -131,12 +131,11 @@ firefox_win8 =
 
 firefox_linux = 
   browserName: 'firefox'
-  version: 'firefox_last'
   platform: 'Linux'
   tags: ['theoricus', 'firefox', 'linux']
   'record-video': true
 
-firefox21_snow = 
+firefox_snow = 
   browserName: 'firefox'
   version: '21'
   platform: 'OS X 10.6'
