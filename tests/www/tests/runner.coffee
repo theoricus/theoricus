@@ -9,15 +9,15 @@ hook = require './utils/hooks'
 
 # compute timeout notify_sauce_labs flag based on env
 if env is 'local'
-  timeout = 1000
+  timeout = 10000
   notify_sauce_labs = false
 else
-  timeout = 3000
+  timeout = 10000
   notify_sauce_labs = true
 
 
 # base url to test
-base_url = "http://localhost:8080/"
+base_url = "http://localhost:8080"
 
 
 # list of test files
