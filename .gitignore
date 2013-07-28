@@ -12,6 +12,8 @@ www/vendors/lodash.js
 # ignoring testable app's release folder
 tests/www/probatus/public/js
 
-# ignoring selenium and sauce labs's logs
+# ignoring test files
+tests/www/coverage
+tests/www/services
 sauce_connect.log*
 .log
