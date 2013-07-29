@@ -30,26 +30,14 @@ files = fsu.find (path.join __dirname, 'functional'), /\.coffee$/m
 
 # sauce connect config
 sauce_conf = 
-  # host: 'localhost'
-  # port: 4445
-  host: 'ondemand.saucelabs.com'
-  port: 80
+  host: 'localhost'
+  port: 4445
   username: process.env.SAUCE_USERNAME
   accessKey: process.env.SAUCE_ACCESS_KEY
 
 # starts server
 server.start coverage
 
-# console.log 'testing'
-# (require 'child_process').spawn 'curl', [
-#   'http://localhost:8080/'
-# ], stdio: 'inherit'
-
-if env isnt 'local'
-  console.log '------------------------------------'
-  console.log 'connecting using sauce credentials..'
-  console.log sauce_conf
-  console.log '------------------------------------'
 
 # mounting suites
 # ------------------------------------------------------------------------------
@@ -82,13 +70,7 @@ describe "[#{env}]", ->
       # SET MOCHA HOOKS
       pass = hook @, browser, caps, base_url, notify_sauce_labs, coverage
 
-      console.log 'caps', caps
-
       for file in files
         
-        console.log 'testing ', file
         {test} = require file
         test browser, pass, timeout
-        return
-
-    return
