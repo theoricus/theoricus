@@ -49,17 +49,6 @@ test.sauce.connect.run:
 	@java -jar $(SAUCE_CONNECT) $(SAUCE_USERNAME) $(SAUCE_ACCESS_KEY)
 
 
-# APP RUNNERS
-test.app.run:
-	@$(THE) -p --base tests/www/probatus
-
-test.app.run.bg:
-	@$(THE) -p --base tests/www/probatus > tests/.probatus.log & \
-		echo "$$!" > tests/.probatus.pid
-
-test.app.kill.bg:
-	@kill `cat tests/.probatus.pid` && rm tests/.probatus.pid tests/.probatus.log
-
 
 # TESTING LOCALLY
 test:
@@ -69,6 +58,15 @@ test:
 	--timeout 600000 \
 	tests/www/tests/runner.coffee --env='local'
 
+test.coverage:
+	@$(MOCHA) --compilers coffee:coffee-script \
+	--ui bdd \
+	--reporter spec \
+	--timeout 600000 \
+	tests/www/tests/runner.coffee --env='local' --coverage
+
+test.coverage.preview: test.coverage
+	@cd tests/www/coverage/lcov-report; python -m SimpleHTTPServer 8080; cd -
 
 # TESTING ON SAUCE LABS
 

@@ -2,9 +2,13 @@ wd = require 'wd'
 fsu = require 'fs-util'
 path = require 'path'
 
-env = (require 'optimist').argv.env
+opt = (require 'optimist').argv
+env = opt.env
+coverage = opt.coverage
+
 browsers = do (require './utils/browsers')[env]
 hook = require './utils/hooks'
+server = require './server'
 
 
 # compute timeout notify_sauce_labs flag based on env
@@ -31,7 +35,8 @@ sauce_conf =
   user: process.env.SAUCE_USERNAME
   pwd: process.env.SAUCE_ACCESS_KEY
 
-
+# starts server
+server.start coverage
 
 # mounting suites
 # ------------------------------------------------------------------------------
@@ -40,20 +45,20 @@ sauce_conf =
 describe "[#{env}]", ->
 
   # loop through all browser configs
-  for browser_conf in browsers
+  for caps in browsers
 
     # computes session name based on the last two tags
-    browser_conf.name = (browser_conf.tags.slice 1 ).join '_'
+    caps.name = (caps.tags.slice 1 ).join '_'
 
     # when testing local
     if env is 'local'
 
       # ignores platform and browser version
-      browser_conf.platform = null
-      browser_conf.version = null
+      caps.platform = null
+      caps.version = null
 
     # 2nd root suite - based on browser
-    describe "[#{browser_conf.name}]", ->
+    describe "[#{caps.name}]", ->
 
       # INIT WD
       if env is 'local'
@@ -62,7 +67,7 @@ describe "[#{env}]", ->
         browser = wd.remote sauce_conf
 
       # SET MOCHA HOOKS
-      pass = hook @, browser, browser_conf, base_url, notify_sauce_labs
+      pass = hook @, browser, caps, base_url, notify_sauce_labs, coverage
 
       for file in files
         

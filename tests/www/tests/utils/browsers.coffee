@@ -1,8 +1,8 @@
 exports['local'] = ->
   return [
     chrome_mountain
-    firefox_mountain
-    safari6_mountain
+    # firefox_mountain
+    # safari6_mountain
   ]
 
 exports['sauce labs'] = ->
