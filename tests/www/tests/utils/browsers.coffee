@@ -9,35 +9,35 @@ exports['sauce labs'] = ->
   return [
     # chrome
     chrome_linux
-    chrome_win8
-    chrome_mountain
+    # chrome_win8
+    # chrome_mountain
 
-    # firefox
-    firefox_win8
-    firefox_linux
-    firefox_snow
+    # # firefox
+    # firefox_win8
+    # firefox_linux
+    # firefox_snow
 
-    # safari
-    safari5_win7
-    safari5_snow
-    safari6_mountain
+    # # safari
+    # safari5_win7
+    # safari5_snow
+    # safari6_mountain
 
-    # ie
-    ie6_winxp
-    ie7_winxp
-    ie8_winxp
+    # # ie
+    # ie6_winxp
+    # ie7_winxp
+    # ie8_winxp
 
-    ie8_win7
-    ie9_win7
+    # ie8_win7
+    # ie9_win7
 
-    ie10_win8
+    # ie10_win8
     
-    # ios
-    ios_iphone
-    ios_ipad
+    # # ios
+    # ios_iphone
+    # ios_ipad
 
-    # android
-    # none - awiting sauce labs to support it
+    # # android
+    # # none - awiting sauce labs to support it
   ]
 
 
