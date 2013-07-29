@@ -38,10 +38,10 @@ sauce_conf =
 # starts server
 server.start coverage
 
-console.log 'testing'
-(require 'child_process').spawn 'curl', [
-  'http://localhost:8080/'
-], stdio: 'inherit'
+# console.log 'testing'
+# (require 'child_process').spawn 'curl', [
+#   'http://localhost:8080/'
+# ], stdio: 'inherit'
 
 # mounting suites
 # ------------------------------------------------------------------------------
