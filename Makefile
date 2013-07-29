@@ -92,7 +92,7 @@ test.coverage.preview: test.coverage
 # NOTE: The `--bail` option is hidden until Mocha fix the hooks execution
 # 	https://github.com/visionmedia/mocha/issues/937
 
-test.cloud: 
+test.cloud: test.build.prod
 	@$(MOCHA) --compilers coffee:coffee-script \
 	--ui bdd \
 	--reporter spec \
