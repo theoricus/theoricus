@@ -16,7 +16,7 @@ if env is 'local'
   timeout = 10000
   notify_sauce_labs = false
 else
-  timeout = 10000
+  timeout = 15000
   notify_sauce_labs = true
 
 
@@ -70,9 +70,14 @@ describe "[#{env}]", ->
         browser = do wd.remote
       else
         browser = wd.remote sauce_conf
+        console.log 'connecting using sauce credentials..'
+        sauce_conf.pwd = sauce_conf.user = 'xxx'
+        console.log sauce_conf
 
       # SET MOCHA HOOKS
       pass = hook @, browser, caps, base_url, notify_sauce_labs, coverage
+
+      console.log 'caps', caps
 
       for file in files
         
