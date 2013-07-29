@@ -27,7 +27,7 @@ module.exports = (ctx, browser, caps, base_url, notify_sauce_labs, coverage) ->
   ctx.afterAll (done)->
 
     if not coverage
-      return quit browser, notify_sauce_labs, done
+      return quit browser, failures, notify_sauce_labs, done
 
     console.log '\n-----\nGenerating test coverage\n-----'
 
@@ -35,7 +35,7 @@ module.exports = (ctx, browser, caps, base_url, notify_sauce_labs, coverage) ->
       should.not.exist err
       should.exist coverage
       post_coverage base_url, coverage, ->
-        quit browser, notify_sauce_labs, done
+        quit browser, failures, notify_sauce_labs, done
 
   ctx.beforeEach ->
     passed = false
@@ -48,7 +48,7 @@ module.exports = (ctx, browser, caps, base_url, notify_sauce_labs, coverage) ->
     do done
 
 
-quit = (browser, notify_sauce_labs, done) ->
+quit = (browser, failures, notify_sauce_labs, done) ->
   browser.quit (err)->
     should.not.exist err
     
