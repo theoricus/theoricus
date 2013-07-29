@@ -73,7 +73,7 @@ test.coverage: test.build.dev
 	--timeout 600000 \
 	tests/www/tests/runner.coffee --env='local' --coverage
 
-test.coverage.coveralls: test.coverage
+test.coveralls: test.coverage
 	@sed -i.bak \
 		"s/^.*public\/js\/theoricus/SF:theoricus/g" \
 		tests/www/coverage/lcov.info
@@ -92,21 +92,21 @@ test.coverage.preview: test.coverage
 # NOTE: The `--bail` option is hidden until Mocha fix the hooks execution
 # 	https://github.com/visionmedia/mocha/issues/937
 
-test.cloud: test.build.prod
+test.saucelabs: test.build.prod
 	@$(MOCHA) --compilers coffee:coffee-script \
 	--ui bdd \
 	--reporter spec \
 	--timeout 600000 \
 	tests/www/tests/runner.coffee --env='sauce labs'
 
-test.cloud.coverage:
+test.saucelabs.coverage: test.build.dev
 	@$(MOCHA) --compilers coffee:coffee-script \
 	--ui bdd \
 	--reporter spec \
 	--timeout 600000 \
 	tests/www/tests/runner.coffee --env='sauce labs' --coverage
 
-test.cloud.coverage.coveralls: test.cloud.coverage
+test.saucelabs.coveralls: test.cloud.coverage
 	@sed -i.bak \
 		"s/^.*public\/js\/theoricus/SF:theoricus/g" \
 		tests/www/coverage/lcov.info
@@ -125,10 +125,10 @@ ifdef TRAVIS
 ifneq ($(TRAVIS_PULL_REQUEST),false)
 	@echo 'Skipping Sauce Labs tests as this is a pull request'
 else
-	@make test.cloud
+	@make test.saucelabs
 endif
 else
-	@make test.cloud
+	@make test.saucelabs
 endif
 
 
