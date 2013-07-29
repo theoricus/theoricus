@@ -8,9 +8,9 @@ exports['local'] = ->
 exports['sauce labs'] = ->
   return [
     # chrome
-    chrome_linux
+    # chrome_linux
     # chrome_win8
-    # chrome_mountain
+    chrome_mountain
 
     # # firefox
     # firefox_win8
