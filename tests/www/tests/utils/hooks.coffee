@@ -9,12 +9,6 @@ user = process.env.SAUCE_USERNAME
 key = process.env.SAUCE_ACCESS_KEY
 build_id = process.env.TRAVIS_BUILD_NUMBER or (do new Date().getTime)
 
-console.log '-----------'
-console.log 'build_id', build_id
-console.log 'travis build number', process.env.TRAVIS_BUILD_NUMBER
-console.log '-----------'
-
-
 module.exports = (ctx, browser, caps, base_url, notify_sauce_labs, coverage) ->
 
   passed = false
