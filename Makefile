@@ -50,7 +50,6 @@ test.sauce.connect.run:
 	@java -jar $(SAUCE_CONNECT) $(SAUCE_USERNAME) $(SAUCE_ACCESS_KEY)
 
 
-
 # TESTING LOCALLY
 test:
 	@$(MOCHA) --compilers coffee:coffee-script \
@@ -79,12 +78,37 @@ test.coverage.coveralls: test.coverage
 test.coverage.preview: test.coverage
 	@cd tests/www/coverage/lcov-report; python -m SimpleHTTPServer 8080; cd -
 
+
 # TESTING ON SAUCE LABS
 
 # NOTE: The `--bail` option is hidden until Mocha fix the hooks execution
-# 					https://github.com/visionmedia/mocha/issues/937
+# 	https://github.com/visionmedia/mocha/issues/937
 
-test_sauce_labs:
+test.cloud: 
+	@$(MOCHA) --compilers coffee:coffee-script \
+	--ui bdd \
+	--reporter spec \
+	--timeout 600000 \
+	tests/www/tests/runner.coffee --env='sauce labs'
+
+test.cloud.coverage:
+	@$(MOCHA) --compilers coffee:coffee-script \
+	--ui bdd \
+	--reporter spec \
+	--timeout 600000 \
+	tests/www/tests/runner.coffee --env='sauce labs' --coverage
+
+test.cloud.coverage.coveralls: test.cloud.coverage
+	@sed -i.bak \
+		"s/^.*public\/js\/theoricus/SF:theoricus/g" \
+		tests/www/coverage/lcov.info
+
+	@cd tests/www/probatus/public/js && \
+		cat ../../../coverage/lcov.info | ../../../../../$(COVERALLS)
+
+	@cd ../../../../../
+
+test.travis:
 # Technique (skipping pull requests) borrowed from WD:
 # 	https://github.com/admc/wd/blob/master/Makefile
 ifdef TRAVIS
@@ -93,18 +117,10 @@ ifdef TRAVIS
 ifneq ($(TRAVIS_PULL_REQUEST),false)
 	@echo 'Skipping Sauce Labs tests as this is a pull request'
 else
-	@$(MOCHA) --compilers coffee:coffee-script \
-	--ui bdd \
-	--reporter spec \
-	--timeout 600000 \
-	tests/www/tests/runner.coffee --env='sauce labs'
+	@make test.cloud
 endif
 else
-	@$(MOCHA) --compilers coffee:coffee-script \
-	--ui bdd \
-	--reporter spec \
-	--timeout 600000 \
-	tests/www/tests/runner.coffee --env='sauce labs'
+	@make test.cloud
 endif
 
 

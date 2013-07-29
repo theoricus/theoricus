@@ -17,4 +17,7 @@ before_script:
   - curl https://gist.github.com/everzet/5698159/raw/sauce_connect_setup.sh | bash
 
 script:
-  - make test_sauce_labs
+  - make test.travis
+
+after_script:
+  - make test.cloud.coverage.coveralls
