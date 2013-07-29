@@ -30,8 +30,10 @@ files = fsu.find (path.join __dirname, 'functional'), /\.coffee$/m
 
 # sauce connect config
 sauce_conf = 
-  host: 'localhost'
-  port: 4445
+  # host: 'localhost'
+  # port: 4445
+  host: 'ondemand.saucelabs.com'
+  port: 80
   username: process.env.SAUCE_USERNAME
   accessKey: process.env.SAUCE_ACCESS_KEY
 
