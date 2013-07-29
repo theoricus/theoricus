@@ -75,7 +75,7 @@ do_notify_sauce_labs = ( job_id, status, done) ->
 
 post_coverage = ( base_url, coverage, done )->
   opts =
-    url: base_url + '/coverage/client'
+    url: base_url + 'coverage/client'
     method: 'POST'
     headers: 'Content-Type': 'application/json'
     body: JSON.stringify coverage
@@ -89,7 +89,7 @@ download_coverage = (base_url, done)->
   fsu.rm_rf output_dir if fs.existsSync output_dir
   fsu.mkdir_p output_dir
 
-  args = ['-o', 'coverage.zip', base_url + '/coverage/download']
+  args = ['-o', 'coverage.zip', base_url + 'coverage/download']
   curl = spawn 'curl', args, cwd: output_dir
 
   curl.on 'exit', (code)->

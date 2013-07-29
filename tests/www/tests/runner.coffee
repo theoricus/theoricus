@@ -21,7 +21,7 @@ else
 
 
 # base url to test
-base_url = "http://localhost:8080"
+base_url = "http://localhost:8080/"
 
 
 # list of test files
