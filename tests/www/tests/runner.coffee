@@ -84,5 +84,9 @@ describe "[#{env}]", ->
 
       for file in files
         
+        console.log 'testing ', file
         {test} = require file
         test browser, pass, timeout
+        return
+
+    return
