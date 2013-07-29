@@ -15,7 +15,6 @@ env:
 
 before_script:
   # - curl https://gist.github.com/everzet/5698159/raw/sauce_connect_setup.sh | bash
-  - make test.build
   - curl https://gist.github.com/santiycr/5139565/raw/sauce_connect_setup.sh | bash
 
 script:

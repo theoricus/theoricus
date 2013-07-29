@@ -51,18 +51,22 @@ test.sauce.connect.run:
 
 
 # BUILDING TEST APP
-test.build:
+test.build.prod:
 	$(THE) -r --base tests/www/probatus
 
+test.build.dev:
+	$(THE) -c --base tests/www/probatus
+
+
 # TESTING LOCALLY
-test:
+test: test.build.prod
 	@$(MOCHA) --compilers coffee:coffee-script \
 	--ui bdd \
 	--reporter spec \
 	--timeout 600000 \
 	tests/www/tests/runner.coffee --env='local'
 
-test.coverage:
+test.coverage: test.build.dev
 	@$(MOCHA) --compilers coffee:coffee-script \
 	--ui bdd \
 	--reporter spec \
