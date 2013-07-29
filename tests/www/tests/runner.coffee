@@ -35,6 +35,7 @@ sauce_conf =
   username: process.env.SAUCE_USERNAME
   accessKey: process.env.SAUCE_ACCESS_KEY
 
+
 # starts server
 server.start coverage
 
@@ -65,6 +66,7 @@ describe "[#{env}]", ->
       if env is 'local'
         browser = do wd.remote
       else
+        console.log 'using sauce labs'
         browser = wd.remote sauce_conf
 
       # SET MOCHA HOOKS
