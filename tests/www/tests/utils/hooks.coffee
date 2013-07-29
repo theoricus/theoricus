@@ -7,11 +7,11 @@ path = require 'path'
 
 user = process.env.SAUCE_USERNAME
 key = process.env.SAUCE_ACCESS_KEY
-build_id = process.env.TRAVIS_JOB_ID or (do new Date().getTime)
+build_id = process.env.TRAVIS_BUILD_NUMBER or (do new Date().getTime)
 
 console.log '-----------'
 console.log 'build_id', build_id
-console.log 'travis job id', process.env.TRAVIS_JOB_ID
+console.log 'travis build number', process.env.TRAVIS_BUILD_NUMBER
 console.log '-----------'
 
 
