@@ -50,6 +50,10 @@ test.sauce.connect.run:
 	@java -jar $(SAUCE_CONNECT) $(SAUCE_USERNAME) $(SAUCE_ACCESS_KEY)
 
 
+# BUILDING TEST APP
+test.build:
+	$(THE) -c --base tests/www/probatus
+
 # TESTING LOCALLY
 test:
 	@$(MOCHA) --compilers coffee:coffee-script \
