@@ -19,5 +19,5 @@ before_script:
 script:
   - make test.travis
 
-after_script:
-  - make test.cloud.coverage.coveralls
+# after_script:
+#   - make test.cloud.coverage.coveralls
