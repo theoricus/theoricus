@@ -30,10 +30,10 @@ files = fsu.find (path.join __dirname, 'functional'), /\.coffee$/m
 
 # sauce connect config
 sauce_conf = 
-  hostname: 'localhost'
-  port: 4445
-  user: process.env.SAUCE_USERNAME
-  pwd: process.env.SAUCE_ACCESS_KEY
+  host: 'localhost'
+  port: 4444
+  username: process.env.SAUCE_USERNAME
+  accessKey: process.env.SAUCE_ACCESS_KEY
 
 # starts server
 server.start coverage
