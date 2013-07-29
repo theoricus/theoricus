@@ -52,7 +52,7 @@ test.sauce.connect.run:
 
 # BUILDING TEST APP
 test.build:
-	$(THE) -c --base tests/www/probatus
+	$(THE) -r --base tests/www/probatus
 
 # TESTING LOCALLY
 test:
