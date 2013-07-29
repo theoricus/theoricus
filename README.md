@@ -6,7 +6,7 @@ Tiny MV(C) implementation for client side projects.
 
 > Version 0.2.20
 
-[![Dependency Status](https://gemnasium.com/serpentem/theoricus.png)](https://gemnasium.com/serpentem/theoricus) [![Build Status](https://secure.travis-ci.org/serpentem/theoricus.png)](http://travis-ci.org/serpentem/theoricus) [![Selenium Test Status](https://saucelabs.com/buildstatus/theoricus)](https://saucelabs.com/u/theoricus)
+[![Dependency Status](https://gemnasium.com/serpentem/theoricus.png)](https://gemnasium.com/serpentem/theoricus) [![Build Status](https://secure.travis-ci.org/serpentem/theoricus.png)](http://travis-ci.org/serpentem/theoricus) [![Selenium Test Status](https://saucelabs.com/buildstatus/theoricus)](https://saucelabs.com/u/theoricus) [![Coverage Status](https://coveralls.io/repos/serpentem/theoricus/badge.png)](https://coveralls.io/r/serpentem/theoricus)
 
 # About
 

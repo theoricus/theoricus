@@ -7,6 +7,7 @@ CHROME_DRIVER=tests/www/services/chromedriver
 
 CS=node_modules/coffee-script/bin/coffee
 MOCHA=node_modules/mocha/bin/mocha
+COVERALLS=node_modules/coveralls/bin/coveralls.js
 VERSION=`$(CS) scripts/bumper.coffee --version`
 
 
@@ -64,6 +65,16 @@ test.coverage:
 	--reporter spec \
 	--timeout 600000 \
 	tests/www/tests/runner.coffee --env='local' --coverage
+
+test.coverage.coveralls: test.coverage
+	@sed -i.bak \
+		"s/^.*public\/js\/theoricus/SF:theoricus/g" \
+		tests/www/coverage/lcov.info
+
+	@cd tests/www/probatus/public/js && \
+		cat ../../../coverage/lcov.info | ../../../../../$(COVERALLS)
+	
+	@cd ../../../../../
 
 test.coverage.preview: test.coverage
 	@cd tests/www/coverage/lcov-report; python -m SimpleHTTPServer 8080; cd -
