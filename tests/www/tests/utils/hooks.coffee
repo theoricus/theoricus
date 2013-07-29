@@ -29,13 +29,15 @@ module.exports = (ctx, browser, caps, base_url, notify_sauce_labs, coverage) ->
     if not coverage
       return quit browser, failures, notify_sauce_labs, done
 
-    console.log '\n-----\nGenerating test coverage\n-----'
+    console.log '\nGenerating test coverage..'
 
     browser.eval 'window.__coverage__', (err, coverage)->
       should.not.exist err
       should.exist coverage
       post_coverage base_url, coverage, ->
-        quit browser, failures, notify_sauce_labs, done
+        quit browser, failures, notify_sauce_labs, ->
+          console.log 'Done.'
+          do done
 
   ctx.beforeEach ->
     passed = false
