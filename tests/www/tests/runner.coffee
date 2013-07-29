@@ -43,6 +43,12 @@ server.start coverage
 #   'http://localhost:8080/'
 # ], stdio: 'inherit'
 
+if env isnt 'local'
+  console.log '------------------------------------'
+  console.log 'connecting using sauce credentials..'
+  console.log sauce_conf
+  console.log '------------------------------------'
+
 # mounting suites
 # ------------------------------------------------------------------------------
 
@@ -70,10 +76,6 @@ describe "[#{env}]", ->
         browser = do wd.remote
       else
         browser = wd.remote sauce_conf
-        console.log '------------------------------------'
-        console.log 'connecting using sauce credentials..'
-        console.log sauce_conf
-        console.log '------------------------------------'
 
       # SET MOCHA HOOKS
       pass = hook @, browser, caps, base_url, notify_sauce_labs, coverage
