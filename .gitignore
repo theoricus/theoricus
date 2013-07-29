@@ -15,5 +15,4 @@ tests/www/probatus/public/js
 # ignoring test files
 tests/www/coverage
 tests/www/services
-sauce_connect.log*
-.log
+*.log
