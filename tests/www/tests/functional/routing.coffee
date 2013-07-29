@@ -9,8 +9,6 @@ exports.test = ( browser, pass, timeout )->
 
   describe '[routes]', ->
 
-    # pass = hook @, browser, browser_conf, base_url, mark_as_passed
-
     # menu
     # ------------------------------------------------------------------------
     describe '[menu must to exist]', ->
