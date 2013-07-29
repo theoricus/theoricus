@@ -10,7 +10,6 @@ index = path.join root, 'index.html'
 
 matcher = (req)->
     parsed = url.parse req.url
-    console.log req.url, (parsed.pathname.match /js\/theoricus/)
     return parsed.pathname.match /js\/theoricus/
 
 exports.start = (coverage)->
@@ -21,8 +20,8 @@ exports.start = (coverage)->
 
   if coverage
     app.use '/coverage', istanbul.createHandler verbose: true, resetOnGet: true
-    app.use istanbul.createClientHandler root
-    app.use express.static root, matcher: matcher
+    app.use istanbul.createClientHandler root, matcher: matcher
+    app.use express.static root
   else
     app.use express.static root
 
