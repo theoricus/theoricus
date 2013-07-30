@@ -35,25 +35,25 @@ Have fun. :)
 
 # Languages
 
-You can use pure `'html`, `css` and `javascript`, as well as some pre-processed languages supported by Polvo [Polvo](http://github.com/serpentem/polvo).
+You can use pure `'html`, `css` and `javascript`, as well as some pre-processed languages supported by [Polvo](http://github.com/serpentem/polvo), such as `CoffeeScript`, `Jade` and `Stylus`.
 
 See the complete list [here](https://github.com/serpentem/polvo#supported-languages).
 
 # Issues
 Do not hesitate to open a feature request or a bug report.
-> https://github.com/serpentem/theoricus/issues
+> [https://github.com/serpentem/theoricus/issues](https://github.com/serpentem/theoricus/issues)
 
 # Mailing List
 A place to talk about it, ask anything, get in touch. Luckily you'll be answered
 sooner than later.
 
-> https://groups.google.com/group/theoricus
+> [https://groups.google.com/group/theoricus](https://groups.google.com/group/theoricus)
 
 ## Dev Mailing List
 
 Got your hands into the source? We're here to help you.
 
-> https://groups.google.com/group/theoricus-dev
+> [https://groups.google.com/group/theoricus-dev](https://groups.google.com/group/theoricus-dev)
 
 
 # Docs
