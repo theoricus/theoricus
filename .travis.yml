@@ -13,8 +13,10 @@ env:
                  d1Wa+eh3QeqY4JsAvhhgP3sDF7urDr5Pi1UQqCG3V8HzBq2fg4Lvh0GIsFTP
                  wVuaURkLsvQ0vdvXJZ0PNBkd+pPn/9mRMgiykq/Zxqp8UdPxy6c='
 
-# before_script:
+before_script:
   # - curl https://gist.github.com/everzet/5698159/raw/sauce_connect_setup.sh | bash
+  - wget https://selenium.googlecode.com/files/selenium-server-standalone-2.33.0.jar
+  - java -jar selenium-server-standalone-2.33.0.jar
 
 script:
   - make test.travis
