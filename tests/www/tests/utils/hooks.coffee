@@ -15,14 +15,10 @@ module.exports = (ctx, browser, caps, base_url, notify_sauce_labs, coverage) ->
   failures = 0
 
   ctx.beforeAll (done)->
-    console.log '...initializing browser'
     browser.init caps, (err)->
-      console.log '...browser initialized'
       console.log err if err?
       should.not.exist err
-      console.log '...getting url', base_url
       browser.get base_url, (err)->
-        console.log '...url got!'
         console.log err if err?
         should.not.exist err
         do done
@@ -54,9 +50,7 @@ module.exports = (ctx, browser, caps, base_url, notify_sauce_labs, coverage) ->
 
 
 quit = (browser, failures, notify_sauce_labs, done) ->
-  console.log '...quiting browser'
   browser.quit (err)->
-    console.log '...browser quit!'
     should.not.exist err
     
     if not notify_sauce_labs
