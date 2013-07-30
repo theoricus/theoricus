@@ -52,10 +52,12 @@ test.sauce.connect.run:
 
 # BUILDING TEST APP
 test.build.prod:
-	@$(THE) -r --base tests/www/probatus
+	@echo 'Building app before testing..'
+	@$(THE) -r --base tests/www/probatus > /dev/null
 
 test.build.dev:
-	@$(THE) -c --base tests/www/probatus
+	@echo 'Compiling app before testing..'
+	@$(THE) -c --base tests/www/probatus > /dev/null
 
 
 # TESTING LOCALLY
