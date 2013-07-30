@@ -11,18 +11,40 @@ COVERALLS=node_modules/coveralls/bin/coveralls.js
 VERSION=`$(CS) scripts/bumper.coffee --version`
 
 
-#-------------------------------------------------------------------------------
 # SETTTING UP DEV ENV
-
-setup:
-	npm link
-	@echo 'Downloading and unzipping selenium'
-
-	@echo 'Downloading and unzipping chrome driver for selenium'
-
-
 #-------------------------------------------------------------------------------
+
+install_test_suite:
+	@mkdir -p tests/www/services
+
+	@echo 'Downloading Selenium..'
+	@curl -o tests/www/services/selenium-server-standalone-2.33.0.jar \
+		https://selenium.googlecode.com/files/selenium-server-standalone-2.33.0.jar
+	@echo 'Done.'
+
+	@echo 'Downloading Chrome Driver..'
+	@curl -o tests/www/services/chromedriver.zip \
+		https://chromedriver.googlecode.com/files/chromedriver_mac_26.0.1383.0.zip
+	@echo 'Done.'
+	@echo 'Unzipping chromedriver..'
+	@cd tests/www/services/; unzip chromedriver.zip; rm chromedriver.zip; cd -
+	@echo 'Done.'
+
+	@echo 'Downloading Sauce Connect..'
+	@curl -o tests/www/services/sauceconnect.zip \
+		http://saucelabs.com/downloads/Sauce-Connect-latest.zip
+	@echo 'Unzipping Sauce Connect..'
+	@cd tests/www/services/; unzip sauceconnect.zip; \
+		rm NOTICE.txt license.html sauceconnect.zip; cd -
+	@echo 'Done.'
+
+
+setup: install_test_suite
+	npm link
+
+
 # DEVELOPING
+#-------------------------------------------------------------------------------
 
 # watch / build
 watch:
@@ -32,15 +54,15 @@ build:
 	$(CS) -mco lib cli/src
 
 
-#-------------------------------------------------------------------------------
 # GENERATING DOCS
+#-------------------------------------------------------------------------------
 
 docs:
 	# to be merged
 
 
-#-------------------------------------------------------------------------------
 # TESTS
+#-------------------------------------------------------------------------------
 
 # SELENIUM & SAUCE CONNECT
 test.selenium.run:
@@ -134,8 +156,8 @@ else
 endif
 
 
-#-------------------------------------------------------------------------------
 # MANAGING VERSIONS
+#-------------------------------------------------------------------------------
 
 bump.minor:
 	$(CS) scripts/bumper.coffee --minor
@@ -147,8 +169,8 @@ bump.patch:
 	$(CS) scripts/bumper.coffee --patch
 
 
-#-------------------------------------------------------------------------------
 # PUBLISHING / RE-PUBLISHING
+#-------------------------------------------------------------------------------
 
 publish:
 	git tag $(VERSION)
