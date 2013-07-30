@@ -108,7 +108,7 @@ test.saucelabs.coverage: test.build.dev
 	--timeout 600000 \
 	tests/www/tests/runner.coffee --env='sauce labs' --coverage
 
-test.saucelabs.coveralls: test.cloud.coverage
+test.saucelabs.coveralls: test.saucelabs.coverage
 	@sed -i.bak \
 		"s/^.*public\/js\/theoricus/SF:theoricus/g" \
 		tests/www/coverage/lcov.info
