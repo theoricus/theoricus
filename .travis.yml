@@ -13,12 +13,11 @@ env:
                  d1Wa+eh3QeqY4JsAvhhgP3sDF7urDr5Pi1UQqCG3V8HzBq2fg4Lvh0GIsFTP
                  wVuaURkLsvQ0vdvXJZ0PNBkd+pPn/9mRMgiykq/Zxqp8UdPxy6c='
 
-before_script:
+# before_script:
   # - curl https://gist.github.com/everzet/5698159/raw/sauce_connect_setup.sh | bash
-  - curl https://gist.github.com/santiycr/5139565/raw/sauce_connect_setup.sh | bash
 
 script:
   - make test.travis
 
-# after_script:
-#   - make test.cloud.coverage.coveralls
+after_script:
+  - make test.saucelabs.coveralls

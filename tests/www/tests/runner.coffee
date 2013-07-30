@@ -63,7 +63,7 @@ describe "[#{env}]", ->
     describe "[#{caps.name}]", ->
 
       # INIT WD
-      if env is 'local'
+      if env is 'local' or caps.name is 'phantomjs'
         browser = do wd.remote
       else
         console.log 'using sauce labs'
