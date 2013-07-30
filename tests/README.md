@@ -26,7 +26,7 @@ The basic folder structure is:
 This setup involves this awesome libraries:
 
 * [WD](https://github.com/admc/wd) - WebDriver / Selenium client for Node
-* [Mocha](https://github.com/visionmedia/mocha) - Test Runner
+* [Mocha](https://github.com/visionmedia/mocha) - Test Runner (using BDD)
 * [Chai](https://github.com/chaijs/chai) - Test Assertions
 * [Istanbul](https://github.com/gotwarlost/istanbul) - Coverage Instrumentation
 * [Istanbul-Middleware](https://github.com/gotwarlost/istanbul-middleware) - Mind blowing coverage generation over WebDrive
@@ -84,6 +84,7 @@ Download and copy chromedriver, sauce-connect and selenium-server to the
 The tests can ben run on whatever browser you want.
 
 Locally (if you're on OSX) you'll probably be fine with four:
+ * PhantomJS (for headless testing)
  * Firefox
  * Chrome
  * Safari
@@ -99,12 +100,12 @@ exports['local'] = ->
 exports['sauce labs'] = ->
 ````
 
-Obviously, the `local` is your local config. By default it will run in `phantomjs` js. Uncomment others to test across multiple browsers.
+Obviously, the `local` is your local config. By default it will only run in `phantomjs` js. Uncomment others to test across multiple browsers at once.
 
 The `sauce labs` is intended to run in the [Sauce Labs](http://saucelabs.com) grid, which provides vast combos of `browser` x `platforms`. Check it out:
 > [https://saucelabs.com/docs/platforms](https://saucelabs.com/docs/platforms)
 
-**Please** not that all possible and good combinations is already built in the `browsers.coffee` file.
+**Please** note that all possible and good combinations is already built in the `browsers.coffee` file, feel free to uncomment anything locally. Just do not push it back.
 
 
 <a name="sauce-connect"/>
@@ -149,6 +150,24 @@ Running tests:
 make test
 ````
 
+#### + Tab 2 (still)
+
+To get coverage, instead of `make test` simply run:
+
+````
+make test.coverage
+````
+
+For previwing `LCOV-HTML` report right away, run with `preview`:
+
+
+````
+make test.coverage.preview
+````
+
+Then go to [http://localhost:8080](http://localhost:8080).
+
+
 ## 2. Testing on sauce labs
 
 Open two terminal tabs:
@@ -158,7 +177,7 @@ Open two terminal tabs:
 Starting Sauce Connect:
 
 ````
-make test.sauceconnect.run
+make test.sauce.connect.run
 ````
 
 ### + Tab 2
@@ -167,32 +186,4 @@ Running tests:
 
 ````
 make test.saucelabs
-````
-
-## 3. Tests coverage
-
-The suite provides full test coverage routine.
-
-### + Tab 1
-
-First start Selenium:
-
-````
-make test.selenium.run
-````
-
-### + Tab 2
-
-#### Generating coverage files
-
-
-````
-make test.coverage
-````
-
-#### Generating + previewing coverage files
-
-
-````
-make test.coverage.preview
 ````
