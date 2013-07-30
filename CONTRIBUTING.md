@@ -17,7 +17,7 @@ Environment setup is simple achieved by:
 
 ````bash
   git clone git://github.com/serpentem/theoricus.git
-  cd theoricus && npm link
+  cd theoricus && make setup
 ````
 
 <a name="branching"/>
@@ -25,10 +25,11 @@ Environment setup is simple achieved by:
 
 Before anything else, start a named branch. 
 
-If you're making a hotfix to the current stable version ( branch master ) you should branch from master:
+If you're making a hotfix to the current stable version ( branch master ) you
+should branch from master:
 
 `````
-git checkout -b fix/view-rendering
+git checkout -b hotfix/view-rendering
 [...comits...]
 [pull request]
 ````
@@ -111,14 +112,7 @@ Starts watching in auto-compile mode.
 <a name="testing"/>
 ## Testing
 
-Tests ( for cli and framework ) are being created in branch "tests", currently we are using [mocha](https://github.com/visionmedia/mocha) and [should.js](https://github.com/visionmedia/should.js/)
-
-For each new feature in Theoricus, a new example should be made in the demo
-application to elucidate things.
-
-Please keep the examples in the *Demo Application* up to date with changes you make in *Theoricus*, ideally when openning a pull request, open one in *Theoricus* and on in the *Demo App*.
-
-To run the tests run `make test`
+For complete documentation, please refer to the [tests](https://github.com/serpentem/theoricus/tree/master/tests) folder.
 
 <a name="docs"/>
 ## Generating Docs

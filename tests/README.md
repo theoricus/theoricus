@@ -1,17 +1,57 @@
 # Tests
 
-The tests consists of:
+This section will threat of the WWW tests (CLI tests is on progress).
+
+The basic concept here is about:
 
 1. A testable application codename `probatus`
 2. Tests written on top of Selenium WebDriver, that mimics an user navigating through the pages
 
-Tough it may be slow, it tests exactly the current real features of all browsers.
 
-It is a very apha version of this test suite, and may change in the future.
+## Folder Structure
+
+The basic folder structure is:
+
+* `/tests`
+  * `/www`
+    * `/probatus` sample app
+    * `/services` pre-requiste files listed bellow
+    * `/tests` All tests
+      * `/functional` tests files, check them out to get the feeling!
+      * `/utils` tests files, check them out to get the feeling!
+    * `/coverage` tests coverage results
+
+## Used Libraries
+
+This setup involves this awesome libraries:
+
+* [WD](https://github.com/admc/wd) - WebDriver / Selenium client for Node
+* [Mocha](https://github.com/visionmedia/mocha) - Test Runner
+* [Chai](https://github.com/chaijs/chai) - Test Assertions
+* [Istanbul](https://github.com/gotwarlost/istanbul) - Coverage Instrumentation
+* [Istanbul-Middleware](https://github.com/gotwarlost/istanbul-middleware) - Mind blowing coverage generation over WebDrive
+* [Express](https://github.com/visionmedia/express) - Used to serve the `probatus` sample app withing the `istanbul-middleware`
+
+## Used Services
+
+Everything is set up to work with these awesome services:
+
+ * [Travis CI](http://travis-ci.org) - For continuous integration
+ * [Sauce Labs](http://saucelabs.com) - For cross-browser testing in the cloud
+ * [Coveralls](http://coveralls.io) - Online coverage report tool
+ 
+
+## Enough of talking
+
+Let's cut to the chase.
 
 # ★ Pre-requisites
 
+<a name="files"/>
 ## 1. Files
+
+> **HAPPY NOTE :)**<br/>
+> If you're on OSX, you can simply run `make setup` and go right to item **[2. Browsers](#browsers)**, this command will download files, unzip them and put everything in the right place. But if you feel the need or if you are in other platforms, you may want continue reading.
 
 Download and copy chromedriver, sauce-connect and selenium-server to the
 `services` folder.
@@ -38,19 +78,42 @@ Download and copy chromedriver, sauce-connect and selenium-server to the
  1. Remember you must to have a JAVA environment.
  1. To assure you have, type `java` or `java -version` in your shell.
 
+<a name="browsers"/>
 ## 2. Browsers
 
-To run tests locally in OSX, make sure you have Chrome, Firefox and Safari installed.
+The tests can ben run on whatever browser you want.
 
-To run tests in other plataforms, adjust the browser list accordingly in file:
+Locally (if you're on OSX) you'll probably be fine with four:
+ * Firefox
+ * Chrome
+ * Safari
 
-  * `tests/www/tests/utils/browsers`
+You can find the whole browser matrix in the file:
 
+ * [`tests/www/tests/utils/browsers.coffee`](https://github.com/serpentem/theoricus/blob/master/tests/www/tests/utils/browsers.coffee)
+
+You'll see two exports methods that returns an array of browsers configs:
+
+````coffeescript
+exports['local'] = ->
+exports['sauce labs'] = ->
+````
+
+Obviously, the `local` is your local config. By default it will run in `phantomjs` js. Uncomment others to test across multiple browsers.
+
+The `sauce labs` is intended to run in the [Sauce Labs](http://saucelabs.com) grid, which provides vast combos of `browser` x `platforms`. Check it out:
+> [https://saucelabs.com/docs/platforms](https://saucelabs.com/docs/platforms)
+
+**Please** not that all possible and good combinations is already built in the `browsers.coffee` file.
+
+
+<a name="sauce-connect"/>
 ## 3. Sauce Connect
 
 1. To run tests on Sauce Connect, first create an account:
-   * [https://saucelabs.com/signup](https://saucelabs.com/signup)
-   > Remember that choosen `username` will be the profile for your tests.
+
+[https://saucelabs.com/signup](https://saucelabs.com/signup)
+> Remember that choosen `username` will be your public profile for testing `theoricus`. A good choice may be using `yourname-theoricus`, I don't know. Feel free.
 
 1. Then add your credentials to your env:
 
@@ -58,6 +121,7 @@ To run tests in other plataforms, adjust the browser list accordingly in file:
 export SAUCE_USERNAME=XXX
 export SAUCE_ACCESS_KEY=YYY
 ````
+
 > Worths to say, always run your tests locally to save some time. Running everything on sauce labs take much time, which you may want to avoid as much as possible.
 
 # ★ Testing
@@ -65,17 +129,11 @@ export SAUCE_ACCESS_KEY=YYY
 ## 1. Testing locally
 
 Remember to link theoricus first (`npm link`)
+> If you ran `make setup` you're already good to go.
 
+Then open two terminal tabs:
 
 ### + Tab 1
-
-Starting `probatus` application in `release` mode:
-
-````
-make test.app.run
-````
-
-### + Tab 3
 
 Starting Selenium:
 
@@ -91,55 +149,38 @@ Running tests:
 make test
 ````
 
-## 2. Testing locally `while developing`
+## 2. Testing on sauce labs
+
+Open two terminal tabs:
 
 ### + Tab 1
-
-To test while developing the `probatus` app, one must simply run it normally through `theoricus -s` to enter the `dev` mode, making use of the common wath'n'compile routine and so on.
-
-````
-cd tests/www/probatus
-the -s
-````
-
-### + Tab 2
-
-Starting Selenium:
-
-````
-make test.selenium.run
-````
-
-### + Tab 3
-
-Running tests:
-
-````
-make test
-````
-
-## 3. Testing on sauce labs
-
-### + Tab 1
-
-Starting `probatus` application in `release` mode:
-
-````
-make test.app.run
-````
-
-### + Tab 2
 
 Starting Sauce Connect:
 
 ````
-make test.sauce.connect.run
+make test.sauceconnect.run
 ````
 
-### + Tab 3
+### + Tab 2
 
 Running tests:
 
 ````
-make test_sauce_labs
+make test.saucelabs
 ````
+
+## 2. Tests coverage
+
+For you pleasure the suite is fully integrated with tests coverage.
+
+### 1. Generating coverage
+
+1. Start selenium
+2. Run `make test.coverage`
+
+
+### 1. Generating coverage with auto-preview
+
+1. Start selenium
+2. Run `make test.coverage`
+3. Go to [http://localhost:8080](http://localhost:8080)
