@@ -73,8 +73,8 @@ module.exports = class Cli
       .describe('src', 'Use with -n for use a specific theoricus version as a git submodule')
       .describe('nogitsub', 'Use with --src for avoiding automatic git submodule setup')
 
-      .describe('base', 'Application base directory (in case you\'re not on it')
-      
+      .describe('base', 'Application base directory (in case you\'re inside it)')
+
       ###
         NOTE FOR HACKERS:
 
