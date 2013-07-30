@@ -6,7 +6,11 @@ Tiny MV(C) implementation for client side projects.
 
 > Version 0.2.20
 
-[![Dependency Status](https://gemnasium.com/serpentem/theoricus.png)](https://gemnasium.com/serpentem/theoricus) [![Build Status](https://secure.travis-ci.org/serpentem/theoricus.png)](http://travis-ci.org/serpentem/theoricus) [![Selenium Test Status](https://saucelabs.com/buildstatus/theoricus)](https://saucelabs.com/u/theoricus) [![Coverage Status](https://coveralls.io/repos/serpentem/theoricus/badge.png)](https://coveralls.io/r/serpentem/theoricus)
+[![Dependency Status](https://gemnasium.com/serpentem/theoricus.png)](https://gemnasium.com/serpentem/theoricus) [![Build Status](https://secure.travis-ci.org/serpentem/theoricus.png)](http://travis-ci.org/serpentem/theoricus) [![Coverage Status](https://coveralls.io/repos/serpentem/theoricus/badge.png)](https://coveralls.io/r/serpentem/theoricus)
+
+<!--
+  [![Selenium Test Status](https://saucelabs.com/buildstatus/theoricus)](https://saucelabs.com/u/theoricus)
+-->
 
 # About
 
@@ -64,7 +68,10 @@ Got your hands into the source? We're here to help you.
   - [Contributing](https://github.com/serpentem/theoricus/blob/master/CONTRIBUTING.md)
   - [Showcase](https://github.com/serpentem/theoricus/wiki/showcase)
   - [Changelog](https://github.com/serpentem/theoricus/blob/master/History.md)
+
+<!--
   - [Compatibility](#compatibility)
+-->
 
 <a name="installing" />
 # Installing
@@ -176,7 +183,10 @@ the -s
 Visit the url [http://localhost:11235](http://localhost:11235) and you should
 see a success status.
 
+<!--
 <a name="compatibility" />
 # Compatibility
 
 [![Selenium Test Status](https://saucelabs.com/browser-matrix/theoricus.svg)](https://saucelabs.com/u/theoricus)
+
+-->
