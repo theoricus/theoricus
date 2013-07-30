@@ -17,7 +17,7 @@ before_script:
   # - curl https://gist.github.com/everzet/5698159/raw/sauce_connect_setup.sh | bash
   - wget https://selenium.googlecode.com/files/selenium-server-standalone-2.33.0.jar
   - java -jar selenium-server-standalone-2.33.0.jar > /dev/null &
-  - sleep 5
+  - sleep 10
 
 script:
   - make test.travis
