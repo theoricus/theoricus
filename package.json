@@ -38,9 +38,9 @@
     "polvo": "0.4.x",
     "source-map-support": "0.2.x",
     "snapshooter": "0.2.x",
-    "istanbul-middleware": "~0.1.0",
-    "express": "~3.3.4",
-    "coveralls": "~2.0.16"
+    "istanbul-middleware": "0.1.x",
+    "express": "3.3.x",
+    "coveralls": "2.0.x",
   },
   "devDependencies": {
     "chai": "1.7.x",
