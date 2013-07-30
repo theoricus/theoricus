@@ -1,14 +1,18 @@
 exports['local'] = ->
   return [
-    chrome_mountain
+    phantomjs
+    # chrome_mountain
     # firefox_mountain
     # safari6_mountain
   ]
 
 exports['sauce labs'] = ->
   return [
-    # chrome
-    chrome_linux
+    
+    phantomjs
+
+    # # chrome
+    # chrome_linux
     # chrome_win8
     # chrome_mountain
 
@@ -39,6 +43,13 @@ exports['sauce labs'] = ->
     # # android
     # # none - awiting sauce labs to support it
   ]
+
+
+# phantom
+# ----------------------------------------------------------------------------
+phantomjs =
+  browserName: 'phantomjs'
+  tags: ['theoricus', 'phantomjs']
 
 
 # chrome
