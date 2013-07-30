@@ -169,18 +169,30 @@ Running tests:
 make test.saucelabs
 ````
 
-## 2. Tests coverage
+## 3. Tests coverage
 
-For you pleasure the suite is fully integrated with tests coverage.
+The suite provides full test coverage routine.
 
-### 1. Generating coverage
+### + Tab 1
 
-1. Start selenium
-2. Run `make test.coverage`
+First start Selenium:
+
+````
+make test.selenium.run
+````
+
+### + Tab 2
+
+#### Generating coverage files
 
 
-### 1. Generating coverage with auto-preview
+````
+make test.coverage
+````
 
-1. Start selenium
-2. Run `make test.coverage`
-3. Go to [http://localhost:8080](http://localhost:8080)
+#### Generating + previewing coverage files
+
+
+````
+make test.coverage.preview
+````
