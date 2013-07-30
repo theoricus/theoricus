@@ -32,4 +32,4 @@ exports.start = (coverage)->
     else
       res.end (fs.readFileSync index, 'utf-8')
   app.use app.router
-  app.listen 3000
+  app.listen 8080
