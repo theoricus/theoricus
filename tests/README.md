@@ -11,15 +11,15 @@ The basic concept here is about:
 ## Folder Structure
 
 The basic folder structure is:
-
-* `/tests`
-  * `/www`
-    * `/probatus` sample app
-    * `/services` pre-requiste files listed bellow
-    * `/tests` All tests
-      * `/functional` tests files, check them out to get the feeling!
-      * `/utils` tests files, check them out to get the feeling!
-    * `/coverage` tests coverage results
+     
+ * `/tests`
+   * `/www`
+     * `/probatus` sample app
+     * `/services` pre-requiste files listed bellow
+     * `/tests` all tests
+         * `/functional` tests files, check them out to get the feeling!
+         * `/utils` test utilities
+     * `/coverage` tests coverage results
 
 ## Used Libraries
 
