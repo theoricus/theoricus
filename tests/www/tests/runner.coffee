@@ -7,7 +7,7 @@ env = opt.env
 coverage = opt.coverage
 
 browsers = do (require './utils/browsers')[env]
-hook = require './utils/hooks'
+hook = require './utils/hook'
 server = require './server'
 
 
