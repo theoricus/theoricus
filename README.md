@@ -4,9 +4,7 @@ Tiny MV(C) implementation for client side projects.
 
 [![Stories in Ready](http://badge.waffle.io/serpentem/theoricus.png)](http://waffle.io/serpentem/theoricus)  
 
-> Version 0.2.20
-
-[![Dependency Status](https://gemnasium.com/serpentem/theoricus.png)](https://gemnasium.com/serpentem/theoricus) [![Build Status](https://secure.travis-ci.org/serpentem/theoricus.png)](http://travis-ci.org/serpentem/theoricus) [![Coverage Status](https://coveralls.io/repos/serpentem/theoricus/badge.png)](https://coveralls.io/r/serpentem/theoricus)
+[![Dependency Status](https://gemnasium.com/serpentem/theoricus.png)](https://gemnasium.com/serpentem/theoricus) [![Build Status](https://secure.travis-ci.org/serpentem/theoricus.png)](http://travis-ci.org/serpentem/theoricus) [![Coverage Status](https://coveralls.io/repos/serpentem/theoricus/badge.png)](https://coveralls.io/r/serpentem/theoricus) [![NPM version](https://badge.fury.io/js/theoricus.png)](http://badge.fury.io/js/theoricus)
 
 <!--
   [![Selenium Test Status](https://saucelabs.com/buildstatus/theoricus)](https://saucelabs.com/u/theoricus)
