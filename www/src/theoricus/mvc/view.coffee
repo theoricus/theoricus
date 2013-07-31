@@ -1,36 +1,95 @@
+###*
+  MVC module
+  @module mvc
+###
+
 Model = require 'theoricus/mvc/model'
 Factory = null
 
+###*
+  @class View
+###
 module.exports = class View
 
   # @property page title
+  ###*
+    Sets the title of the document.
+
+    @property title {String}
+  ###
   title: null
 
-  # $ reference to dom element
+  ###*
+    The template's html as jQuery object.
+
+    @property el {Object}
+  ###
   el: null
 
   # @property [String] class path
+  ###*
+   File's path relative to the app's folder.
+
+   @property classpath {String}
+  ###
   classpath : null
 
   # @property [String] class name
+  ###*
+    Stores class name
+
+    @property classname {String}
+  ###
   classname : null
 
-  # @property [String] namespace
+  ###*
+    Namespace is the class folder path relative to the views folder.
+
+    @property namespace {String}
+  ###
   namespace : null
   
-  # @property [theoricus.core.Process] process
+  ###*
+    {{#crossLink "Process"}}{{/crossLink}} responsible for running the controller's action that rendered this view.
+
+    @property process {Process}
+  ###
   process   : null
 
+  ###*
+    Responsible for binding the DOM events on the view. Use the format `selector event: handler` to define an event.
+
+    @property events {Object}
+    @example
+        events:  
+            ".bt-alert click":"on_alert"
+
   ###
-  @param [theoricus.Theoricus] @the   Shortcut for app's instance
+  events    : null
+
+  ###*
+    Responsible for storing the template's data and the URL params.
+    
+    @property data {Object}
+  ###
+  data      : null
+
+  ###*
+    This function is executed by the Factory. It saves a `@the.factory` reference inside the view.
+
+    @method _boot
+    @param @the {Theoricus} Shortcut for app's instance
   ###
   _boot:( @the )->
     Factory = @the.factory
     @
 
-  ###
-  @param [Object] @data   Data to be passed to the template
-  @param [Object] @el     Element where the view will be "attached/appended"
+  ###*
+    Responsible for rendering the view, passing the data to the `template`.
+
+    @method _render
+    @param data {Object} Data object to be passed to the template, usually it is and instance of the {{#crossLink "Model"}}{{/crossLink}}
+    @param [template=null] {String} The path of the template to be rendered.
   ###
   _render:( data = {}, template )=>
     @data = 
@@ -54,6 +113,20 @@ module.exports = class View
 
     @render_template template
 
+  ###*
+    If there is a `before_render` method implemented, it will be executed before the view's template is appended to the document.
+
+    @method before_render
+    @param data {Object} Reference to the `@data`
+  ###
+
+
+  ###*
+    Responsible for loading the given template, and appending it to {{#crossLink "View"}}{{/crossLink}} `el` element.
+
+    @method render_template
+    @param template {String} Path to the template to be rendered.
+  ###
   render_template:( template )->
     @the.factory.template template, ( template ) =>
 
@@ -74,11 +147,25 @@ module.exports = class View
         $( window ).bind   'resize', @_on_resize
         @on_resize()
 
+  ###*
+    If there is an `after_render` method implemented, it will be executed after the view's template is appended to the document. Useful for caching DOM elements as jQuery objects.
+
+    @method after_render
+    @param data {Object} Reference to the `@data`
+  ###
+
+  ###*
+    If there is an `@on_resize` method implemented, it will be executed whenever the window triggers the `scroll` event.
+
+    @method on_resize
+  ###
   _on_resize:=>
     do @on_resize
 
-  ###
-  In case you defined @events in your view they will be automatically binded
+  ###*
+    Process the `@events`, automatically binding them.
+
+    @method set_triggers
   ###
   set_triggers: () =>
     return if not @events?
@@ -87,8 +174,18 @@ module.exports = class View
       ( @el.find sel ).unbind ev, null, @[funk]
       ( @el.find sel ).bind   ev, null, @[funk]
 
+  ###*
+    If there is a `@before_in` method implemented, it will be called before the view execute it's intro animations. Useful to setting up the DOM elements properties before animating them.
+
+    @method before_in    
   ###
-  Triggers view "animation in", "@after_in" must be called in the end
+
+  ###*
+    The `in` method is where the view intro animations are defined. It is executed after the `@after_render` method.
+
+    The `@after_in` method must be called at the end of the animations, to Theoricus knows that the View finished animating.
+
+    @method in
   ###
   in:()->
     @before_in?()
@@ -99,6 +196,14 @@ module.exports = class View
     else
       @el.css "opacity", 0
       @el.animate {opacity: 1}, 300, => @after_in?()
+
+  ###*
+    If there is an`@after_in` method implemented, it will be called after the view finish it's intro animations.
+
+    Will only be executed if the {{#crossLink "Config"}}{{/crossLink}} property `disable_transitions` is `false`.
+
+    @method after_in    
+  ###
 
   ###
   Triggers view "animation out", "after_out" must be called in the end
