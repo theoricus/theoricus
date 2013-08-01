@@ -7,6 +7,8 @@ Model = require 'theoricus/mvc/model'
 Factory = null
 
 ###*
+  The View class is responsible for manipulating the templates (DOM).
+
   @class View
 ###
 module.exports = class View
@@ -20,7 +22,7 @@ module.exports = class View
   title: null
 
   ###*
-    The template's html as jQuery object.
+    Stores template's html as jQuery object.
 
     @property el {Object}
   ###
@@ -36,14 +38,14 @@ module.exports = class View
 
   # @property [String] class name
   ###*
-    Stores class name
+    Stores the class name
 
     @property classname {String}
   ###
   classname : null
 
   ###*
-    Namespace is the class folder path relative to the views folder.
+    Namespace is the folder path relative to the `views` folder.
 
     @property namespace {String}
   ###
@@ -57,7 +59,7 @@ module.exports = class View
   process   : null
 
   ###*
-    Responsible for binding the DOM events on the view. Use the format `selector event: handler` to define an event.
+    Object responsible for binding the DOM events on the view. Use the format `selector event: handler` to define an event. It is called after the `template` was rendered in the document.
 
     @property events {Object}
     @example
@@ -122,7 +124,7 @@ module.exports = class View
 
 
   ###*
-    Responsible for loading the given template, and appending it to {{#crossLink "View"}}{{/crossLink}} `el` element.
+    Responsible for loading the given template, and appending it to view's `el` element.
 
     @method render_template
     @param template {String} Path to the template to be rendered.
@@ -148,7 +150,9 @@ module.exports = class View
         @on_resize()
 
   ###*
-    If there is an `after_render` method implemented, it will be executed after the view's template is appended to the document. Useful for caching DOM elements as jQuery objects.
+    If there is an `after_render` method implemented, it will be executed after the view's template is appended to the document. 
+
+    Useful for caching DOM elements as jQuery objects.
 
     @method after_render
     @param data {Object} Reference to the `@data`
@@ -175,7 +179,9 @@ module.exports = class View
       ( @el.find sel ).bind   ev, null, @[funk]
 
   ###*
-    If there is a `@before_in` method implemented, it will be called before the view execute it's intro animations. Useful to setting up the DOM elements properties before animating them.
+    If there is a `@before_in` method implemented, it will be called before the view execute its intro animations. 
+
+    Useful to setting up the DOM elements properties before animating them.
 
     @method before_in    
   ###
@@ -183,7 +189,7 @@ module.exports = class View
   ###*
     The `in` method is where the view intro animations are defined. It is executed after the `@after_render` method.
 
-    The `@after_in` method must be called at the end of the animations, to Theoricus knows that the View finished animating.
+    The `@after_in` method must be called at the end of the animations, so Theoricus knows that the View finished animating.
 
     @method in
   ###
@@ -198,16 +204,26 @@ module.exports = class View
       @el.animate {opacity: 1}, 300, => @after_in?()
 
   ###*
-    If there is an`@after_in` method implemented, it will be called after the view finish it's intro animations.
+    If there is an`@after_in` method implemented, it will be called after the view finish its intro animations.
 
     Will only be executed if the {{#crossLink "Config"}}{{/crossLink}} property `disable_transitions` is `false`.
 
     @method after_in    
   ###
 
+  ###*
+    If there is an`@before_out` method implemented, it will be called before the view executes its exit animations.
+
+    @method before_out
   ###
-  Triggers view "animation out", "after_out" must be called in the end
-   @param [Function] after_out Callback function to be triggered in the end
+
+  ###*
+    The `@out` method is responsible for the view's exit animations. 
+
+    At the end of the animations, the `after_out` callback must be called.
+
+    @method out
+    @param after_out {Function} Callback to be called when the animation ends.
   ###
   out:( after_out )->
     @before_out?()
@@ -218,11 +234,20 @@ module.exports = class View
     else
       @el.animate {opacity: 0}, 300, after_out
 
-  ###
-  Destroy the view after the 'out' animation, the default behavior is to just
-  empty it's container element.
+  ###*
+    If there is an`@before_destroy` method implemented, it will be called before removing the view's template from the document.
 
-  before_destroy will be called just before emptying it.
+    @method before_destroy
+  ###
+
+  ###*
+    Destroy the view after executing the `@out` method, the default behaviour empties its `el` element and unbind the `window.resize` event.
+
+    If overwritten, the `super` method must be called.
+
+    Useful for removing variables assignments that needs to be removed from memory by the Garbage Collector, avoiding Memory Leaks.
+
+    @method destroy
   ###
   destroy: () ->
     if @on_resize?
@@ -233,10 +258,13 @@ module.exports = class View
 
   # ~> Shortcuts
 
-  ###
-  Shortcut for application navigate
+  ###*
+    Shortcut for application navigate.
 
-  @param [String] url URL to navigate
+    Navigate to the given URL.
+
+    @method navigate
+    @param url {String} URL to navigate to.
   ###
   navigate:( url )->
     @the.processes.router.navigate url
