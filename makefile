@@ -10,6 +10,8 @@ MOCHA=node_modules/mocha/bin/mocha
 COVERALLS=node_modules/coveralls/bin/coveralls.js
 VERSION=`$(CS) scripts/bumper.coffee --version`
 
+YUIDOC=node_modules/yuidocjs/lib/cli.js
+
 
 # SETTTING UP DEV ENV
 #-------------------------------------------------------------------------------
@@ -57,8 +59,28 @@ build:
 # GENERATING DOCS
 #-------------------------------------------------------------------------------
 
-docs:
-	# to be merged
+# docs generation
+docs.www:
+	cd www/src && \
+	../../$(YUIDOC) \
+	--syntaxtype coffee \
+	-e .coffee \
+	-o ../../docs/www \
+	-t ../../docs/bootstrap-theme \
+	-H ../../docs/bootstrap-theme/helpers/helpers.js \
+	.
+
+docs.www.server:
+	cd www/src && \
+	../../$(YUIDOC) \
+	--syntaxtype coffee \
+	-e .coffee \
+	-o ../../docs/www \
+	-t ../../docs/bootstrap-theme \
+	-H ../../docs/bootstrap-theme/helpers/helpers.js \
+	--server \
+	.
+
 
 
 # TESTS

@@ -41,11 +41,13 @@
     "istanbul-middleware": "0.1.x",
     "express": "3.3.x",
     "coveralls": "2.0.x"
+
   },
   "devDependencies": {
     "chai": "1.7.x",
     "mocha": "1.12.x",
     "request": "2.22.x",
+    "yuidocjs": "0.3.x",
     "wd": "0.0.32"
   }
 }
