@@ -46,6 +46,14 @@ module.exports = class Theoricus
   processes: null
 
   ###*
+    Reference to `window.crawler` object, this object contains a property called `is_rendered` which is set to true whenever the current process finishes rendering.
+
+    This object is used specially for server-side indexing of Theoricus's apps, though the use of <a href="http://github.com/serpentem/snapshooter">Snapshooter</a>.
+    @property {Crawler} crawler
+  ###
+  crawler: (window.crawler = is_rendered: false)
+
+  ###*
     Theoricus constructor, must to be invoked by the application with a `super`
     call.
     @class Theoricus
