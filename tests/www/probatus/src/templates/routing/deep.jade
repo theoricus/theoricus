@@ -1,0 +1,19 @@
+h1 Deep
+
+p This route is one level deeper and depends on <strong>simple's</strong> route.
+
+p It can also receive one parameter - which is optional:
+
+- params.name = params.name || 'undefined';
+p Param received: 
+  span#deep-param.info #{params.name}
+
+blockquote.small This param is inherit from the Dynamic page, which depends on Deep
+
+pre.prettyprint.linenums.lang-coffee
+  |  '/routing/deep/?(:name)?':
+  |    to: "routing/deep"
+  |    at: "/routing/simple"
+  |    el: "#simple-container"
+
+#deep-container

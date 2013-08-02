@@ -1,0 +1,26 @@
+language: node_js
+
+node:
+  - 0.10.x
+
+env:
+  global:
+    - secure: ! 'DslWb1+Hb4do/m/YE955FZ/SEbBTCzgNdhdS+p0/si2PXh9SlmDxsW8aaLCP
+                  taFGNxuIX7s2/3zCOXeytwGII+mVTTPP0ctW2ZKKb/gWSIiMBkW6NT/wEU7B
+                  Iqzk5hunntibx74Z8AS0MYbymL0NfOIA6tklWq3ODOt2prJmpdw='
+
+    - secure: ! 'ihNdrWe/GtrU5JYVNO5f5Yts4LuSQGfegM7iZotjEzw6t8EiwQsvKxKLuQ/K
+                 d1Wa+eh3QeqY4JsAvhhgP3sDF7urDr5Pi1UQqCG3V8HzBq2fg4Lvh0GIsFTP
+                 wVuaURkLsvQ0vdvXJZ0PNBkd+pPn/9mRMgiykq/Zxqp8UdPxy6c='
+
+before_script:
+  # - curl https://gist.github.com/everzet/5698159/raw/sauce_connect_setup.sh | bash
+  - wget https://selenium.googlecode.com/files/selenium-server-standalone-2.33.0.jar
+  - java -jar selenium-server-standalone-2.33.0.jar > /dev/null &
+  - sleep 10
+
+script:
+  - make test.travis
+
+after_script:
+  - make test.saucelabs.coveralls

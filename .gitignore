@@ -2,8 +2,17 @@
 node_modules
 docs*
 
+# ignoring some app skel files
 cli/templates/app_skel/node_modules
 cli/templates/app_skel/public/js
 
 # lodash is copied from node_modules to the vendors folder on postinstall
 www/vendors/lodash.js
+
+# ignoring testable app's release folder
+tests/www/probatus/public/js
+
+# ignoring test files
+tests/www/coverage
+tests/www/services
+*.log

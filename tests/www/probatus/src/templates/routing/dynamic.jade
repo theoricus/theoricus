@@ -1,0 +1,27 @@
+h1 Dynamic
+
+p This route is one level deeper and depends on <strong>deep's</strong> route'.
+
+p It can also receive one parameter - which is optional:
+
+- params.name = params.name || 'undefined';
+p Param received: 
+  span#dynamic-param.info #{params.name}
+
+blockquote.small This param is passed along to the Deep page.
+
+pre.prettyprint.linenums.lang-coffee
+  |  # when matched without params
+  |  '/routing/dynamic':
+  |    to: "routing/dynamic"
+  |    at: "/routing/deep"
+  |    el: "#deep-container"
+  |  
+  |  # when matched with params
+  |  '/routing/dynamic/:name':
+  |    to: "routing/dynamic"
+  |    at: "/routing/deep/:name"
+  |    el: "#deep-container"
+
+
+#deep-container

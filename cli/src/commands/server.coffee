@@ -35,3 +35,7 @@ module.exports = class Server
         else
           if data.msg is 'server.started'
             do @repl.start
+
+    process.on 'SIGTERM', ->
+      do @polvo.kill
+      do process.exit

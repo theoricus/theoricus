@@ -130,6 +130,10 @@ module.exports = class Router
   ###
 
   navigate:( url, trigger = true, replace = false )->
+
+    if not window.history.pushState
+      return window.location = url
+
     @trigger = trigger
 
     action   = if replace then "replaceState" else "pushState"

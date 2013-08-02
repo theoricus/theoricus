@@ -1,4 +1,4 @@
-require('source-map-support').install()
+require('source-map-support').install handleUncaughtExceptions: false
 
 fs = require "fs"
 path = require "path"
@@ -21,12 +21,12 @@ exports.run = ->
 module.exports = class Theoricus
   
   constructor:->
+    @cli = new Cli @version
+    @version = (require "./../package.json" ).version
+
     @root = path.join __dirname, ".."
     @app_root = @_get_app_root()
     @pwd = @app_root || path.resolve "."
-
-    @version = (require "./../package.json" ).version
-    @cli = new Cli @version
 
     return new NewProject @, @cli if @cli.argv.new
     return console.log @version if @cli.argv.version
@@ -48,7 +48,7 @@ module.exports = class Theoricus
     return true
 
   _get_app_root:()->
-    current = path.resolve "."
+    current = path.resolve (@cli.argv.base or '.')
 
     while true
       app = path.join current, 'src', 'app', 'app.coffee'

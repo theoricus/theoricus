@@ -2,24 +2,19 @@
 
 Tiny MV(C) implementation for client side projects.
 
-> Version 0.2.20
+[![Stories in Ready](http://badge.waffle.io/serpentem/theoricus.png)](http://waffle.io/serpentem/theoricus)  
 
-[![Dependency Status](https://gemnasium.com/serpentem/theoricus.png)](https://gemnasium.com/serpentem/theoricus)
+[![Dependency Status](https://gemnasium.com/serpentem/theoricus.png)](https://gemnasium.com/serpentem/theoricus) [![Build Status](https://secure.travis-ci.org/serpentem/theoricus.png)](http://travis-ci.org/serpentem/theoricus) [![Coverage Status](https://coveralls.io/repos/serpentem/theoricus/badge.png)](https://coveralls.io/r/serpentem/theoricus) [![NPM version](https://badge.fury.io/js/theoricus.png)](http://badge.fury.io/js/theoricus)
+
+<!--
+  [![Selenium Test Status](https://saucelabs.com/buildstatus/theoricus)](https://saucelabs.com/u/theoricus)
+-->
 
 # About
 
 Theoricus uses simple naming conventions (as you see in rails and many others),
 with a powerful build system behind it. There's also a naviagation mechanism
 built to let your free to code your shit instead of handling url's manually.
-
-Theoricus uses some lovely pre-processed languages to accomplish the goals:
-
- - [Stylus](https://github.com/learnboost/stylus) (css)
- - [Jade](https://github.com/visionmedia/jade) (html)
- - [CoffeeScript](https://github.com/jashkenas/coffee-script) (js)
-
-> More languages will be available in the future, following
-[Polvo](http://github.com/serpentem/polvo) capabilities.
 
 It's in a very alpha version, use at your own risk.
 
@@ -36,21 +31,27 @@ Have fun. :)
  and [FsUtil](http://github.com/serpentem/fs-util))*
  * Simplistic JSON-Rest interface for models
 
+# Languages
+
+You can use pure `'html`, `css` and `javascript`, as well as some pre-processed languages supported by [Polvo](http://github.com/serpentem/polvo), such as `CoffeeScript`, `Jade` and `Stylus`.
+
+See the complete list [here](https://github.com/serpentem/polvo#supported-languages).
+
 # Issues
 Do not hesitate to open a feature request or a bug report.
-> https://github.com/serpentem/theoricus/issues
+> [https://github.com/serpentem/theoricus/issues](https://github.com/serpentem/theoricus/issues)
 
 # Mailing List
 A place to talk about it, ask anything, get in touch. Luckily you'll be answered
 sooner than later.
 
-> https://groups.google.com/group/theoricus
+> [https://groups.google.com/group/theoricus](https://groups.google.com/group/theoricus)
 
 ## Dev Mailing List
 
 Got your hands into the source? We're here to help you.
 
-> https://groups.google.com/group/theoricus-dev
+> [https://groups.google.com/group/theoricus-dev](https://groups.google.com/group/theoricus-dev)
 
 
 # Docs
@@ -64,7 +65,11 @@ Got your hands into the source? We're here to help you.
   - [Demo Application](https://github.com/serpentem/theoricus-demo-app)
   - [Contributing](https://github.com/serpentem/theoricus/blob/master/CONTRIBUTING.md)
   - [Showcase](https://github.com/serpentem/theoricus/wiki/showcase)
-  - [CHANGELOG.md](https://github.com/serpentem/theoricus/tree/master/build/CHANGELOG.md)
+  - [Changelog](https://github.com/serpentem/theoricus/blob/master/History.md)
+
+<!--
+  - [Compatibility](#compatibility)
+-->
 
 <a name="installing" />
 # Installing
@@ -175,3 +180,11 @@ the -s
 
 Visit the url [http://localhost:11235](http://localhost:11235) and you should
 see a success status.
+
+<!--
+<a name="compatibility" />
+# Compatibility
+
+[![Selenium Test Status](https://saucelabs.com/browser-matrix/theoricus.svg)](https://saucelabs.com/u/theoricus)
+
+-->
