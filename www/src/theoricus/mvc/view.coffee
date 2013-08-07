@@ -164,7 +164,7 @@ module.exports = class View
     @method on_resize
   ###
   _on_resize:=>
-    do @on_resize
+    @on_resize?()
 
   ###*
     Process the `@events`, automatically binding them.
