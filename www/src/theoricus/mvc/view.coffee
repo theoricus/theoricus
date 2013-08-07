@@ -75,7 +75,7 @@ module.exports = class View
         @on_resize()
 
   _on_resize:=>
-    do @on_resize
+    @on_resize?()
 
   ###
   In case you defined @events in your view they will be automatically binded
