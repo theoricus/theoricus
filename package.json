@@ -37,7 +37,7 @@
     "optimist": "0.6.x",
     "polvo": "0.4.x",
     "source-map-support": "0.2.x",
-    "snapshooter": "0.2.x",
+    "snapshooter": "0.3.x",
     "istanbul-middleware": "0.1.x",
     "express": "3.3.x",
     "coveralls": "2.0.x"
