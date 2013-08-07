@@ -1,3 +1,8 @@
+0.2.22 / 2013-08-07
+===================
+ * Adding basic docs for whole www forlder
+ * Fixing `_on_resize` bind in View (closes #75)
+
 0.2.21 / 2013-07-29
 ===================
  * Setting up environment for functional tests on the `www` folder
