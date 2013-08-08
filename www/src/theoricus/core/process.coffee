@@ -8,12 +8,13 @@ View = require 'theoricus/mvc/view'
 
 ###*
   Responsible for executing the controller render action based on the {{#crossLink "Router"}}{{/crossLink}} information.
+
   @class Process
 ###
 module.exports = class Process
 
   ###*
-  Route controller instance.
+  Route {{#crossLink "Controller"}}{{/crossLink}} instance.
 
   @property {Controller} controller
   ###
