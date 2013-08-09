@@ -31,7 +31,7 @@ module.exports = class Factory
     Model.Factory = @
 
   ###*
-  Loads and returns an instantiated Model given the name. 
+  Loads and returns an instantiated {{#crossLink "Model"}} __Model__ {{/crossLink}} given the name. 
 
   If a model by given name was not found, returns an instance of `AppModel`.
 
@@ -71,7 +71,7 @@ module.exports = class Factory
       fn null
 
   ###*
-  Loads and returns an instantiated View given the name. 
+  Loads and returns an instantiated {{#crossLink "View"}} __View__  {{/crossLink}} given the name. 
 
   If a view by given name was not found, returns an instance of `AppView`.
 
@@ -109,7 +109,7 @@ module.exports = class Factory
 
 
   ###*
-  Returns an instantiated Controller given the name.
+  Returns an instantiated {{#crossLink "Controller"}}__Controller__{{/crossLink}} given the name.
 
   If the controller was not loaded yeat, load it using AMD loader, otherwise, get it from `@controllers` object.
 
