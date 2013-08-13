@@ -48,6 +48,15 @@ module.exports = class Process
   params: null
 
   ###*
+  Switched to on when you run "@dont_render()" in your controller.
+
+  This way process won't expect a view, neither wait for render time
+
+  @property {Boolean} wont_render
+  ###
+  wont_render: off
+
+  ###*
   Responsible for executing the controller render action based on the {{#crossLink "Router"}}{{/crossLink}} information.
 
   @class Process
@@ -125,6 +134,9 @@ module.exports = class Process
   @param @after_destroy {Function} Callback to be called after the view was removed.
   ###
   destroy:( @after_destroy )->
+
+    if @wont_render then return @after_destroy()
+
     # call the OUT transition with the given callback
     unless (@view instanceof View)
       controller_name = @route.controller_name.camelize()

@@ -89,6 +89,17 @@ module.exports = class Controller
       else
         view._render data
 
+  ###*
+    This method substitutes the need of calling @render and returning
+    a view.
+
+    Process will simply ignores the rendering times, and will the frameworks
+    callbacks will be called instantly
+  ###
+  dont_render: =>
+    @process.wont_render = on
+
+    @after_render()
 
   # ~> Shortcuts
 
