@@ -259,12 +259,14 @@ module.exports = class View
   # ~> Shortcuts
 
   ###*
-    Shortcut for application navigate.
-
-    Navigate to the given URL.
+    Alias to router.navigate
+    
+    Change the url state.
 
     @method navigate
-    @param url {String} URL to navigate to.
+    @param url {String} New url state.
+    @param [trigger=true] {String} If false,
+    @param [replace=false] {String} If true, pushes a new state to the browser.
   ###
-  navigate:( url )->
-    @the.processes.router.navigate url
+  navigate:( url, trigger = true, replace = false )->
+    @the.processes.router.navigate url, trigger, replace
