@@ -108,7 +108,7 @@ module.exports = class Process
       after_run()
 
     # sets the callback
-    @controller.after_render = @after_run
+    @controller.done_rendering = @after_run
 
     # executes action
     @controller[ action ] @params
