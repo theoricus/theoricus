@@ -105,8 +105,8 @@ module.exports = class Route
     @class Route
     @constructor
     @param @match {String} Url state.
-    @param @to {String} Controller '/' action to which the route will be sent.
-    @param @at {String} Route to be called as a dependency.
+    @param @to {String} {{#crossLink "Controller"}}__Controller's__{{/crossLink}} action (controller/action)  to which the route will be sent.
+    @param @at {String} {{#crossLink "Route"}}__Route__{{/crossLink}} to be called as a dependency.
     @param @el {String} CSS selector to define where the template will be rendered.
   ###
   constructor:( @match, @to, @at, @el )->

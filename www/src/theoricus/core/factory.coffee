@@ -73,7 +73,7 @@ module.exports = class Factory
   ###*
   Loads and returns an instantiated {{#crossLink "View"}} __View__  {{/crossLink}} given the name. 
 
-  If a view by given name was not found, returns an instance of `AppView`.
+  If a {{#crossLink "View"}} __view__  {{/crossLink}} by given name was not found, returns an instance of `AppView`.
 
   @method view
   @param path {String} Path to the view file.
@@ -111,7 +111,7 @@ module.exports = class Factory
   ###*
   Returns an instantiated {{#crossLink "Controller"}}__Controller__{{/crossLink}} given the name.
 
-  If the controller was not loaded yeat, load it using AMD loader, otherwise, get it from `@controllers` object.
+  If the {{#crossLink "Controller"}}__controller__{{/crossLink}} was not loaded yeat, load it using AMD loader, otherwise, get it from `@controllers` object.
 
   Throws an error if no controller is found.
 

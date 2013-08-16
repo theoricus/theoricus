@@ -57,10 +57,10 @@ module.exports = class Router
     , 1
 
   ###*
-    Create and store a route within `routes` array.
+    Create and store a {{#crossLink "Route"}}__route__{{/crossLink}} within `routes` array.
     @method map
     @param route {String} Url state.
-    @param to {String} Controller's action (controller/action) to which the route will be sent.
+    @param to {String} {{#crossLink "Controller"}}__Controller's__{{/crossLink}} action (controller/action) to which the {{#crossLink "Route"}}__route__{{/crossLink}} will be sent.
     @param at {String} Url state to be called as a dependency.
     @param el {String} CSS selector to define where the template will be rendered in the DOM.
   ###
