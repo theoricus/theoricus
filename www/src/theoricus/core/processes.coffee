@@ -15,36 +15,71 @@ module.exports = class Processes
 
   # variables
   ###*
-  Block the url state to be changed. Useful if there is a current {{#crossLink "Process"}}{{/crossLink}} being executed.
+  Block the url state to be changed. Useful if there is a current {{#crossLink "Process"}}__Process__{{/crossLink}} being executed.
 
   @property {Boolean} locked
   ###
   locked: false
   disable_transitions: null
 
+  ###*
+    Stores the current {{#crossLink "Processes"}}__processes__{{/crossLink}} that are active.
+
+    @property active_processes {Array}
+  ###
   active_processes: []
+
+  ###*
+    Stores the current {{#crossLink "Processes"}}__processes__{{/crossLink}} that doesn't need to be active.
+
+    @property dead_processes {Array}
+  ###
   dead_processes: []
+
+  ###*
+    Stores the new {{#crossLink "Process"}}__process__{{/crossLink}} dependencies.
+
+    @property pending_processes {Array}
+  ###
   pending_processes: []
 
   ###*
-  Responsible for handling the page/url change. It removes last Process, runs new Process dependencies, and then add the required Process. 
+  Responsible for handling the url change. 
+
+  When the URL changes, it initializes the {{#crossLink "Process"}}__process__{{/crossLink}} responsible for the current {{#crossLink "Route"}}__route__{{/crossLink}} (which is responsible for the current URL).
+  
+  Stores the new {{#crossLink "Process"}}__process__{{/crossLink}} dependency processes at `@pending_processes`
+  
+  Destroy the current {{#crossLink "Process"}}__processes__{{/crossLink}} that are active, but are not dependency of the new {{#crossLink "Process"}}__process__{{/crossLink}}.
+  
+  Runs the {{#crossLink "Process"}}__processes__{{/crossLink}} that are not active yet. 
 
   __Execution order__
 
-  1. `_on_router_change`
+  1. `_on_router_change` : 
+
+      The URL changed, it will create a new {{#crossLink "Process"}}__process__{{/crossLink}} to handle the current Route.
 
   2. `_filter_pending_processes`
 
+      Will search for all the new {{#crossLink "Process"}}__process__{{/crossLink}} dependencies recursively, and store them at `pending_processes`
+
   3. `_filter_dead_processes`
+
+      Will search for all the {{#crossLink "Process"}}__process__{{/crossLink}} that doesn't need to be active.
 
   4. `_destroy_dead_processes` - one by one, waiting or not for callback (timing can be sync/async)
 
+      Will destroy the {{#crossLink "Process"}}__process__{{/crossLink}} that doesn't need to be active.
+
   6. `_run_pending_process` - one by one, waiting or not for callback (timing can be sync/async)
+
+      Will run the {{#crossLink "Process"}}__process__{{/crossLink}} that are required, but not active yet.
 
   @class Processes
   @constructor
   @param @the {Theoricus} Shortcut for app's instance.
-  @param @Routes {Object} App Routes
+  @param @Routes {Object} App routes defined in the `routes.coffee`
   ###
   constructor:( @the, @Routes )->
     Factory = @the.factory
@@ -57,10 +92,10 @@ module.exports = class Processes
       @router = new Router @the, @Routes, @_on_router_change
 
   ###*
-  Executed when the route changes, it creates a {{#crossLink "Process"}}{{/crossLink}} to manipulate the route, removes the current process, and run the new process alongside its dependencies.
+  Executed when the url changes, it creates a {{#crossLink "Process"}}__Process__{{/crossLink}} to manipulate the {{#crossLink "Route"}}__route__{{/crossLink}}, removes the current {{#crossLink "Process"}}__process__{{/crossLink}}, and run the new {{#crossLink "Process"}}__process__{{/crossLink}} alongside its dependencies.
   
   @method _on_router_change
-  @param route {Route} Route containing the controller and url state information.
+  @param route {Route} {{#crossLink "Route"}}__Route__{{/crossLink}} containing the {{#crossLink "Controller"}}__controller__{{/crossLink}} and url state information.
   @param url {String} Current url state.
   ###
   _on_router_change:( route, url )=>
@@ -79,18 +114,12 @@ module.exports = class Processes
         do @_filter_dead_processes
         do @_destroy_dead_processes
 
-  ###
-  2nd
-
-  Check if target scope ( for rendering ) exists
-  If yes adds it to pending_process list
-  If no  throws an error
-
-  @param [theoricus.core.Process] process
-  ###
   ###*
-    
-  
+    Searchs and stores the {{#crossLink "Process"}}__Process__{{/crossLink}} dependencies recursively.
+
+    @method _filter_pending_processes
+    @param process {Process} {{#crossLink "Process"}}__Process__{{/crossLink}} to search the dependencies.
+    @param after_filter {Function} Callback to be called when all the dependencies are stored.
   ###
   _filter_pending_processes:( process, after_filter )->
 
@@ -120,10 +149,10 @@ module.exports = class Processes
       do after_filter
 
   ###*
-  Finds the dependency of the given {{#crossLink "Process"}}{{/crossLink}}
+  Finds the dependency of the given {{#crossLink "Process"}}__Process__{{/crossLink}}
 
   @method _find_dependency
-  @param process {Process} Processto find the dependency.
+  @param process {Process} {{#crossLink "Process"}}__Process__{{/crossLink}} to find the dependency.
   @param after_find {Function} Callback to be called after the dependency has been found.
   ###
   _find_dependency:( process, after_find )->
@@ -151,8 +180,8 @@ module.exports = class Processes
 
 
   ###*
-  Check which of the processes needs to stay active in order to render current process.
-  The ones that doesn't, are pushed to dead_processes.
+  Check which of the {{#crossLink "Process"}}__processes__{{/crossLink}} needs to stay active in order to render current {{#crossLink "Process"}}__process__{{/crossLink}}.
+  The ones that doesn't, are pushed to `@dead_processes`.
 
   @method _filter_dead_processes
   ###
@@ -174,7 +203,7 @@ module.exports = class Processes
         @dead_processes.push active
 
   ###*
-  Destroy the dead processes (doesn't need to be active) one by one, then run the pending process.
+  Destroy the dead {{#crossLink "Process"}}__processes__{{/crossLink}} (doesn't need to be active) one by one, then run the pending {{#crossLink "Process"}}__process__{{/crossLink}}.
 
   @method _destroy_dead_processes
   ###
@@ -191,7 +220,7 @@ module.exports = class Processes
       @_run_pending_processes()
 
   ###*
-  Run the processes that are not active yet.
+  Run the {{#crossLink "Process"}}__processes__{{/crossLink}} that are not active yet.
 
   @method _run_pending_processes
   ###

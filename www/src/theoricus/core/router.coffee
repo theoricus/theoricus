@@ -15,12 +15,13 @@ Factory = null
 
 ###*
   Proxies browser's History API, routing request to and from the aplication.
+
   @class Router
 ###
 module.exports = class Router
 
   ###*
-    Array storing all the routes defined in the application's route file.
+    Array storing all the routes defined in the application's route file (routes.coffee)
 
     @property {Array} routes
   ###
@@ -37,7 +38,8 @@ module.exports = class Router
   @class Router
   @constructor
   @param @the {Theoricus} Shortcut for app's instance.
-  @param @on_change {Function} state/url change handler.
+  @param @Routes {Theoricus} Routes defined in the app's `routes.coffee` file.
+  @param @on_change {Function} state/url handler.
   ###
   constructor:( @the, @Routes, @on_change )->
     Factory = @the.factory
@@ -55,19 +57,22 @@ module.exports = class Router
     , 1
 
   ###*
-    Create and store a route within `routes` array.
+    Create and store a {{#crossLink "Route"}}__route__{{/crossLink}} within `routes` array.
     @method map
     @param route {String} Url state.
-    @param to {String} Controller '/' action to which the route will be sent.
-    @param at {String} Route to be called as a dependency.
-    @param el {String} CSS selector to define where the template will be rendered.
+    @param to {String} {{#crossLink "Controller"}}__Controller's__{{/crossLink}} action (controller/action) to which the {{#crossLink "Route"}}__route__{{/crossLink}} will be sent.
+    @param at {String} Url state to be called as a dependency.
+    @param el {String} CSS selector to define where the template will be rendered in the DOM.
   ###
   map:( route, to, at, el )->
     @routes.push route = new Route route, to, at, el, @
     return route
 
   ###*
-    Handle the url state.
+    Handles the url state.
+
+    Calls the `@on_change` method passing as parameter the {{#crossLink "Route"}}__Route__{{/crossLink}} storing the current url state information.
+
     @method route
     @param state {Object} HTML5 pushstate state
   ###
@@ -121,11 +126,11 @@ module.exports = class Router
     @trigger = true
 
   ###*
-    Change the url state.
+    Tells Theoricus to navigate to another view.
 
     @method navigate
     @param url {String} New url state.
-    @param [trigger=true] {String} If false,
+    @param [trigger=true] {String} If false, doesn't change the View.
     @param [replace=false] {String} If true, pushes a new state to the browser.
   ###
 
@@ -140,7 +145,7 @@ module.exports = class Router
     History[action] null, null, url
 
   ###*
-    Set the url if the browser doesn't support HTML5 pushstate.
+    {{#crossLink "Router/navigate:method"}} __Navigate__ {{/crossLink}} to the initial url state.
 
     @method run
     @param url {String} New url state.

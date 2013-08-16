@@ -6,9 +6,9 @@
 
 ###*
   
-  Responsible for manipulating and validating url state.
+  Responsible for manipulating and validating the url state.
 
-  Stores the data defined in the application config `routes.coffee`
+  Stores the data defined in the application config `routes.coffee` file.
 
   @class Route
 ###
@@ -16,7 +16,7 @@ module.exports = class Route
 
   ###*
 
-    Match named params
+    Match named params.
 
     @static
     @property named_param_reg {RegExp}
@@ -27,8 +27,13 @@ module.exports = class Route
 
   ###*
 
+    Match wildcard params.
+
     @static
     @property splat_param_reg {RegExp}
+
+    @example
+      "works/*anything/from/here".match Route.named_param_reg # matchs '*anything/from/here'
   ###
   @splat_param_reg: /\*\w+/g
 
@@ -100,13 +105,14 @@ module.exports = class Route
     @class Route
     @constructor
     @param @match {String} Url state.
-    @param @to {String} Controller '/' action to which the route will be sent.
-    @param @at {String} Route to be called as a dependency.
+    @param @to {String} {{#crossLink "Controller"}}__Controller's__{{/crossLink}} action (controller/action)  to which the route will be sent.
+    @param @at {String} {{#crossLink "Route"}}__Route__{{/crossLink}} to be called as a dependency.
     @param @el {String} CSS selector to define where the template will be rendered.
   ###
   constructor:( @match, @to, @at, @el )->
 
     # prepare regex matcher str for reuse
+    # Add regexp to ignore the last "slash"
     @matcher = @match.replace Route.named_param_reg, '([^\/]+)'
     @matcher = @matcher.replace Route.splat_param_reg, '(.*?)'
     @matcher = new RegExp "^#{@matcher}$", 'm'
@@ -120,6 +126,11 @@ module.exports = class Route
 
     @method extract_params
     @param url {String}
+
+    @example
+For a route `pages/:id`, extract the `:id` from `pages/1`
+
+    extract_params('pages/1') # returns {id:1}
 
   ###
   extract_params:( url )->
@@ -151,6 +162,9 @@ module.exports = class Route
     @param url {String}
     @param params {Object}
 
+    @example
+        rewrite_url_with_parms('pages/:id', {id:1}) # returns 'pages/1'
+
   ###
   rewrite_url_with_parms:( url, params )->
     for key, value of params
@@ -160,7 +174,7 @@ module.exports = class Route
 
   ###*
 
-    Test given url against the url state defined in the route.
+    Test given url using the {{#crossLink "Route/matcher:property"}} __@matcher__ {{/crossLink}} regexp.
     
     @method test
     @param url {String} Url to be tested.
