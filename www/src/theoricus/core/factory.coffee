@@ -8,7 +8,7 @@ View = require 'theoricus/mvc/view'
 Controller = require 'theoricus/mvc/controller'
 
 ###*
-  Factory is responsible for loading/creating the MVC classes.
+  Factory is responsible for loading/creating the MVC classes, templates and stylesheets using AMD loader.
 
   @class Factory
 ###
@@ -16,7 +16,7 @@ Controller = require 'theoricus/mvc/controller'
 module.exports = class Factory
 
   ###*
-    Store the loaded controllers.
+    Stores the loaded controllers for subsequent calls.
     @property controllers {Array}
   ###
   controllers: {}
@@ -31,7 +31,9 @@ module.exports = class Factory
     Model.Factory = @
 
   ###*
-  Returns an instantiated Model.
+  Loads and returns an instantiated {{#crossLink "Model"}} __Model__ {{/crossLink}} given the name. 
+
+  If a model by given name was not found, returns an instance of `AppModel`.
 
   @method model
   @param name {String} Model name.
@@ -69,7 +71,9 @@ module.exports = class Factory
       fn null
 
   ###*
-  Returns an instantiated View.
+  Loads and returns an instantiated {{#crossLink "View"}} __View__  {{/crossLink}} given the name. 
+
+  If a {{#crossLink "View"}} __view__  {{/crossLink}} by given name was not found, returns an instance of `AppView`.
 
   @method view
   @param path {String} Path to the view file.
@@ -105,7 +109,11 @@ module.exports = class Factory
 
 
   ###*
-  Returns an instantiated Controller.
+  Returns an instantiated {{#crossLink "Controller"}}__Controller__{{/crossLink}} given the name.
+
+  If the {{#crossLink "Controller"}}__controller__{{/crossLink}} was not loaded yeat, load it using AMD loader, otherwise, get it from `@controllers` object.
+
+  Throws an error if no controller is found.
 
   @method controller
   @param name {String} Controller name.
@@ -145,6 +153,9 @@ module.exports = class Factory
   @method template
   @param path {String} Path to the template.
   @param fn {Function} Callback function returning the template string.
+
+  @example
+
   ###
   @template=@::template=( path, fn )->
     # console.log "Factory.template( #{path} )"

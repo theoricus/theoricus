@@ -7,58 +7,77 @@ StringUtil = require 'theoricus/utils/string_util'
 View = require 'theoricus/mvc/view'
 
 ###*
-  Responsible for executing the controller render action based on the {{#crossLink "Router"}}{{/crossLink}} information.
+  Responsible for executing the {{#crossLink "Controller"}}__controller__{{/crossLink}} render action based on the {{#crossLink "Route"}}__Route__{{/crossLink}} information.
+
   @class Process
 ###
 module.exports = class Process
 
   ###*
-  Route controller instance.
+  {{#crossLink "Controller"}}__Controller__{{/crossLink}} instance, responsible for rendering the {{#crossLink "View"}}__views__{{/crossLink}} based on the __action__ defined in the {{#crossLink "Route"}}__Route's__{{/crossLink}} {{#crossLink "Route/to:property"}} __to__ {{/crossLink}} property.
 
   @property {Controller} controller
   ###
   controller: null
 
   ###*
-  Route storing the information which will be used to render the view.
+  {{#crossLink "Route"}}{{/crossLink}} storing the information which will be used load the {{#crossLink "Controller"}}{{/crossLink}} and render the {{#crossLink "View"}} __view__ {{/crossLink}}.
   
   @property {Route} route
   ###
   route: null
 
   ###*
-  Stores the `@route` dependency url.
+  Stores the dependency url defined in the {{#crossLink "Route"}}__Route's__{{/crossLink}} {{#crossLink "Route/at:property"}} __at__{{/crossLink}} property.
   
   @property {String} dependency
   ###
   dependency: null
 
   ###*
-  Will set be true in the run method, right before the action execution, and set to false right after the action is executed. this way the navigate method on controller can abort the process prematurely as needed.
+  Will be setted to __`true`__ in the __`run`__ method, right before the action execution, and set to __`false`__ right after the action is executed. 
+
+  This way the {{#crossLink "Router/navigate:method"}} __navigate__ {{/crossLink}} method can abort the {{#crossLink "Process"}} __process__ {{/crossLink}} prematurely as needed.
   
   @property {Boolean} is_in_the_middle_of_running_an_action
   ###
   is_in_the_middle_of_running_an_action: false
 
   ###*
-  Stores the url parameters.
+  Stores the {{#crossLink "Route"}} __Route__ {{/crossLink}} parameters.
+
+  @example
+  If there is a route defined with a parameter `id` like this:
+
+      '/works/:id': #parameters are defined in the ':{value}' format.
+          to: "pages/container"
+          at: null
+          el: "body"
+  
+  And the url changes to:
+
+      '/works/1'
+
+
+  The `params` will stores an `Object` like this:
+
+      {id:1}
+
 
   @property {Object} params
   ###
   params: null
 
   ###*
-  Responsible for executing the controller render action based on the {{#crossLink "Router"}}{{/crossLink}} information.
-
   @class Process
   @constructor
   @param @the {Theoricus} Shortcut for app's instance.
-  @param @processes {Processes} Processes instance.
-  @param @route {Route} Route to be manipulated.
-  @param @at {Route} Route dependency.
+  @param @processes {Processes} {{#crossLink "Processes"}}__Processes__{{/crossLink}}, responsible for delegating the current {{#crossLink "Route"}}__route__{{/crossLink}} to its respective {{#crossLink "Process"}}__process__{{/crossLink}}.
+  @param @route {Route} {{#crossLink "Processes"}}__Route__{{/crossLink}} storing the current URL information.
+  @param @at {Route} {{#crossLink "Processes"}}__Route__{{/crossLink}} dependency defined in the {{#crossLink "Route/at:property"}} __at__ {{/crossLink}} property.
   @param @url {String} Current url state.
   @param @parent_process {Process}
-  @param fn {Function} Callback to be called after the dependency have been manipulated, and the controller loaded.
+  @param fn {Function} Callback to be called after the `dependency` have been setted, and the {{#crossLink "Controller"}}__controller__{{/crossLink}} loaded.
   ###
   constructor:( @the, @processes, @route, @at, @url, @parent_process, fn )->
 
@@ -86,7 +105,7 @@ module.exports = class Process
       @dependency = @route.rewrite_url_with_parms @at, @params
 
   ###*
-  Executes controller's action, in case it isn't declared executes a default one.
+  Executes the {{#crossLink "Controller"}}__controller's__{{/crossLink}} __action__ defined in the {{#crossLink "Route/to:property"}} __to__ {{/crossLink}} property, if it isn't declared executes a default one based on the name convention.
   
   @param after_run {Function} Callback to be called after the view was rendered.
   ###
@@ -119,7 +138,7 @@ module.exports = class Process
 
 
   ###*
-  Executes view's transition "out" method, wait for it to empty the dom element and then call a callback.
+  Executes the {{#crossLink "View"}}__view's__{{/crossLink}} transition {{#crossLink "View/out:method"}} __out__ {{/crossLink}} method, wait for it to empty the dom element and then call the `@after_destroy` callback.
   
   @method destroy
   @param @after_destroy {Function} Callback to be called after the view was removed.

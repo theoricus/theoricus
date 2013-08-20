@@ -28,25 +28,25 @@ module.exports = class Theoricus
   base_path: ''
 
   ###*
-    Instance of Factory class.
+    Instance of {{#crossLink "Factory"}}__Factory__{{/crossLink}} class.
     @property {Factory} factory
   ###
   factory  : null
 
   ###*
-    Instance of {{#crossLink "Config"}}{{/crossLink}} class, fed by the Settings class.
+    Instance of {{#crossLink "Config"}}__Config__{{/crossLink}} class, fed by the application's `config.coffee` file.
     @property {Config} config
   ###
   config   : null
 
   ###*
-    Instance of Processes class.
+    Instance of {{#crossLink "Processes"}}__Processes__{{/crossLink}} class, responsible for handling the url change.
     @property {Processes} processes
   ###
   processes: null
 
   ###*
-    Reference to `window.crawler` object, this object contains a property called `is_rendered` which is set to true whenever the current process finishes rendering.
+    Reference to `window.crawler` object, this object contains a property called `is_rendered` which is set to true whenever the current {{#crossLink "Process"}}__process__{{/crossLink}} finishes rendering.
 
     This object is used specially for server-side indexing of Theoricus's apps, though the use of <a href="http://github.com/serpentem/snapshooter">Snapshooter</a>.
     @property {Crawler} crawler
@@ -58,15 +58,15 @@ module.exports = class Theoricus
     call.
     @class Theoricus
     @constructor
-    @param Settings {Object} App Settings
-    @param Routes {Object} App Routes
+    @param Settings {Object} Settings defined in the application's `config.coffee` file.
+    @param Routes {Object} Routes defined in the application's `routes.coffee` file.
   ###
   constructor:( @Settings, @Routes )->
     @config  = new Config @, @Settings
     @factory = new Factory @
 
   ###*
-    Starts the Theoricus engine, plugging the Processes onto the Router system.
+    Starts the Theoricus engine, plugging the {{#crossLink "Processes"}}__Processes__{{/crossLink}} onto the {{#crossLink "Router"}}__Router__{{/crossLink}} system.
     @method start
   ###
   start: ->
