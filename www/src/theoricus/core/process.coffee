@@ -110,6 +110,7 @@ module.exports = class Process
   @param after_run {Function} Callback to be called after the view was rendered.
   ###
   run:( after_run )->
+    return unless @controller?
 
     # sets is_in_the_middle_of_running_an_action=true
     @is_in_the_middle_of_running_an_action = true
