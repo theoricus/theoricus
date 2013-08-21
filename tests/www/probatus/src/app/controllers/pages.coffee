@@ -1,4 +1,4 @@
 AppController = require 'app/controllers/app_controller'
 Main = require 'app/models/page'
 
-exports.module = class Pages extends AppController
+module.exports = class Pages extends AppController

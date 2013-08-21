@@ -1,6 +1,6 @@
 View = require 'theoricus/mvc/view'
 
-exports.module = class AppView extends View
+module.exports = class AppView extends View
 
   set_triggers: ->
     super()

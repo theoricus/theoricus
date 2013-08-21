@@ -1,3 +1,3 @@
 AppModel = require 'app/models/app_model'
 
-exports.module = class Page extends AppModel
+module.exports = class Page extends AppModel
