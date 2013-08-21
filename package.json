@@ -15,8 +15,7 @@
     "lib": "./lib/"
   },
   "scripts": {
-    "test": "make test",
-    "postinstall": "coffee scripts/postinstall.coffee"
+    "test": "make test"
   },
   "repository": {
     "type": "git",
