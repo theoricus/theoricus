@@ -11,6 +11,7 @@ output:
 
 mappings:
   'app': 'src/'
+  'templates': 'src/'
   'theoricus': '../../../www/src'
 
 boot: src/app/app
