@@ -46,29 +46,21 @@ module.exports = class Factory
     classname = name.camelize()
     classpath = "app/models/#{name}".toLowerCase()
 
-    require ['app/models/app_model', classpath], ( AppModel, NewModel )=>
+    if (ModelClass = require classpath) is null
+      console.error "Model not found '#{classpath}'"
+      return fn null
 
-      model = new NewModel
+    unless (model = new ModelClass) instanceof Model
+      msg = "#{classpath} is not a Model instance, you probably forgot to "
+      msg += "extend thoricus/mvc/Model"
+      console.error msg
+      return fn null
 
-      # FIXME: This will throw an error on browser: "Uncaught TypeError: Expecting a function in instanceof check, but got #<Main>"
-      #
-      # unless (model = new NewModel) instanceof Model
-      #   msg = "#{classpath} is not a Model instance - you probably forgot to "
-      #   msg += "extend thoricus/mvc/Model"
-      #   console.error msg
+    model.classpath = classpath
+    model.classname = classname
+    model[prop] = value for prop, value of init
 
-      # defaults to AppModel if given model is  is not found
-      # (cant see any sense on this, will probably be removed later)
-      model = new AppModel unless model?
-
-      model.classpath = classpath
-      model.classname = classname
-      model[prop] = value for prop, value of init
-
-      fn model
-    , (err)->
-      console.error 'Model not found: ' + classpath
-      fn null
+    fn model
 
   ###*
   Loads and returns an instantiated {{#crossLink "View"}} __View__  {{/crossLink}} given the name. 
@@ -86,26 +78,26 @@ module.exports = class Factory
     namespace = parts[parts.length - 1]
     classpath = "app/views/#{path}"
 
-    require ['app/views/app_view', classpath], ( AppView, View )=>
-      unless (view = new View) instanceof View
-        msg = "#{classpath} is not a View instance - you probably forgot to "
-        msg += "extend thoricus/mvc/View"
-        console.error msg
+    if (ViewClass = require classpath) is null
+      console.error "View not found '#{classpath}'"
+      return fn null
 
-      # defaults to AppView if given view is not found
-      # (cant see any sense on this, will probably be removed later)
-      view = new AppView unless view?
+    unless (view = new ViewClass) instanceof View
+      msg = "#{classpath} is not a View instance, you probably forgot to "
+      msg += "extend thoricus/mvc/View"
+      console.error msg
+      return fn null
 
-      view._boot @the
-      view.classpath = classpath
-      view.classname = classname
-      view.namespace = namespace
+    # defaults to AppView if given view is not found
+    # (cant see any sense on this, will probably be removed later)
+    view = new AppView unless view?
 
-      fn view
+    view._boot @the
+    view.classpath = classpath
+    view.classname = classname
+    view.namespace = namespace
 
-    , (err)->
-      console.error 'View not found: ' + classpath
-      fn null
+    fn view
 
 
   ###*
@@ -129,23 +121,22 @@ module.exports = class Factory
       fn @controllers[ classpath ]
     else
 
-      require [classpath], ( Controller )=>
+      if (ControllerClass = require classpath) is null
+        console.error "Controller not found '#{classpath}'"
+        return fn null
 
-        unless (controller = new Controller) instanceof Controller
-          msg = "#{classpath} is not a Controller instance - you probably "
-          msg += "forgot to extend thoricus/mvc/Controller"
-          console.error msg
+      unless (controller = new ControllerClass) instanceof Controller
+        msg = "#{classpath} is not a Controller instance, you probably "
+        msg += "forgot to extend thoricus/mvc/Controller"
+        console.error msg
+        return fn null
 
-        controller.classpath = classpath
-        controller.classname = classname
-        controller._boot @the
+      controller.classpath = classpath
+      controller.classname = classname
+      controller._boot @the
 
-        @controllers[ classpath ] = controller
-        fn @controllers[ classpath ]
-
-      , (err)->
-        console.error 'Controller not found: ' + classpath
-        fn null
+      @controllers[ classpath ] = controller
+      fn @controllers[ classpath ]
 
   ###*
   Returns an AMD compiled template.
@@ -159,25 +150,10 @@ module.exports = class Factory
   ###
   @template=@::template=( path, fn )->
     # console.log "Factory.template( #{path} )"
-    require ['templates/' + path], ( template )->
-      fn template
-    , (err)->
-      console.error 'Template not found: ' + path
-      fn null
+    classpath = 'templates/' + path
 
-
-
-  ###*
-  Returns an AMD compiled style.
-
-  @method style
-  @param path {String} Path to the style.
-  @param fn {Function} Callback function returning the style string.
-  ###
-  @style=@::style=( path, fn )->
-    # console.log "Factory.template( #{path} )"
-    require ['styles/' + path], ( style )->
-      fn style
-    , (err)->
-      console.error 'Style not found: ' + path
-      fn null
+    if (template = require classpath) is null
+      console.error 'Template not found: ' + classpath
+      return fn null
+    
+    fn template
