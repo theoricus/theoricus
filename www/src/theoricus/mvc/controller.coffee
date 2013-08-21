@@ -74,7 +74,8 @@ module.exports = class Controller
   ###
   render:( path, data )->
     @the.factory.view path, (view)=>
-      
+      return unless view?
+
       @process.view = view
 
       view.process = @process
