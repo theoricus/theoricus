@@ -9,7 +9,7 @@
 StringUril = require 'theoricus/utils/string_util'
 Route = require 'theoricus/core/route'
 
-require 'history'
+require '../../../vendors/history'
 
 Factory = null
 
