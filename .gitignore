@@ -10,7 +10,8 @@ cli/templates/app_skel/public/js
 www/vendors/lodash.js
 
 # ignoring testable app's release folder
-tests/www/probatus/public/js
+tests/www/probatus/public/app.js
+tests/www/probatus/public/app.css
 
 # ignoring test files
 tests/www/coverage
