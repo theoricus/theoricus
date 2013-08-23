@@ -28,13 +28,18 @@ module.exports = class Server
   fork_polvo:->
     polvo_path = path.join @the.root, 'node_modules', 'polvo', 'bin', 'polvo'
     @polvo = fork polvo_path, ['-ws'], cwd: @the.app_root
+
     @polvo.on 'message', (data)=>
       switch data.channel
-        when 'stdout' then @repl.log data.msg
-        when 'stderr' then @repl.error data.msg
-        else
-          if data.msg is 'server.started'
-            do @repl.start
+
+        when 'stdout'
+          if data.msg.stripColors isnt 'Initializing..'
+            @repl.log data.msg
+            if data.msg.indexOf('♫ ') is 0
+              do @repl.start
+
+        when 'stderr'
+          @repl.error data.msg
 
     process.on 'SIGTERM', ->
       do @polvo.kill
