@@ -30,7 +30,7 @@ module.exports = class View
 
   # @property [String] class path
   ###*
-   File's path relative to the app's folder.
+   File's path relative to the application's folder.
 
    @property classpath {String}
   ###
@@ -52,7 +52,7 @@ module.exports = class View
   namespace : null
   
   ###*
-    {{#crossLink "Process"}}{{/crossLink}} responsible for running the controller's action that rendered this view.
+    {{#crossLink "Process"}} __Process__ {{/crossLink}} responsible for running the {{#crossLink "Controller"}} __controller's__ {{/crossLink}} action that rendered this view.
 
     @property process {Process}
   ###
@@ -70,7 +70,7 @@ module.exports = class View
   events    : null
 
   ###*
-    Responsible for storing the template's data and the URL params.
+    Responsible for storing the {{#crossLink "Model"}} __model's__ {{/crossLink}} data and the URL params.
     
     @property data {Object}
   ###
@@ -87,10 +87,10 @@ module.exports = class View
     @
 
   ###*
-    Responsible for rendering the view, passing the data to the `template`.
+    Responsible for rendering the view, passing the data (usually a {{#crossLink "Model"}} __Model__ {{/crossLink}} instance) to the `template`.
 
     @method _render
-    @param data {Object} Data object to be passed to the template, usually it is and instance of the {{#crossLink "Model"}}{{/crossLink}}
+    @param data {Object} Data object to be passed to the template, usually it is and instance of the {{#crossLink "Model"}} __Model__ {{/crossLink}}
     @param [template=null] {String} The path of the template to be rendered.
   ###
   _render:( data = {}, template )=>
@@ -116,7 +116,7 @@ module.exports = class View
     @render_template template
 
   ###*
-    If there is a `before_render` method implemented, it will be executed before the view's template is appended to the document.
+    If there is a `@before_render` method implemented, it will be executed before the view's template is appended to the document.
 
     @method before_render
     @param data {Object} Reference to the `@data`
@@ -124,7 +124,7 @@ module.exports = class View
 
 
   ###*
-    Responsible for loading the given template, and appending it to view's `el` element.
+    Responsible for loading the given template, and appending it to view's `@el` element.
 
     @method render_template
     @param template {String} Path to the template to be rendered.
@@ -150,7 +150,7 @@ module.exports = class View
         @on_resize()
 
   ###*
-    If there is an `after_render` method implemented, it will be executed after the view's template is appended to the document. 
+    If there is an `@after_render` method implemented, it will be executed after the view's template has been appended to the document. 
 
     Useful for caching DOM elements as jQuery objects.
 
@@ -179,7 +179,7 @@ module.exports = class View
       ( @el.find sel ).bind   ev, null, @[funk]
 
   ###*
-    If there is a `@before_in` method implemented, it will be called before the view execute its intro animations. 
+    If there is a `@before_in` method implemented, it will be called before the view executes its intro animations (before the `@in` method). 
 
     Useful to setting up the DOM elements properties before animating them.
 
@@ -187,7 +187,7 @@ module.exports = class View
   ###
 
   ###*
-    The `in` method is where the view intro animations are defined. It is executed after the `@after_render` method.
+    The `@in` method is where the view intro animations are defined. It is executed after the `@after_render` method.
 
     The `@after_in` method must be called at the end of the animations, so Theoricus knows that the View finished animating.
 
@@ -206,7 +206,7 @@ module.exports = class View
   ###*
     If there is an`@after_in` method implemented, it will be called after the view finish its intro animations.
 
-    Will only be executed if the {{#crossLink "Config"}}{{/crossLink}} property `disable_transitions` is `false`.
+    Will only be executed if the {{#crossLink "Config"}} __Config's__ {{/crossLink}} {{#crossLink "Config/disable_transitions:property"}} __disable_transitions__{{/crossLink}} property is `false`.
 
     @method after_in    
   ###
@@ -241,7 +241,7 @@ module.exports = class View
   ###
 
   ###*
-    Destroy the view after executing the `@out` method, the default behaviour empties its `el` element and unbind the `window.resize` event.
+    Destroy the view after executing the `@out` method, the default behaviour empties its `@el` element and unbind the `window.resize` event.
 
     If overwritten, the `super` method must be called.
 
