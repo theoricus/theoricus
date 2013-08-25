@@ -9,9 +9,9 @@ output:
   js: ./public/app.js
   css: ./public/app.css
 
-mappings:
-  'app': 'src/'
-  'templates': 'src/'
-  'theoricus': '../../../www/src'
+virtual:
+  'app': 'src/app'
+  'templates': 'src/templates'
+  'theoricus': '../../../www/src/theoricus'
 
 boot: src/app/app
