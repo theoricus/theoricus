@@ -117,7 +117,8 @@ module.exports = class Controller
     if @process.is_in_the_middle_of_running_an_action
 
       # kill current running process
-      do @process.processes.active_processes.pop
+      @process.processes.active_processes.pop()
+      @process.processes.pending_processes = []
 
       # fires after_render prematurely to wipe the fresh glue
       @after_render()

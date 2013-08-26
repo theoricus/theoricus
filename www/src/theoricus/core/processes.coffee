@@ -245,4 +245,5 @@ module.exports = class Processes
         @disable_transitions = null
 
       # calls the activate for the last active process only
-      (_.last @active_processes).on_activate?()
+      if @active_processes.length
+        (_.last @active_processes).on_activate?()
