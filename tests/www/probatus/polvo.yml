@@ -1,17 +1,17 @@
 server:
-  port: 8080
+  port: 3000
   root: ./public
 
 input:
-  - src
+  - ./src
 
 output:
   js: ./public/app.js
   css: ./public/app.css
 
-virtual:
-  'app': 'src/app'
-  'templates': 'src/templates'
-  'theoricus': '../../../www/src/theoricus'
+alias:
+  app: ./src/app
+  templates: ./src/templates
+  theoricus: ../../../www/src/theoricus
 
-boot: src/app/app
+boot: ./src/app/app
