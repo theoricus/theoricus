@@ -1,17 +1,10 @@
 path = require 'path'
 fork = (require 'child_process' ).fork
 
+polvo = require 'polvo'
+
 module.exports = class Compiler
 
   constructor:( @the, @cli, release, webserver )->
-    return unless do @the.is_theoricus_app
-
-    opt = if release? then '-r' else '-c'
-    opt += if webserver? then 's' else ''
-
-    @polvo_path = path.join @the.root, 'node_modules', 'polvo', 'bin', 'polvo'
-    @polvo = fork @polvo_path, [opt, '--stdio'], cwd: @the.app_root
-
-    process.on 'SIGTERM', =>
-      do @polvo.kill
-      do process.exit
+    return unless @the.is_theoricus_app()
+    polvo compile: true

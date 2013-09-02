@@ -1,18 +1,20 @@
-Compiler = require '../commands/compiler'
+polvo = require 'polvo'
+polvo_config = require 'polvo/lib/utils/config'
 
 fork = (require 'child_process').fork
 
 module.exports = class Index
 
   constructor:( @the, @cli )->
-    process.on 'exit', =>
-      do @compiler.polvo.kill
-      do @snapshooter.kill
+    options = compile: true, server: true
+    @polvo = polvo options, out:(msg)=>
+      console.log msg
+      if msg.stripColors.charAt(0) is '♫'
+        @start_snapshooter()
 
-    @compiler = new Compiler @the, @cli, true, true
-    @compiler.polvo.on 'message', (data)=>
-      if data.channel is null and data.msg is 'server.started'
-        do @start_snapshooter
+    process.on 'exit', =>
+      @polvo.close()
+      @snapshooter.kill()
 
   start_snapshooter:->
     console.log 'Start indexing pages..'.magenta
@@ -20,11 +22,11 @@ module.exports = class Index
     snapshooter_path = path.join snapshooter_path, 'bin', 'snapshooter'
 
     output = if (o = @cli.argv.index is true) then 'public_indexed' else o
-    url = @cli.argv.url ? 'localhost:11235'
+    url = @cli.argv.url ? 'localhost:' + polvo_config.parse().server.port
     opts = [ '-i', url, '-o', output]
 
     if @cli.argv.snapshooter?
       opts = opts.concat [].concat (@cli.argv.snapshooter.split ' ')
 
     @snapshooter = fork snapshooter_path, opts, cwd: @the.app_root
-    @snapshooter.on 'exit', -> do process.exit
+    @snapshooter.on 'exit', -> process.exit()
