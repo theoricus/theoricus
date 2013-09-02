@@ -13,13 +13,13 @@ module.exports = class Server
   constructor:( @the, options )->
     return unless @the.is_theoricus_app()
 
-    process.on 'exit', => do @polvo.kill
+    process.on 'exit', => @polvo.close()
 
     @create_repl()
     @fork_polvo()
 
     process.on 'SIGTERM', ->
-      @polvo.kill()
+      @polvo.close()
       process.exit()
 
   create_repl:->
