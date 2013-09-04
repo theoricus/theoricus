@@ -1,12 +1,11 @@
 polvo = require 'polvo'
-polvo_config = require 'polvo/lib/utils/config'
 
 fork = (require 'child_process').fork
 
 module.exports = class Index
 
   constructor:( @the, @cli )->
-    options = compile: true, server: true
+    options = compile: true, server: true, base: @the.app_root
     @polvo = polvo options, out:(msg)=>
       console.log msg
       if msg.stripColors.charAt(0) is '♫'
@@ -22,7 +21,7 @@ module.exports = class Index
     snapshooter_path = path.join snapshooter_path, 'bin', 'snapshooter'
 
     output = if (o = @cli.argv.index is true) then 'public_indexed' else o
-    url = @cli.argv.url ? 'localhost:' + polvo_config.parse().server.port
+    url = @cli.argv.url ? 'localhost:' + polvo.read_config().server.port
     opts = [ '-i', url, '-o', output]
 
     if @cli.argv.snapshooter?
