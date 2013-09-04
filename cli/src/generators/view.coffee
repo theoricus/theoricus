@@ -56,9 +56,7 @@ module.exports = class View
 
     # prepare view contents
     contents = (fs.readFileSync tmpl_view).toString()
-    contents = contents.replace /~NAME_LOWER/g, name_lc
     contents = contents.replace /~NAME_CAMEL/g, name_camel
-    contents = contents.replace /~CONTROLLER_NAME_LC/g, controller_name_lc
 
     # write view
     unless fs.existsSync view_path

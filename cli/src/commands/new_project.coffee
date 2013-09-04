@@ -70,7 +70,7 @@ module.exports = class NewProject
       # default configuration
       unless @cli.argv.dev
         deps = "\"theoricus\": \"#{@the.version}\""
-        the_www = 'node_modules/theoricus/www'
+        the_www = './node_modules/theoricus/www'
 
       # hack mode
       else
@@ -85,7 +85,7 @@ module.exports = class NewProject
 
     # config variables
     deps = ''
-    the_www = 'vendors/theoricus/www'
+    the_www = './vendors/theoricus/www'
 
     # cloning
     params = ['clone', repo, 'vendors/theoricus']
@@ -117,7 +117,7 @@ module.exports = class NewProject
 
     # config variables
     deps = ''
-    the_www = 'vendors/theoricus/www'
+    the_www = './vendors/theoricus/www'
 
     # git init
     init = spawn 'git', ['init'], {cwd: @target, stdio: 'inherit'}
@@ -156,14 +156,14 @@ module.exports = class NewProject
     pack = pack.replace '~name', name
     pack = pack.replace '~deps', deps
 
-    # configures polvo.coffee
-    polvo = path.join @the.root, 'cli', 'templates', 'config', 'polvo.coffee'
+    # configures polvo.yml
+    polvo = path.join @the.root, 'cli', 'templates', 'config', 'polvo.yml'
     polvo = fs.readFileSync polvo, 'utf-8'
     polvo = polvo.replace '~theoricus-www', the_www
 
     # write everything to disk
     fs.writeFileSync (path.join @target, 'package.json'), pack
-    fs.writeFileSync (path.join @target, 'polvo.coffee'), polvo
+    fs.writeFileSync (path.join @target, 'polvo.yml'), polvo
 
     do @finish
 
