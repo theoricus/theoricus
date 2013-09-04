@@ -1,7 +1,7 @@
 .PHONY: docs
 
 THE=bin/the
-SELENIUM=tests/www/services/selenium-server-standalone-2.33.0.jar
+SELENIUM=tests/www/services/selenium-server-standalone-2.35.0.jar
 SAUCE_CONNECT=tests/www/services/Sauce-Connect.jar
 CHROME_DRIVER=tests/www/services/chromedriver
 
@@ -19,29 +19,40 @@ YUIDOC=node_modules/yuidocjs/lib/cli.js
 install_test_suite:
 	@mkdir -p tests/www/services
 
+	@echo '-----'
 	@echo 'Downloading Selenium..'
-	@curl -o tests/www/services/selenium-server-standalone-2.33.0.jar \
-		https://selenium.googlecode.com/files/selenium-server-standalone-2.33.0.jar
+	@curl -o tests/www/services/selenium-server-standalone-2.35.0.jar \
+		https://selenium.googlecode.com/files/selenium-server-standalone-2.35.0.jar
 	@echo 'Done.'
 
+	@echo '-----'
 	@echo 'Downloading Chrome Driver..'
 	@curl -o tests/www/services/chromedriver.zip \
-		https://chromedriver.googlecode.com/files/chromedriver_mac_26.0.1383.0.zip
+		https://chromedriver.googlecode.com/files/chromedriver_mac32_2.3.zip
 	@echo 'Done.'
+	
+	@echo '-----'
 	@echo 'Unzipping chromedriver..'
-	@cd tests/www/services/; unzip chromedriver.zip; rm chromedriver.zip; cd -
+	@cd tests/www/services/; unzip chromedriver.zip; \
+		rm chromedriver.zip; cd -
 	@echo 'Done.'
 
+	@echo '-----'
 	@echo 'Downloading Sauce Connect..'
 	@curl -o tests/www/services/sauceconnect.zip \
 		http://saucelabs.com/downloads/Sauce-Connect-latest.zip
+	
+	@echo '-----'
 	@echo 'Unzipping Sauce Connect..'
 	@cd tests/www/services/; unzip sauceconnect.zip; \
 		rm NOTICE.txt license.html sauceconnect.zip; cd -
+	@echo '-----'
 	@echo 'Done.'
+	@echo 
 
 
 setup: install_test_suite
+	@echo '-----'
 	npm link
 
 
