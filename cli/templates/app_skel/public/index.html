@@ -2,8 +2,14 @@
 <html>
     <head>
         <title>My Awesome App - made with Theoricus</title>
-        <script type="text/javascript" src="/js/app.js"></script>
+        <link rel="stylesheet" type="text/css" href="/app.css">
     </head>
     <body>
+       <script type='text/javascript'>
+        var s = document.createElement('script'),
+          h = document.getElementsByTagName('head')[0];
+        s.src = '/app.js';
+        h.insertBefore(s, h.lastChild);
+      </script>
     </body>
 </html>
