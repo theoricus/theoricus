@@ -48,5 +48,6 @@
     "request": "2.22.x",
     "yuidocjs": "0.3.x",
     "wd": "0.0.32"
+    "mversion": "0.2.x"
   }
 }

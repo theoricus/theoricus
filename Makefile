@@ -8,7 +8,9 @@ CHROME_DRIVER=tests/www/services/chromedriver
 CS=node_modules/coffee-script/bin/coffee
 MOCHA=node_modules/mocha/bin/mocha
 COVERALLS=node_modules/coveralls/bin/coveralls.js
-VERSION=`$(CS) scripts/bumper.coffee --version`
+
+MVERSION=node_modules/.bin/mversion
+VERSION=`$(MVERSION) | sed -E 's/\* package.json: //g'`
 
 YUIDOC=node_modules/yuidocjs/lib/cli.js
 
@@ -193,13 +195,13 @@ endif
 #-------------------------------------------------------------------------------
 
 bump.minor:
-	$(CS) scripts/bumper.coffee --minor
+	@$(MVERSION) minor
 
 bump.major:
-	$(CS) scripts/bumper.coffee --major
+	@$(MVERSION) major
 
 bump.patch:
-	$(CS) scripts/bumper.coffee --patch
+	@$(MVERSION) patch
 
 
 # PUBLISHING / RE-PUBLISHING
