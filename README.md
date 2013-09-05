@@ -2,11 +2,11 @@
 
 Tiny MV(C) implementation for client side projects.
 
-[![Stories in Ready](http://badge.waffle.io/serpentem/theoricus.png)](http://waffle.io/serpentem/theoricus)  
+[![Stories in Ready](http://badge.waffle.io/theoricus/theoricus.png)](http://waffle.io/theoricus/theoricus)  
 
-[![Build Status](https://secure.travis-ci.org/serpentem/theoricus.png)](http://travis-ci.org/serpentem/theoricus) [![Coverage Status](https://coveralls.io/repos/serpentem/theoricus/badge.png)](https://coveralls.io/r/serpentem/theoricus)
+[![Build Status](https://secure.travis-ci.org/theoricus/theoricus.png)](http://travis-ci.org/theoricus/theoricus) [![Coverage Status](https://coveralls.io/repos/theoricus/theoricus/badge.png)](https://coveralls.io/r/theoricus/theoricus)
 
-[![Dependency Status](https://gemnasium.com/serpentem/theoricus.png)](https://gemnasium.com/serpentem/theoricus) [![NPM version](https://badge.fury.io/js/theoricus.png)](http://badge.fury.io/js/theoricus)
+[![Dependency Status](https://gemnasium.com/theoricus/theoricus.png)](https://gemnasium.com/theoricus/theoricus) [![NPM version](https://badge.fury.io/js/theoricus.png)](http://badge.fury.io/js/theoricus)
 
 <!--
   [![Selenium Test Status](https://saucelabs.com/buildstatus/theoricus)](https://saucelabs.com/u/theoricus)
@@ -39,7 +39,7 @@ and so you can use any language it supports - full list [here](https://github.co
 
 # Issues
 Do not hesitate to open a feature request or a bug report.
-> [https://github.com/serpentem/theoricus/issues](https://github.com/serpentem/theoricus/issues)
+> [https://github.com/theoricus/theoricus/issues](https://github.com/theoricus/theoricus/issues)
 
 # Mailing List
 A place to talk about it, ask anything, get in touch. Luckily you'll be answered
@@ -62,11 +62,11 @@ Got your hands into the source? We're here to help you.
 
 ## More
 
-<!--  - [Demo Application](https://github.com/serpentem/theoricus-demo-app) -->
-  - [Contributing](https://github.com/serpentem/theoricus/blob/master/CONTRIBUTING.md)
-  - [Showcase](https://github.com/serpentem/theoricus/wiki/showcase)
-  - [Changelog](https://github.com/serpentem/theoricus/blob/master/History.md)
-  - [License](https://github.com/serpentem/theoricus/blob/master/LICENSE)
+<!--  - [Demo Application](https://github.com/theoricus/theoricus-demo-app) -->
+  - [Contributing](https://github.com/theoricus/theoricus/blob/master/CONTRIBUTING.md)
+  - [Showcase](https://github.com/theoricus/theoricus/wiki/showcase)
+  - [Changelog](https://github.com/theoricus/theoricus/blob/master/History.md)
+  - [License](https://github.com/theoricus/theoricus/blob/master/LICENSE)
 
 <!--
   - [Compatibility](#compatibility)
