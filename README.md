@@ -1,6 +1,4 @@
-# Theoricus #
-
-Tiny MV(C) implementation for client side projects.
+![Theoricus - Tiny MV(C) implementation for client side projects](assets/theoricus.png)
 
 [![Stories in Ready](http://badge.waffle.io/theoricus/theoricus.png)](http://waffle.io/theoricus/theoricus)  
 
@@ -15,8 +13,9 @@ Tiny MV(C) implementation for client side projects.
 # About
 
 Theoricus uses simple naming conventions (as you see in rails and many others),
-with a powerful build system behind it. There's also a naviagation mechanism
-built to let your free to code your shit instead of handling url's manually.
+with a powerful [build system](http://github.com/serpentem/polvo/polvo) behind
+it. There's also a naviagation mechanism built to let your *free* to code your
+**shit** instead of handling url's manually.
 
 It's in a very alpha version, use at your own risk.
 
@@ -29,7 +28,7 @@ Have fun. :)
  * I/O transitions for all Views
  * Convention over configuration *([+](http://en.wikipedia.org/wiki/Convention_over_configuration))*
  * Automagic naviagation mechanism
- * Powerful build system *(on top of [Polvo](http://github.com/serpentem/polvo)*)
+ * Powerful build system *(on top of [Polvo](http://github.com/serpentem/polvo/polvo)*)
  * Simplistic JSON-Rest interface for models
 
 # Supported Languages
@@ -131,13 +130,15 @@ Examples:
 
 <a name="getting-started" />
 ## Scaffolding
+
 To scaffold a new working project:
 
 ````bash
 the -n myawesomeapp
 ````
 
-It'll produce the following structure:
+It'll produce the following structure, which contains a default page section and
+`404` Not Found error page:
 
 ````bash
 myawesomeapp
