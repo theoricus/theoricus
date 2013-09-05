@@ -205,7 +205,6 @@ see a success status.
 # Compatibility
 
 [![Selenium Test Status](https://saucelabs.com/browser-matrix/theoricus.svg)](https://saucelabs.com/u/theoricus)
-
 -->
 
 # License
