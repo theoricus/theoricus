@@ -109,19 +109,16 @@ module.exports = class Router
       controller_name = url_parts[0]
       action_name = url_parts[1] or 'index'
 
-      @the.factory.controller controller_name, (controller)=>
+      try
+        Controller = require.resolve 'app/controllers/' + controller_name
+        route = @map url, "#{controller_name}/#{action_name}", null, 'body'
+        return @on_change route, url
 
-        # if controller is found, route call to it
-        if controller?
-          route = @map url, "#{controller_name}/#{action_name}", null, 'body'
-          return @on_change route, url
-
-        # otherwise renders the not found route
-        else
-
-          for route in @routes
-            if route.test @Routes.notfound
-              return @on_change route, url
+      # otherwise renders the not found route
+      catch e
+        for route in @routes
+          if route.test @Routes.notfound
+            return @on_change route, url
 
     @trigger = true
 
