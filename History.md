@@ -1,3 +1,9 @@
+0.2.23 / 2013-09-06
+===================
+ * Synchronizing with new Polvo
+ * Fixing all templates and generators
+ * Improving route-not found in order to not raise error unnecessarily
+
 0.2.22 / 2013-08-07
 ===================
  * Adding basic docs for whole www forlder
