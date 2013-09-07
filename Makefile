@@ -120,6 +120,19 @@ test.build.split:
 	@$(POLVO) -cxb tests/www/probatus > /dev/null
 
 
+# NORMALIZING COVERAGE AND POSTING TO COVERALLS
+test.cover.normalize:
+	@sed -i.bak \
+		"s/^.*public\/__split__\/theoricus\/www\/src\/theoricus/SF:theoricus/g" \
+		tests/www/cover/lcov.info
+
+test.cover.publish:
+	@cd tests/www/probatus/public/__split__/theoricus/www/src && \
+		cat ../../../../../../cover/lcov.info | \
+		../../../../../../../../$(COVERALLS)
+	
+	@cd ../../../../../../../../	
+
 # TESTING LOCALLY
 test: test.build.prod
 	@$(MOCHA) --compilers coffee:coffee-script \
@@ -128,25 +141,17 @@ test: test.build.prod
 	--timeout 600000 \
 	tests/www/tests/runner.coffee --env='local'
 
-test.coverage: test.build.split
+test.cover: test.build.split
 	@$(MOCHA) --compilers coffee:coffee-script \
 	--ui bdd \
 	--reporter spec \
 	--timeout 600000 \
 	tests/www/tests/runner.coffee --env='local' --coverage
 
-test.coveralls: test.coverage
-	@sed -i.bak \
-		"s/^.*public\/js\/theoricus/SF:theoricus/g" \
-		tests/www/coverage/lcov.info
+test.coveralls: test.cover test.cover.normalize test.cover.publish
 
-	@cd tests/www/probatus/public/js && \
-		cat ../../../coverage/lcov.info | ../../../../../$(COVERALLS)
-	
-	@cd ../../../../../
-
-test.coverage.preview: test.coverage
-	@cd tests/www/coverage/lcov-report; python -m SimpleHTTPServer 8080; cd -
+test.cover.preview: test.cover
+	@cd tests/www/cover/lcov-report; python -m SimpleHTTPServer 8080; cd -
 
 
 # TESTING ON SAUCE LABS
@@ -154,29 +159,22 @@ test.coverage.preview: test.coverage
 # NOTE: The `--bail` option is hidden until Mocha fix the hooks execution
 #   https://github.com/visionmedia/mocha/issues/937
 
-test.saucelabs: test.build.prod
+test.sauce: test.build.prod
 	@$(MOCHA) --compilers coffee:coffee-script \
 	--ui bdd \
 	--reporter spec \
 	--timeout 600000 \
 	tests/www/tests/runner.coffee --env='sauce labs'
 
-test.saucelabs.coverage: test.build.split
+test.sauce.cover: test.build.split
 	@$(MOCHA) --compilers coffee:coffee-script \
 	--ui bdd \
 	--reporter spec \
 	--timeout 600000 \
 	tests/www/tests/runner.coffee --env='sauce labs' --coverage
 
-test.saucelabs.coveralls: test.saucelabs.coverage
-	@sed -i.bak \
-		"s/^.*public\/js\/theoricus/SF:theoricus/g" \
-		tests/www/coverage/lcov.info
+test.sauce.coveralls: test.sauce.cover test.cover.normalize test.cover.publish
 
-	@cd tests/www/probatus/public/js && \
-		cat ../../../coverage/lcov.info | ../../../../../$(COVERALLS)
-
-	@cd ../../../../../
 
 test.travis:
 # Technique (skipping pull requests) borrowed from WD:
