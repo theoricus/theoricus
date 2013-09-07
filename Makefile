@@ -11,7 +11,7 @@ CS=node_modules/coffee-script/bin/coffee
 MOCHA=node_modules/mocha/bin/mocha
 COVERALLS=node_modules/coveralls/bin/coveralls.js
 
-MVERSION=node_modules/.bin/mversion
+MVERSION=node_modules/mversion/bin/version
 VERSION=`$(MVERSION) | sed -E 's/\* package.json: //g'`
 
 YUIDOC=node_modules/yuidocjs/lib/cli.js
