@@ -187,10 +187,10 @@ ifdef TRAVIS
 ifneq ($(TRAVIS_PULL_REQUEST),false)
 	@echo 'Skipping Sauce Labs tests as this is a pull request'
 else
-	@make test.saucelabs.coveralls
+	@make test.coveralls
 endif
 else
-	@make test.saucelabs.coveralls
+	@make test.coveralls
 endif
 
 
