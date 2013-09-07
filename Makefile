@@ -1,6 +1,8 @@
 .PHONY: docs
 
 THE=bin/the
+POLVO=node_modules/polvo/bin/polvo
+
 SELENIUM=tests/www/services/selenium-server-standalone-2.35.0.jar
 SAUCE_CONNECT=tests/www/services/Sauce-Connect.jar
 CHROME_DRIVER=tests/www/services/chromedriver
@@ -112,9 +114,10 @@ test.build.prod:
 	@echo 'Building app before testing..'
 	@$(THE) -r --base tests/www/probatus > /dev/null
 
-test.build.dev:
+test.build.split:
 	@echo 'Compiling app before testing..'
-	@$(THE) -c --base tests/www/probatus > /dev/null
+	@# @$(THE) -c --base tests/www/probatus > /dev/null
+	@$(POLVO) -cxb tests/www/probatus > /dev/null
 
 
 # TESTING LOCALLY
@@ -125,7 +128,7 @@ test: test.build.prod
 	--timeout 600000 \
 	tests/www/tests/runner.coffee --env='local'
 
-test.coverage: test.build.dev
+test.coverage: test.build.split
 	@$(MOCHA) --compilers coffee:coffee-script \
 	--ui bdd \
 	--reporter spec \
@@ -158,7 +161,7 @@ test.saucelabs: test.build.prod
 	--timeout 600000 \
 	tests/www/tests/runner.coffee --env='sauce labs'
 
-test.saucelabs.coverage: test.build.dev
+test.saucelabs.coverage: test.build.split
 	@$(MOCHA) --compilers coffee:coffee-script \
 	--ui bdd \
 	--reporter spec \
