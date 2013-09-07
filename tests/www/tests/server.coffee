@@ -10,7 +10,7 @@ index = path.join root, 'index.html'
 
 matcher = (req)->
     parsed = url.parse req.url
-    return parsed.pathname.match /js\/theoricus/
+    return parsed.pathname.match /www\/src\/theoricus/
 
 exports.start = (coverage)->
   if coverage
