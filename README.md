@@ -1,6 +1,6 @@
 ![Theoricus - Tiny MV(C) implementation for client side projects](assets/theoricus.png)
 
-[![Stories in Ready](http://badge.waffle.io/theoricus/theoricus.png)](http://waffle.io/theoricus/theoricus)  
+[![Stories in Ready](https://badge.waffle.io/theoricus/theoricus.png)](http://waffle.io/theoricus/theoricus)  
 
 [![Build Status](https://secure.travis-ci.org/theoricus/theoricus.png)](http://travis-ci.org/theoricus/theoricus) [![Coverage Status](https://coveralls.io/repos/theoricus/theoricus/badge.png)](https://coveralls.io/r/theoricus/theoricus)
 
