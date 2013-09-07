@@ -2,7 +2,7 @@
 
 [![Stories in Ready](https://badge.waffle.io/theoricus/theoricus.png)](http://waffle.io/theoricus/theoricus)  
 
-[![Build Status](https://secure.travis-ci.org/theoricus/theoricus.png)](http://travis-ci.org/theoricus/theoricus) [![Coverage Status](https://coveralls.io/repos/theoricus/theoricus/badge.png)](https://coveralls.io/r/theoricus/theoricus)
+[![Build Status](https://secure.travis-ci.org/theoricus/theoricus.png?branch=master)](http://travis-ci.org/theoricus/theoricus) [![Coverage Status](https://coveralls.io/repos/theoricus/theoricus/badge.png)](https://coveralls.io/r/theoricus/theoricus)
 
 [![Dependency Status](https://gemnasium.com/theoricus/theoricus.png)](https://gemnasium.com/theoricus/theoricus) [![NPM version](https://badge.fury.io/js/theoricus.png)](http://badge.fury.io/js/theoricus)
 
