@@ -124,11 +124,11 @@ test.build.split:
 test.cover.normalize:
 	@sed -i.bak \
 		"s/^.*public\/__split__\/theoricus\/www\/src\/theoricus/SF:theoricus/g" \
-		tests/www/cover/lcov.info
+		tests/www/coverage/lcov.info
 
 test.cover.publish:
 	@cd tests/www/probatus/public/__split__/theoricus/www/src && \
-		cat ../../../../../../cover/lcov.info | \
+		cat ../../../../../../coverage/lcov.info | \
 		../../../../../../../../$(COVERALLS)
 	
 	@cd ../../../../../../../../	
@@ -151,7 +151,7 @@ test.cover: test.build.split
 test.coveralls: test.cover test.cover.normalize test.cover.publish
 
 test.cover.preview: test.cover
-	@cd tests/www/cover/lcov-report; python -m SimpleHTTPServer 8080; cd -
+	@cd tests/www/coverage/lcov-report; python -m SimpleHTTPServer 8080; cd -
 
 
 # TESTING ON SAUCE LABS
