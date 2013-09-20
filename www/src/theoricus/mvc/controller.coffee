@@ -18,9 +18,14 @@ Fetcher = require 'theoricus/mvc/lib/fetcher'
 ###
 module.exports = class Controller
 
+  ###*
+  Injected by {Process}, called after rendering procedure is finished,
+  so {Processes} can go ahead and process the next pending one.
+
+  @property {Function} done_rendering
   ###
-  @param [theoricus.Theoricus] @the   Shortcut for app's instance
-  ###
+  done_rendering: null
+
   ###*
     This function is executed by the Factory. It saves a `@the` reference inside the controller.
 
@@ -78,8 +83,8 @@ module.exports = class Controller
 
       @process.view = view
 
-      view.process = @process
-      view.after_in = @after_render
+      view.process  = @process
+      view.after_in = @done_rendering
 
       if data instanceof Fetcher
         if data.loaded
@@ -89,7 +94,6 @@ module.exports = class Controller
             view._render records
       else
         view._render data
-
 
   # ~> Shortcuts
 
@@ -120,8 +124,8 @@ module.exports = class Controller
       @process.processes.active_processes.pop()
       @process.processes.pending_processes = []
 
-      # fires after_render prematurely to wipe the fresh glue
-      @after_render()
+      # fires done_rendering prematurely so we can unlock
+      @done_rendering()
 
     # and redirects user
     @the.processes.router.navigate url
