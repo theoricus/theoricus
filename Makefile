@@ -108,6 +108,9 @@ test.selenium.run:
 test.sauce.connect.run:
 	@java -jar $(SAUCE_CONNECT) $(SAUCE_USERNAME) $(SAUCE_ACCESS_KEY)
 
+# MANUALLY TESTING PROBATUS
+test.probatus:
+	@$(THE) -s --base tests/www/probatus
 
 # BUILDING TEST APP
 test.build.prod:
