@@ -50,7 +50,7 @@ module.exports = class View
     @property namespace {String}
   ###
   namespace : null
-  
+
   ###*
     {{#crossLink "Process"}}{{/crossLink}} responsible for running the controller's action that rendered this view.
 
@@ -63,7 +63,7 @@ module.exports = class View
 
     @property events {Object}
     @example
-        events:  
+        events:
             ".bt-alert click":"on_alert"
 
   ###
@@ -71,7 +71,7 @@ module.exports = class View
 
   ###*
     Responsible for storing the template's data and the URL params.
-    
+
     @property data {Object}
   ###
   data      : null
@@ -94,7 +94,7 @@ module.exports = class View
     @param [template=null] {String} The path of the template to be rendered.
   ###
   _render:( data = {}, template )=>
-    @data = 
+    @data =
       view: @
       params: @process.params
       data: data
@@ -138,7 +138,7 @@ module.exports = class View
       # binds item if the data passed is a valid Model
       if (@data instanceof Model)
         @data.bind dom, !@the.config.autobind
-      
+
       @set_triggers?()
       @after_render?(@data)
 
@@ -149,8 +149,12 @@ module.exports = class View
         $( window ).bind   'resize', @_on_resize
         @on_resize()
 
+      if @on_scroll?
+        $( window ).unbind 'scroll', @_on_scroll
+        $( window ).bind   'scroll', @_on_scroll
+
   ###*
-    If there is an `after_render` method implemented, it will be executed after the view's template is appended to the document. 
+    If there is an `after_render` method implemented, it will be executed after the view's template is appended to the document.
 
     Useful for caching DOM elements as jQuery objects.
 
@@ -159,12 +163,20 @@ module.exports = class View
   ###
 
   ###*
-    If there is an `@on_resize` method implemented, it will be executed whenever the window triggers the `scroll` event.
+    If there is an `@on_resize` method implemented, it will be executed whenever the window triggers the `resize` event.
 
     @method on_resize
   ###
   _on_resize:=>
     @on_resize?()
+
+  ###*
+    If there is an `@on_scroll` method implemented, it will be executed whenever the window triggers the `scroll` event.
+
+    @method on_resize
+  ###
+  _on_scroll:=>
+    @on_scroll?()
 
   ###*
     Process the `@events`, automatically binding them.
@@ -179,11 +191,11 @@ module.exports = class View
       ( @el.find sel ).bind   ev, null, @[funk]
 
   ###*
-    If there is a `@before_in` method implemented, it will be called before the view execute its intro animations. 
+    If there is a `@before_in` method implemented, it will be called before the view execute its intro animations.
 
     Useful to setting up the DOM elements properties before animating them.
 
-    @method before_in    
+    @method before_in
   ###
 
   ###*
@@ -208,7 +220,7 @@ module.exports = class View
 
     Will only be executed if the {{#crossLink "Config"}}{{/crossLink}} property `disable_transitions` is `false`.
 
-    @method after_in    
+    @method after_in
   ###
 
   ###*
@@ -218,7 +230,7 @@ module.exports = class View
   ###
 
   ###*
-    The `@out` method is responsible for the view's exit animations. 
+    The `@out` method is responsible for the view's exit animations.
 
     At the end of the animations, the `after_out` callback must be called.
 
@@ -252,6 +264,9 @@ module.exports = class View
   destroy: () ->
     if @on_resize?
       $( window ).unbind 'resize', @_on_resize
+
+    if @on_scroll?
+      $( window ).unbind 'resize', @_on_scroll
 
     @before_destroy?()
     @el.empty()
