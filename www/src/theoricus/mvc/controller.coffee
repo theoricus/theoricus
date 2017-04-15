@@ -8,11 +8,11 @@ View = require 'theoricus/mvc/view'
 Fetcher = require 'theoricus/mvc/lib/fetcher'
 
 ###*
-  The controller is responsible for rendering the view.
+  The controller is responsible for rendering the {{#crossLink "View"}} __view__ {{/crossLink}}.
 
-  It receives the URL params, to be used for Model instantiation.
+  The controller actions are mapped with the {{#crossLink "Route"}} __routes__ {{/crossLink}} in the application's `routes` file.
 
-  The controller actions are mapped with the URL states (routes) in the app `routes` file.
+  Each action receives the URL params, to be used for {{#crossLink "Model"}} __Model__ {{/crossLink}} instantiation.
 
   @class Controller
 ###
@@ -22,7 +22,7 @@ module.exports = class Controller
   @param [theoricus.Theoricus] @the   Shortcut for app's instance
   ###
   ###*
-    This function is executed by the Factory. It saves a `@the` reference inside the controller.
+    This function is executed by the {{#crossLink "Factory"}} __Factory__ {{/crossLink}}. It saves a `@the` reference inside the controller.
 
     @method _boot
     @param @the {Theoricus} Shortcut for app's instance
@@ -30,7 +30,7 @@ module.exports = class Controller
   _boot: ( @the ) -> @
 
   ###*
-    Build a default action ( renders the view passing all model records as data) in case the controller doesn't have an action implemented for the current `process` call.
+    Build a default action ( renders the {{#crossLink "View"}} __view__ {{/crossLink}} passing all {{#crossLink "Model"}} __model__ {{/crossLink}} records as data) in case the controller doesn't have an action implemented for the current {{#crossLink "Process"}} __process__ {{/crossLink}} call.
 
     @method _build_action
     @param process {Process} Current {{#crossLink "Process"}}{{/crossLink}} being executed.
@@ -52,21 +52,14 @@ module.exports = class Controller
         else
           @render "#{view_folder}/#{view_name}"
 
-  ###
-  Renders to some view
-
-  @param [String] path  Path to view on the app tree
-  @param [String] data  data to be rendered on the template
-  ###
-
   ###*
-    Responsible for rendering the View.
+    Responsible for rendering the {{#crossLink "View"}} __View__ {{/crossLink}}.
 
-    Usually, this method is executed in the controller action mapped with the `route`.
+    Usually, this method is executed in the controller action mapped with the {{#crossLink "Route"}} __route__ {{/crossLink}}.
     
     @method render
-    @param path {String} View's file path. 
-    @param data {Object} Data to be passed to the view. 
+    @param path {String} {{#crossLink "View"}} __View's__ {{/crossLink}} file path. 
+    @param data {Object} Data to be passed to the {{#crossLink "View"}} __view__ {{/crossLink}}, usually a {{#crossLink "Model"}} __Model__ {{/crossLink}} instance. 
 
     @example
         index:(id)-> # Controller action
